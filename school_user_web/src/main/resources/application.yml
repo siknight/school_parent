@@ -3,3 +3,5 @@ server:
 spring:
   resources:
     static-locations: classpath:/templates/,classpath:/static/
+  application:
+    name: school-user-web

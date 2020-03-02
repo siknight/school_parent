@@ -7,10 +7,9 @@
   <meta name="description" content="" /> 
   <meta name="author" content="" /> 
   <link rel="icon" href="./img/asset-favicon.ico" /> 
-  <title>校园社交-头条</title>
+  <title>社交-头条</title> 
   <!-- 页面 css js --> 
   <!-- <script type="text/javascript" src="../../plugins/sui/sui.min.js"></script> --> 
-  <!-- <script type="text/javascript" src="./sj-index.js"></script> --> 
   <link rel="stylesheet" type="text/css" href="./plugins/normalize-css/normalize.css" /> 
   <link rel="stylesheet" type="text/css" href="./plugins/yui/cssgrids-min.css" /> 
   <link rel="stylesheet" type="text/css" href="./plugins/sui/sui.min.css" /> 
@@ -18,25 +17,19 @@
   <link rel="stylesheet" type="text/css" href="./plugins/font-awesome/css/font-awesome.min.css" /> 
   <link rel="stylesheet" type="text/css" href="./css/widget-base.css" /> 
   <link rel="stylesheet" type="text/css" href="./css/widget-head-foot.css" /> 
-  <link rel="stylesheet" type="text/css" href="./css/page-headline-logined.css" />
-  <script src="./js/jquery-3.4.1.js"></script>
+  <link rel="stylesheet" type="text/css" href="./css/page-sj-headline-login.css" /> 
  </head> 
  <body> 
-  <div class="wrapper"> 
+  <div class="sui-container wrapper"> 
    <!--引用组件--> 
    <!--头部导航--> 
    <header> 
     <div class="sui-navbar"> 
      <div class="navbar-inner"> 
-      <!--<a href="index-logined.html" class="sui-brand">-->
-         <a href="#" class="sui-brand">
-          <!--<div >开心校园</div>-->
-          <!--图标-->
-          <img src="./img/asset-logo-black.png" alt="社交" />
-      </a>
+      <a href="index-login.html" class="sui-brand"><img src="./img/asset-logo-black.png" alt="社交" /></a>
       <ul class="sui-nav"> 
        <li class="active"><a href="./headline-logined.html">头条</a></li> 
-       <li><a href="./qa-logined.html">问答</a></li> 
+       <li><a href="./qa-login.html">问答</a></li> 
        <li><a href="./activity-index.html">活动</a></li> 
        <li><a href="./makeFriends-index.html">交友</a></li> 
        <li><a href="./spit-index.html">吐槽</a></li> 
@@ -47,51 +40,42 @@
        <span class="btn-search fa fa-search"></span> 
       </form> 
       <div class="sui-nav pull-right info"> 
-       <li><a href="./other-notice.html" target="_blank" class="notice">通知</a></li> 
-       <li class="hover"> <span class="fa fa-plus "></span> 
-        <ul class="hoverinfo"> 
-         <li><i class="fa fa-share-alt" aria-hidden="true"></i> <a href="./headline-submit.html">去分享</a></li> 
-         <li><i class="fa fa-question-circle" aria-hidden="true"></i> <a href="./qa-submit.html" target="_blank">提问题</a></li> 
-         <li><i class="fa fa-comments" aria-hidden="true"></i><a href="./spit-submit.html" target="_blank">去吐槽</a></li> 
-         <li><i class="fa fa-heartbeat" aria-hidden="true"></i> <a href="./makeFriends-submit.html" target="_blank">发约会</a></li> 
-        </ul> </li> 
-       <li><a href="./person-homepage.html" target="_blank" class="homego"><img src="./img/widget-photo.png" alt="用户头像" /></a></li> 
+       <li><a href="tologin_register.html" target="_blank">注册</a></li>
+       <li><a href="tologin_register.html" target="_blank" class="sui-btn btn-login">登录</a></li>
       </div> 
      </div> 
-    </div> 
-   </header>
-      <!--头部导航-->
-      <!--中间部分-->
+    </div>
+   </header> 
    <!--三列布局--> 
    <div class="sj-content"> 
-    <!--<div class="left-nav"> -->
-     <!--<div class="float-nav" id="float-nav"> -->
-      <!--<ul class="sui-nav nav-tabs nav-xlarge tab-navbar tab-vertical"> -->
-       <!--&lt;!&ndash;<li class="active"><a>热门</a></li> &ndash;&gt;-->
-       <!--&lt;!&ndash;<li><a href="#">牛人专区</a></li> &ndash;&gt;-->
-       <!--&lt;!&ndash;<li><a href="#">机器学习</a></li> &ndash;&gt;-->
-       <!--&lt;!&ndash;<li><a href="#">后端开发</a></li> &ndash;&gt;-->
-       <!--&lt;!&ndash;<li><a href="#">人工智能</a></li> &ndash;&gt;-->
-       <!--&lt;!&ndash;<li><a href="#">虚拟现实</a></li> &ndash;&gt;-->
-       <!--&lt;!&ndash;<li><a href="#">商业预测</a></li> &ndash;&gt;-->
-       <!--&lt;!&ndash;<li><a href="#">前端开发</a></li> &ndash;&gt;-->
-      <!--</ul> -->
-     <!--</div> -->
-    <!--</div> -->
+    <div class="left-nav"> 
+     <div class="float-nav" id="float-nav"> 
+      <ul class="sui-nav nav-tabs nav-xlarge tab-navbar tab-vertical"> 
+       <li class="active"><a>热门</a></li> 
+       <li><a href="#">牛人专区</a></li> 
+       <li><a href="#">机器学习</a></li> 
+       <li><a href="#">后端开发</a></li> 
+       <li><a href="#">人工智能</a></li> 
+       <li><a href="#">虚拟现实</a></li> 
+       <li><a href="#">商业预测</a></li> 
+       <li><a href="#">前端开发</a></li> 
+      </ul> 
+     </div> 
+    </div> 
     <div class="right-content"> 
      <div class="fl middle"> 
       <div class="carousel"> 
        <div id="myCarousel" data-ride="carousel" data-interval="4000" class="sui-carousel slide"> 
         <ol class="carousel-indicators"> 
-         <li data-target="#myCarousel" data-slide-to="0" ></li>
-         <li data-target="#myCarousel" data-slide-to="1" class="active"></li>
+         <li data-target="#myCarousel" data-slide-to="0" class="active"></li> 
+         <li data-target="#myCarousel" data-slide-to="1"></li> 
          <li data-target="#myCarousel" data-slide-to="2"></li> 
         </ol> 
         <div class="carousel-inner"> 
-         <div class="item">
+         <div class="active item"> 
           <img src="./img/widget-banner01.png" /> 
          </div> 
-         <div class="active item">
+         <div class="item"> 
           <img src="./img/widget-banner02.png" /> 
          </div> 
          <div class="item"> 
@@ -453,7 +437,7 @@
       </div> 
       <div class="ad-carousel"> 
        <div class="carousel"> 
-        <div id="myCarousel2" data-ride="carousel" data-interval="4000" class="sui-carousel slide">
+        <div id="myCarousel" data-ride="carousel" data-interval="4000" class="sui-carousel slide"> 
          <ol class="carousel-indicators"> 
           <li data-target="#myCarousel" data-slide-to="0" class="active"></li> 
           <li data-target="#myCarousel" data-slide-to="1"></li> 
@@ -478,18 +462,76 @@
      </div> 
     </div> 
    </div> 
-  </div>
+  </div> 
+  <div class="footer"> 
+   <div class="wrapper"> 
+    <div class="footer-bottom"> 
+     <div class="link"> 
+      <dl> 
+       <dt>
+        网站相关
+       </dt> 
+       <dd>
+        关于我们
+       </dd> 
+       <dd>
+        服务条款
+       </dd> 
+       <dd>
+        帮助中心
+       </dd> 
+       <dd>
+        编辑器语法
+       </dd> 
+      </dl> 
+      <dl> 
+       <dt>
+        常用链接
+       </dt> 
+       <dd>
+        传智播客
+       </dd> 
+       <dd>
+        传智论坛
+       </dd> 
+      </dl> 
+      <dl> 
+       <dt>
+        联系我们
+       </dt> 
+       <dd>
+        联系我们
+       </dd> 
+       <dd>
+        加入我们
+       </dd> 
+       <dd>
+        建议反馈
+       </dd> 
+      </dl> 
+      <dl> 
+       <dt>
+        关注我们
+       </dt> 
+       <dd>
+        微博
+       </dd> 
+       <dd>
+        twitter
+       </dd> 
+      </dl> 
+      <div class="xuke"> 
+       <h3>内容许可</h3> 
+       <p>除特别说明外，用户内容均采用知识共享署名-非商业性使用-禁止演绎4.0 国际许可协议 (CC BY-NC-ND 4.0) 进行许可</p> 
+       <p>本站由 传智研究院 提供更新服务</p> 
+      </div> 
+     </div> 
+     <p class="Copyright">Copyright &copy; 2017 传智问答社区 当前版本 0.0.1</p> 
+    </div> 
+   </div> 
+  </div> 
+  <script>
 
-
-  <!--中间部分-->
-
-  <!--尾部-->
-  <div id="footer">
-
-  </div>
- <script>
-     $('#footer').load('footer.html');
- </script>
-  <!--尾部-->
+</script> 
  </body>
 </html>

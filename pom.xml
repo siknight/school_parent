@@ -9,8 +9,12 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
+        <!--公共子模块-->
         <module>school_common</module>
+        <!--用户web端-->
         <module>school_user_web</module>
+        <!--后台-->
+        <module>school_user</module>
     </modules>
 
 

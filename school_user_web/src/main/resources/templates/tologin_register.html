@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head> 
+  <meta charset="UTF-8" /> 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
+  <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ --> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <link rel="icon" href="./img/asset-favicon.ico" /> 
+  <title>社交-登录注册</title> 
+  <!-- 页面 css js --> 
+  <!-- <script type="text/javascript" src="../../plugins/sui/sui.min.js" charset="UTF-8"></script> --> 
+  <link rel="stylesheet" type="text/css" href="./plugins/normalize-css/normalize.css" /> 
+  <link rel="stylesheet" type="text/css" href="./plugins/yui/cssgrids-min.css" /> 
+  <link rel="stylesheet" type="text/css" href="./plugins/sui/sui.min.css" /> 
+  <link rel="stylesheet" type="text/css" href="./plugins/sui/sui-append.min.css" /> 
+  <link rel="stylesheet" type="text/css" href="./plugins/font-awesome/css/font-awesome.min.css" /> 
+  <link rel="stylesheet" type="text/css" href="./css/widget-base.css" /> 
+  <link rel="stylesheet" type="text/css" href="./css/widget-head-foot.css" /> 
+  <link rel="stylesheet" type="text/css" href="./css/page-sj-person-loginsign.css" />
+  <script src="./js/vuejs-2.5.16.js"></script>
+  <script src="./js/axios-0.18.0.js"></script>
+  <script src="./js/jquery-3.4.1.js"></script>
+ </head> 
+ <body> 
+  <!--头部导航--> 
+  <header class="head-login"> 
+   <div class="wrapper"> 
+    <div class="sui-navbar"> 
+     <div class="navbar-inner"> 
+      <a href="./index-login.html" class="sui-brand"> <img src="./img/asset-logo-black.png" alt="社交" /> </a> 
+      <span class="login-text">| 登录注册</span> 
+     </div> 
+    </div> 
+   </div>
+  </header>
+
+  <div class="wrapper loginsign">
+   <!--注册-->
+   <div class="item signup"> 
+    <div class="form"> 
+     <h3 class="loginsign-title">注册新账号</h3> 
+     <form class="sui-form"> 
+      <div class="control-group"> 
+       <label for="inputname" class="control-label">名字</label> 
+       <div class="controls"> 
+        <input type="text" id="register_name" placeholder="真实姓名或常用昵称" class="input-xlarge" />
+       </div> 
+      </div> 
+      <div class="different"> 
+       <div class="radio-content"> 
+        <div id="a1" class="phone"> 
+         <div class="control-group number"> 
+          <input type="text" placeholder="请输入邮箱" class="input-xlarge" />
+         </div> 
+         <div class="control-group code"> 
+          <div class="input-append"> 
+           <input id="appendedInputButton" type="text" placeholder="短信验证" class="span2 input-large msg-input" /> 
+           <button type="button" class="sui-btn msg-btn">获取验证码</button> 
+          </div> 
+         </div> 
+         <div class="control-group"> 
+          <label for="inputpassword" class="control-label">密码</label> 
+          <div class="controls"> 
+           <input type="text" id="register_password" placeholder="请输入6-16位密码" class="input-xlarge" />
+          </div> 
+         </div> 
+        </div> 
+       </div> 
+      </div> 
+      <div class="control-group btn-signup"> 
+       <label class="control-label"></label> 
+       <div class="controls"> 
+        <label> <input type="checkbox" /><span class="type-text" style="font-size:12px;">同意协议并接受《服务条款》</span> </label> 
+        <button type="button" class="sui-btn btn-danger btn-yes">注 册</button> 
+       </div> 
+      </div> 
+     </form> 
+    </div> 
+   </div>
+   <!--注册-->
+   <!--登录-->
+   <div class="item"> 
+    <div class="form"> 
+     <h3 class="loginsign-title">用户登录</h3> 
+     <form class="sui-form login-form"> 
+      <div class="control-group"> 
+       <label for="inputname" class="control-label">邮箱：</label>
+       <div class="controls"> 
+        <input type="text" id="inputname" placeholder="请输入邮箱" class="input-xlarge" data-rules="required" />
+       </div> 
+      </div> 
+      <div class="control-group"> 
+       <label for="inputpassword" class="control-label">密码：</label> 
+       <div class="controls"> 
+        <input type="text" id="inputpassword" placeholder="输入登录密码" class="input-xlarge" /> 
+       </div> 
+      </div> 
+      <div class="controls"> 
+       <label> <input type="checkbox" name="remember-me" /><span class="type-text" style="font-size:12px;">记住登录状态</span> </label> 
+       <button type="button" class="sui-btn btn-danger btn-yes">登 录</button> 
+      </div> 
+      <div class="other-methods"> 
+      </div> 
+     </form> 
+    </div> 
+   </div>
+   <!--登录-->
+  </div>
+
+  <script type="text/javascript">
+    new Vue({
+        el:"app",
+        data:{
+
+        }
+    });
+  </script>
+
+
+  <!--中间部分-->
+
+  <!--尾部-->
+  <div id="footer">
+
+  </div>
+  <script>
+      $('#footer').load('footer.html');
+  </script>
+  <!--尾部-->
+
+ </body>
+</html>
