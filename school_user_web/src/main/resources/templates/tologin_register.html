@@ -21,6 +21,8 @@
   <script src="./js/vuejs-2.5.16.js"></script>
   <script src="./js/axios-0.18.0.js"></script>
   <script src="./js/jquery-3.4.1.js"></script>
+  <link rel="stylesheet" type="text/css" href="./js/elementui/elementui.css">
+  <script src="./js/elementui/elementui.js"></script>
  </head> 
  <body> 
   <!--头部导航--> 
@@ -35,9 +37,9 @@
    </div>
   </header>
 
-  <div class="wrapper loginsign">
+  <div class="wrapper loginsign" >
    <!--注册-->
-   <div class="item signup"> 
+   <div class="item signup" id="registerApp">
     <div class="form"> 
      <h3 class="loginsign-title">注册新账号</h3> 
      <form class="sui-form"> 
@@ -51,18 +53,20 @@
        <div class="radio-content"> 
         <div id="a1" class="phone"> 
          <div class="control-group number"> 
-          <input type="text" placeholder="请输入邮箱" class="input-xlarge" />
+          <input type="text" placeholder="请输入邮箱" class="input-xlarge" v-model="user.mobile"/>
          </div> 
          <div class="control-group code"> 
           <div class="input-append"> 
-           <input id="appendedInputButton" type="text" placeholder="短信验证" class="span2 input-large msg-input" /> 
-           <button type="button" class="sui-btn msg-btn">获取验证码</button> 
+           <input v-model="verifyCode" type="text" placeholder="邮箱验证" class="span2 input-large msg-input" />
+           <button type="button" v-if="show" class="sui-btn msg-btn" @click="getCode()">获取验证码</button>
+           <button type="button" v-if="!show" class="sui-btn msg-btn">{{count}} s</button>
           </div> 
          </div> 
          <div class="control-group"> 
-          <label for="inputpassword" class="control-label">密码</label> 
+          <label for="inputpassword" class="control-label" >密码</label>
           <div class="controls"> 
-           <input type="text" id="register_password" placeholder="请输入6-16位密码" class="input-xlarge" />
+           <input type="password" style="height: 32px" v-model="user.password" placeholder="请输入密码" class="input-xlarge" />
+           <span v-text="result.message" style="color: red;font-size: medium"></span>
           </div> 
          </div> 
         </div> 
@@ -71,8 +75,8 @@
       <div class="control-group btn-signup"> 
        <label class="control-label"></label> 
        <div class="controls"> 
-        <label> <input type="checkbox" /><span class="type-text" style="font-size:12px;">同意协议并接受《服务条款》</span> </label> 
-        <button type="button" class="sui-btn btn-danger btn-yes">注 册</button> 
+        <label> <input type="checkbox" v-model="checkflag"/><span class="type-text" style="font-size:12px;">同意协议并接受《服务条款》</span> </label>
+        <button type="button" class="sui-btn btn-danger btn-yes" @click="register()">注 册</button>
        </div> 
       </div> 
      </form> 
@@ -80,25 +84,31 @@
    </div>
    <!--注册-->
    <!--登录-->
-   <div class="item"> 
+   <div class="item" id="loginApp">
     <div class="form"> 
      <h3 class="loginsign-title">用户登录</h3> 
      <form class="sui-form login-form"> 
       <div class="control-group"> 
-       <label for="inputname" class="control-label">邮箱：</label>
+       <label for="inputname" class="control-label" >邮箱：</label>
        <div class="controls"> 
-        <input type="text" id="inputname" placeholder="请输入邮箱" class="input-xlarge" data-rules="required" />
+        <input type="text" height="32px" id="inputname" v-model="user.mobile" placeholder="请输入邮箱" class="input-xlarge" data-rules="required" />
        </div> 
       </div> 
       <div class="control-group"> 
-       <label for="inputpassword" class="control-label">密码：</label> 
-       <div class="controls"> 
-        <input type="text" id="inputpassword" placeholder="输入登录密码" class="input-xlarge" /> 
-       </div> 
-      </div> 
-      <div class="controls"> 
+       <label for="inputpassword" class="control-label" >密码：</label>
+       <div class="controls">
+        <input type="password" style="height: 32px"  id="inputpassword" v-model="user.password" placeholder="输入登录密码" class="input-xlarge" data-rules="required"/>
+
+        <span v-text="result.message" style="color: red;font-size: medium"></span>
+       </div>
+
+      </div>
+
+
+      <div class="controls">
+
        <label> <input type="checkbox" name="remember-me" /><span class="type-text" style="font-size:12px;">记住登录状态</span> </label> 
-       <button type="button" class="sui-btn btn-danger btn-yes">登 录</button> 
+       <button type="button" class="sui-btn btn-danger btn-yes" @click="login">登 录</button>
       </div> 
       <div class="other-methods"> 
       </div> 
@@ -109,12 +119,79 @@
   </div>
 
   <script type="text/javascript">
-    new Vue({
-        el:"app",
-        data:{
+   <!--登录vue-->
+    var userlogin = new Vue({
+            el:"#loginApp",
+            data:{
+                user: {},
+                result:{},
 
+            },
+        methods:{
+            login: function () {
+                var url = "http://localhost:9001/user/login";
+                var _this = this;
+                //post必须用这种方式
+                var params = new URLSearchParams()
+                params.append('mobile', this.user.mobile)
+                params.append('password',this.user.password)
+                //post必须用这种方式
+                axios.post(url, params).then(function (response) {
+                    _this.result = response.data;
+                    window.localStorage.setItem("mobile",mobile);
+                    window.localStorage.setItem("token_"+_this.user.mobile,token);
+                }).catch(function (err) {
+                    console.log("网络错误");
+                });
+            }
         }
     });
+
+
+  //  注册vue
+   var userRegister = new Vue({
+       el:"#registerApp",
+       data:{
+           user: {},  //用户
+           verifyCode:"", //验证码
+           result:{}, //服务器返回结果
+           checkflag:true,  //是否同意协议，默认同意
+           show:true,   //验证码倒计时，默认是显示发送按钮，点击后显示倒计时，倒计时结束后，又变成发送按钮
+           count: '',
+           timer: null,
+       },
+       methods:{
+           getCode:function () {
+               var url = "http://localhost:9001/user/sendsms/"+this.user.mobile;
+               var _this = this;
+               axios.post(url).then(function (response) {
+                   var TIME_COUNT = 30;
+                   _this.show = false;
+                   if (!_this.timer) {
+                       _this.count = TIME_COUNT;
+
+                       _this.timer=setInterval(() =>{
+                           if (_this.count > 0 && _this.count <= TIME_COUNT) {
+                               _this.count--;
+                         } else{
+                           _this.show = true;
+                           clearInterval(_this.timer);
+                           _this.timer = null;
+                       }
+                       },1000);
+
+                   }
+
+               // _this.result = response.data;
+                   // window.localStorage.setItem("mobile",mobile);
+                   // window.localStorage.setItem("token_"+_this.user.mobile,token);
+               }).catch(function (err) {
+                   console.log("网络错误");
+               });
+           }
+       }
+   });
+
   </script>
 
 

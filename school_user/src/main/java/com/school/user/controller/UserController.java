@@ -49,7 +49,7 @@ public class UserController {
 		return new Result(true,StatusCode.OK,"发送成功");
 	}
 
-	/**
+	/*
 	 * 注册 添加用户
 	 * @param user
 	 * @param code
@@ -57,9 +57,9 @@ public class UserController {
 	 */
 	@RequestMapping(value="/register/{code}",method=RequestMethod.POST)
 	public Result register(@RequestBody User user , @PathVariable String code){
-//		userService.add(user,code);
-//		return new Result(true,StatusCode.OK,"注册成功");
-		return null;
+		userService.add(user,code);
+		return new Result(true,StatusCode.OK,"注册成功");
+
 	}
 	
 	/**
@@ -78,8 +78,8 @@ public class UserController {
 	 */
 	@RequestMapping(value="/{id}",method= RequestMethod.GET)
 	public Result findById(@PathVariable String id){
-//		return new Result(true,StatusCode.OK,"查询成功",userService.findById(id));
-		return null;
+		return new Result(true,StatusCode.OK,"查询成功",userService.findById(id));
+
 	}
 
 	/**
@@ -108,20 +108,20 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(value="/login",method=RequestMethod.POST)
-	public Result login(String mobile, String password){
-//		System.out.println("mobile="+mobile+",password="+password+",加密后="+encoder.encode(password));
-//		User user = userService.findByMobileAndPassword(mobile,password);
-//		if(user!=null){
-//			String token = jwtUtil.createJWT(user.getId(), user.getNickname(), "user");
-//			Map map=new HashMap();
-//			map.put("token",token);
-//			map.put("name",user.getNickname());//昵称
-//			map.put("avatar",user.getAvatar());//头像
-//			return new Result(true,StatusCode.OK,"登陆成功",map);
-//		}else {
-//			return new Result(false,StatusCode.LOGINERROR,"用户名或密码错误");
-//		}
-		return null;
+	public Result login(@RequestParam("mobile") String mobile,@RequestParam("password") String password){
+		System.out.println("mobile="+mobile+",password="+password);
+		User user = userService.findByMobileAndPassword(mobile,password);
+		if(user!=null){
+			String token = jwtUtil.createJWT(user.getId(), user.getNickname(), "user");
+			Map map=new HashMap();
+			map.put("token",token);  //里面包含id，nickname
+			map.put("name",user.getNickname());//昵称
+			map.put("avatar",user.getAvatar());//头像
+			return new Result(true,StatusCode.OK,"登陆成功",map);
+		}else {
+			return new Result(false,StatusCode.LOGINERROR,"用户名或密码错误");
+		}
+
 	}
 
 

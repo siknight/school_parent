@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit;
  *
  */
 @Service
+@Transactional
 public class UserService {
 
 	@Autowired
@@ -39,8 +40,6 @@ public class UserService {
 	@Autowired
 	private RedisTemplate redisTemplate;
 
-//	@Autowired
-//	private RabbitTemplate rabbitTemplate;
 
 	@Autowired
 	private MailService mailService;
@@ -72,16 +71,10 @@ public class UserService {
 		}
 		System.out.println(mobile+"收到验证码是："+code);
 		//2.将验证码放入redis
-		redisTemplate.opsForValue().set("smscode_"+mobile, code+"" ,5, TimeUnit.MINUTES );//五分钟过期
+		redisTemplate.opsForValue().set("smscode_"+mobile, code+"" ,5, TimeUnit.HOURS);//五分钟过期
 		//3.发送出去
 		mailService.sendSimpleMail(mobile,"校园社交验证码","尊敬的用户您好,你的验证码为"+code+",五分钟内有效");
-		//3.将验证码和手机号发动到rabbitMQ中
-//		Map<String,String> map=new HashMap();
-//		map.put("mobile",mobile);
-//		map.put("code",code+"");
 
-
-//		rabbitTemplate.convertAndSend("sms",map); //直接模式
 	}
 
 	/**
@@ -101,6 +94,12 @@ public class UserService {
 		if(!syscode.equals(code)){
 			throw new RuntimeException("验证码输入不正确");
 		}
+
+		User byMobile = userDao.findByMobile(user.getMobile());
+		if (byMobile!=null){
+			throw new RuntimeException("该邮箱已被注册");
+		}
+
 		user.setId( idWorker.nextId()+"" );
 		user.setFollowcount(0);//关注数
 		user.setFanscount(0);//粉丝数
@@ -110,7 +109,7 @@ public class UserService {
 		user.setLastdate(new Date());//最后登陆日期
 
 		//密码加密
-		String newpassword = encoder.encode(user.getPassword());//加密后的 密码
+		String newpassword = encoder.encode(user.getPassword());//加密后的密码
 		user.setPassword(newpassword);
 		//密码加密
 		userDao.save(user);
@@ -126,8 +125,10 @@ public class UserService {
 		User user = userDao.findByMobile(mobile);
 		if (user!=null&&encoder.matches(password,user.getPassword())){
 			return user;
+		}else if (user==null){
+			throw new RuntimeException("该账户不存在");
 		}else{
-			return  null;
+			throw new RuntimeException("密码错误");
 		}
 
 	}
@@ -180,14 +181,7 @@ public class UserService {
 		return userDao.findById(id).get();
 	}
 
-	/**
-	 * 增加
-	 * @param user
-	 */
-	public void add(User user) {
-		user.setId( idWorker.nextId()+"" );
-		userDao.save(user);
-	}
+
 
 	/**
 	 * 修改
