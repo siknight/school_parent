@@ -46,18 +46,18 @@
       <div class="control-group"> 
        <label for="inputname" class="control-label">名字</label> 
        <div class="controls"> 
-        <input type="text" id="register_name" placeholder="真实姓名或常用昵称" class="input-xlarge" />
+        <input type="text" id="register_name" v-model="user.nickname" placeholder="真实姓名或常用昵称" class="input-xlarge" />
        </div> 
       </div> 
       <div class="different"> 
        <div class="radio-content"> 
         <div id="a1" class="phone"> 
          <div class="control-group number"> 
-          <input type="text" placeholder="请输入邮箱" class="input-xlarge" v-model="user.mobile"/>
+          <input type="text" placeholder="请输入邮箱" class="input-xlarge" v-model.trim ="user.mobile"/>
          </div> 
          <div class="control-group code"> 
           <div class="input-append"> 
-           <input v-model="verifyCode" type="text" placeholder="邮箱验证" class="span2 input-large msg-input" />
+           <input v-model.trim="verifyCode" type="text" placeholder="邮箱验证" class="span2 input-large msg-input" />
            <button type="button" v-if="show" class="sui-btn msg-btn" @click="getCode()">获取验证码</button>
            <button type="button" v-if="!show" class="sui-btn msg-btn">{{count}} s</button>
           </div> 
@@ -65,8 +65,9 @@
          <div class="control-group"> 
           <label for="inputpassword" class="control-label" >密码</label>
           <div class="controls"> 
-           <input type="password" style="height: 32px" v-model="user.password" placeholder="请输入密码" class="input-xlarge" />
-           <span v-text="result.message" style="color: red;font-size: medium"></span>
+           <input type="password" style="height: 32px" v-model.trim="user.password" placeholder="请输入密码" class="input-xlarge" />
+          <br/>
+           <span v-text="error" style="color: red;font-size: medium"></span>
           </div> 
          </div> 
         </div> 
@@ -75,7 +76,8 @@
       <div class="control-group btn-signup"> 
        <label class="control-label"></label> 
        <div class="controls"> 
-        <label> <input type="checkbox" v-model="checkflag"/><span class="type-text" style="font-size:12px;">同意协议并接受《服务条款》</span> </label>
+        <label> <input type="checkbox" v-model="checkflag"/>
+         <span class="type-text" style="font-size:12px;">同意协议并接受《<span style="color: green" onclick="alert('在该平台不允许做任何违法国家法律的事情，否则后果自负')">服务条款</span>》</span> </label>
         <button type="button" class="sui-btn btn-danger btn-yes" @click="register()">注 册</button>
        </div> 
       </div> 
@@ -91,14 +93,14 @@
       <div class="control-group"> 
        <label for="inputname" class="control-label" >邮箱：</label>
        <div class="controls"> 
-        <input type="text" height="32px" id="inputname" v-model="user.mobile" placeholder="请输入邮箱" class="input-xlarge" data-rules="required" />
+        <input type="text" height="32px" id="inputname" v-model.trim="user.mobile" placeholder="请输入邮箱" class="input-xlarge" data-rules="required" />
        </div> 
       </div> 
       <div class="control-group"> 
        <label for="inputpassword" class="control-label" >密码：</label>
        <div class="controls">
-        <input type="password" style="height: 32px"  id="inputpassword" v-model="user.password" placeholder="输入登录密码" class="input-xlarge" data-rules="required"/>
-
+        <input type="password" style="height: 32px"  id="inputpassword" v-model.trim="user.password" placeholder="输入登录密码" class="input-xlarge" data-rules="required"/>
+         <br/>
         <span v-text="result.message" style="color: red;font-size: medium"></span>
        </div>
 
@@ -107,7 +109,9 @@
 
       <div class="controls">
 
-       <label> <input type="checkbox" name="remember-me" /><span class="type-text" style="font-size:12px;">记住登录状态</span> </label> 
+       <label> <input type="checkbox" name="rememberme" v-model="rememberme"/>
+        <span class="type-text" style="font-size:12px;">记住登录状态</span>
+       </label>
        <button type="button" class="sui-btn btn-danger btn-yes" @click="login">登 录</button>
       </div> 
       <div class="other-methods"> 
@@ -124,26 +128,57 @@
             el:"#loginApp",
             data:{
                 user: {},
-                result:{},
+                result:{
+                    message:""
+                },
+                rememberme:false
 
             },
         methods:{
             login: function () {
-                var url = "http://localhost:9001/user/login";
-                var _this = this;
-                //post必须用这种方式
-                var params = new URLSearchParams()
-                params.append('mobile', this.user.mobile)
-                params.append('password',this.user.password)
-                //post必须用这种方式
-                axios.post(url, params).then(function (response) {
-                    _this.result = response.data;
-                    window.localStorage.setItem("mobile",mobile);
-                    window.localStorage.setItem("token_"+_this.user.mobile,token);
-                }).catch(function (err) {
-                    console.log("网络错误");
-                });
+                this.result.message="";
+                var regEmail = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+                if(this.user.mobile==null||this.user.mobile==""){
+                    this.result.message="邮箱不能为空";
+                }else if(!regEmail.test(this.user.mobile)){
+                    this.result.message="邮箱格式不正确";
+                }else if(this.user.password==null||this.user.password==""){
+                    this.result.message="密码不能为空";
+                }else{
+                    var url = "http://localhost:9001/user/login";
+                    var _this = this;
+                    //post必须用这种方式
+                    var params = new URLSearchParams()
+                    params.append('mobile', this.user.mobile)
+                    params.append('password',this.user.password)
+                    //post必须用这种方式
+                    axios.post(url, params).then(function (response) {
+                        _this.result = response.data;
+                        window.localStorage.setItem("nickName_school",_this.result.data.name);
+                        window.localStorage.setItem("mobile_school",_this.user.mobile);
+                        window.localStorage.setItem("token_school",_this.result.data.token);
+                        if (_this.rememberme==true){  //如果为true下次登录就直接显示了
+                            window.localStorage.setItem("userpass_school",_this.user.password);
+                        } else {  //如果为false，就将密码删除
+                            window.localStorage.removeItem("userpass_school");
+                        }
+                    }).catch(function (err) {
+                        console.log("网络错误");
+                    });
+                }
+
+            },  //login方法
+            loadInit: function(){
+                var userpass_school = window.localStorage.getItem("userpass_school");
+                if (userpass_school!=null){
+                   this.user.mobile = window.localStorage.getItem("mobile_school");
+                   this.user.password = userpass_school;
+                   this.rememberme=true;
+                }
             }
+        },  //methods
+        created(){
+            this.loadInit();
         }
     });
 
@@ -159,35 +194,76 @@
            show:true,   //验证码倒计时，默认是显示发送按钮，点击后显示倒计时，倒计时结束后，又变成发送按钮
            count: '',
            timer: null,
+           error:""
        },
        methods:{
            getCode:function () {
-               var url = "http://localhost:9001/user/sendsms/"+this.user.mobile;
-               var _this = this;
-               axios.post(url).then(function (response) {
-                   var TIME_COUNT = 30;
-                   _this.show = false;
-                   if (!_this.timer) {
-                       _this.count = TIME_COUNT;
+               this.error="";
+               //邮箱正则表达式
+               var regEmail = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+               if(this.user.mobile==null||this.user.mobile==""){
+                  this.error="邮箱不能为空";
+               }else if(!regEmail.test(this.user.mobile)){
+                   this.error="邮箱格式不正确"
+               }else{
+                   var url = "http://localhost:9001/user/sendsms/"+this.user.mobile;
+                   var _this = this;
 
-                       _this.timer=setInterval(() =>{
-                           if (_this.count > 0 && _this.count <= TIME_COUNT) {
+                   axios.post(url).then(function (response) {
+                       var TIME_COUNT = 30;
+                       _this.show = false;
+                       console.log(_this.timer);  //null
+                       if (!_this.timer) {  //非空
+                           _this.count = TIME_COUNT;
+
+                           _this.timer=setInterval(() =>{
+                               if (_this.count > 0 && _this.count <= TIME_COUNT) {
                                _this.count--;
-                         } else{
-                           _this.show = true;
-                           clearInterval(_this.timer);
-                           _this.timer = null;
-                       }
+                           } else{
+                               _this.show = true;
+                               clearInterval(_this.timer);
+                               _this.timer = null;
+                           }
                        },1000);
 
-                   }
+                       }
+                   }).catch(function (err) {
+                       console.log("网络错误");
+                   });
+               }  //else
 
-               // _this.result = response.data;
-                   // window.localStorage.setItem("mobile",mobile);
-                   // window.localStorage.setItem("token_"+_this.user.mobile,token);
-               }).catch(function (err) {
-                   console.log("网络错误");
-               });
+           },  //getcode
+           //注册方法
+           register:function () {
+               this.error="";
+               var regEmail = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+               if(this.user.nickname==null||this.user.nickname==""){
+                   this.error="名字不能为空";
+               }else if(this.user.mobile==null||this.user.mobile==""){
+                   this.error="邮箱不能为空";
+               }else if(!regEmail.test(this.user.mobile)){
+                   this.error="邮箱格式不正确";
+               }else if(this.verifyCode==null||this.verifyCode==""){
+                   this.error="验证码不能为空";
+               }else if(this.user.password==null||this.user.password==""){
+                   this.error="密码不能为空";
+               }else if(this.checkflag == false){
+                   this.error="你必须同意服务条款才能注册";
+               }else{
+                   var url = "http://localhost:9001/user/register/"+this.verifyCode;
+                   var _this = this;
+                   //json请求用默认方式
+                   axios.post(url, _this.user
+                   ).then(function (response) {
+                       _this.result = response.data;
+                       _this.error = _this.result.message;
+                   }).catch(function (err) {
+                       console.log("网络错误");
+                   });
+               }
+
+
+
            }
        }
    });
