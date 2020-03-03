@@ -23,6 +23,11 @@
   <script src="./js/jquery-3.4.1.js"></script>
   <link rel="stylesheet" type="text/css" href="./js/elementui/elementui.css">
   <script src="./js/elementui/elementui.js"></script>
+  <style>
+   [v-cloak]{
+    display: none;
+   }
+  </style>
  </head> 
  <body> 
   <!--头部导航--> 
@@ -57,7 +62,7 @@
          </div> 
          <div class="control-group code"> 
           <div class="input-append"> 
-           <input v-model.trim="verifyCode" type="text" placeholder="邮箱验证" class="span2 input-large msg-input" />
+           <input v-model.trim="verifyCode" type="text" placeholder="邮箱验证码" class="span2 input-large msg-input" />
            <button type="button" v-if="show" class="sui-btn msg-btn" @click="getCode()">获取验证码</button>
            <button type="button" v-if="!show" class="sui-btn msg-btn">{{count}} s</button>
           </div> 
@@ -76,8 +81,11 @@
       <div class="control-group btn-signup"> 
        <label class="control-label"></label> 
        <div class="controls"> 
-        <label> <input type="checkbox" v-model="checkflag"/>
-         <span class="type-text" style="font-size:12px;">同意协议并接受《<span style="color: green" onclick="alert('在该平台不允许做任何违法国家法律的事情，否则后果自负')">服务条款</span>》</span> </label>
+        <label> <input type="checkbox" v-model="checkflag" style="margin-right: 0px;padding-right: 0px"/>
+         <span class="type-text" style="font-size:12px;margin:0px;padding: 0px">同意协议并接受
+         </span >
+        </label>
+        《<span style="color: green;margin:0px;padding: 0px" onclick="alert('在该平台不允许做任何违法国家法律的事情，否则后果自负')">服务条款</span>》
         <button type="button" class="sui-btn btn-danger btn-yes" @click="register()">注 册</button>
        </div> 
       </div> 
@@ -85,9 +93,10 @@
     </div> 
    </div>
    <!--注册-->
-   <!--登录-->
-   <div class="item" id="loginApp">
-    <div class="form"> 
+   <!--登录和修改密码-->
+   <div class="item" id="loginApp" >
+    <!--登陆-->
+    <div class="form" v-show="registerLoginFlag">
      <h3 class="loginsign-title">用户登录</h3> 
      <form class="sui-form login-form"> 
       <div class="control-group"> 
@@ -95,7 +104,8 @@
        <div class="controls"> 
         <input type="text" height="32px" id="inputname" v-model.trim="user.mobile" placeholder="请输入邮箱" class="input-xlarge" data-rules="required" />
        </div> 
-      </div> 
+      </div>
+
       <div class="control-group"> 
        <label for="inputpassword" class="control-label" >密码：</label>
        <div class="controls">
@@ -109,17 +119,75 @@
 
       <div class="controls">
 
-       <label> <input type="checkbox" name="rememberme" v-model="rememberme"/>
-        <span class="type-text" style="font-size:12px;">记住登录状态</span>
+       <label>
+          <input type="checkbox" name="rememberme" v-model="rememberme"/>
+          <span class="type-text" style="font-size:12px;">记住登录状态</span> &nbsp;&nbsp;
        </label>
+       <label>
+        <a class="type-text" style="font-size:12px;margin:0px;padding: 0px;color: green" @click="registerLoginComeBack()">忘记密码?
+        </a >
+       </label>
+
        <button type="button" class="sui-btn btn-danger btn-yes" @click="login">登 录</button>
       </div> 
       <div class="other-methods"> 
       </div> 
      </form> 
-    </div> 
+    </div>
+    <!--登陆-->
+    <!--修改密码-->
+    <div class="form" v-show="!registerLoginFlag">
+     <h3 class="loginsign-title">修改密码</h3>
+     <form class="sui-form">
+      <!--<div class="control-group">-->
+       <!--<label for="inputname" class="control-label">名字</label>-->
+       <!--<div class="controls">-->
+        <!--<input type="text" id="register_name3" v-model="user.nickname" placeholder="真实姓名或常用昵称" class="input-xlarge" />-->
+       <!--</div>-->
+      <!--</div>-->
+      <div class="different">
+       <div class="radio-content">
+        <div id="a3" class="phone">
+         <div class="control-group number">
+          <label for="inputname" class="control-label">邮箱</label>
+          <input type="text" placeholder="请输入邮箱" class="input-xlarge" v-model.trim ="user.mobile"/>
+         </div>
+         <div class="control-group code">
+          <div class="input-append">
+           <input v-model.trim="verifyCode" type="text" placeholder="邮箱验证码" class="span2 input-large msg-input" />
+           <button type="button" v-if="show" class="sui-btn msg-btn" @click="getCode()">获取验证码</button>
+           <button type="button" v-if="!show" class="sui-btn msg-btn">{{count}} s</button>
+          </div>
+         </div>
+         <div class="control-group">
+          <label for="inputpassword" class="control-label" >密码</label>
+          <div class="controls">
+           <input type="password" style="height: 32px" v-model.trim="user.password" placeholder="请输入密码" class="input-xlarge" />
+           <br/>
+           <span v-text="result.message" style="color: red;font-size: medium"></span>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+      <div class="control-group btn-signup">
+       <label class="control-label"></label>
+       <div class="controls">
+        <label>
+         &nbsp;&nbsp;
+          <a class="type-text" style="font-size:12px;margin:0px;padding: 0px;color: green" @click="registerLoginComeBack()">返回登陆?
+          </a >
+        </label>
+        &nbsp;&nbsp;
+        <button type="button" class="sui-btn btn-danger btn-yes" @click="updatePass()">修改</button>
+       </div>
+      </div>
+     </form>
+    </div>
+    <!--修改密码-->
    </div>
-   <!--登录-->
+   <!--登录和修改密码-->
+
   </div>
 
   <script type="text/javascript">
@@ -131,10 +199,17 @@
                 result:{
                     message:""
                 },
-                rememberme:false
+                rememberme:false,
+                registerLoginFlag:true,  //true表示显示登陆 false表示显示修改密码
+                show:true,   //验证码倒计时，默认是显示发送按钮，点击后显示倒计时，倒计时结束后，又变成发送按钮
+                count: '',
+                timer: null,
+                verifyCode:"", //验证码
+
 
             },
         methods:{
+
             login: function () {
                 this.result.message="";
                 var regEmail = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
@@ -175,6 +250,9 @@
                    this.user.password = userpass_school;
                    this.rememberme=true;
                 }
+            },
+            registerLoginComeBack:function () {
+                this.registerLoginFlag = !this.registerLoginFlag;
             }
         },  //methods
         created(){
