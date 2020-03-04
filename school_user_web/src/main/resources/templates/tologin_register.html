@@ -21,8 +21,9 @@
   <script src="./js/vuejs-2.5.16.js"></script>
   <script src="./js/axios-0.18.0.js"></script>
   <script src="./js/jquery-3.4.1.js"></script>
-  <link rel="stylesheet" type="text/css" href="./js/elementui/elementui.css">
-  <script src="./js/elementui/elementui.js"></script>
+  <script src="./js/schoolUrl.js"></script>
+  <!--<link rel="stylesheet" type="text/css" href="./js/elementui/elementui.css">-->
+  <!--<script src="./js/elementui/elementui.js"></script>-->
   <style>
    [v-cloak]{
     display: none;
@@ -127,7 +128,8 @@
         <a class="type-text" style="font-size:12px;margin:0px;padding: 0px;color: green" @click="registerLoginComeBack()">忘记密码?
         </a >
        </label>
-
+       <!-- 下面链接为了解决window.location.href 跳转兼容问题-->
+       <a id='links' href="#" style='display:none;'></a>
        <button type="button" class="sui-btn btn-danger btn-yes" @click="login">登 录</button>
       </div> 
       <div class="other-methods"> 
@@ -189,8 +191,8 @@
    <!--登录和修改密码-->
 
   </div>
-<script src="./js/schoolUrl.js"></script>
-  <!--将此页vuey代码引进来-->
+
+  <!--将此页vue代码引进来-->
   <script type="text/javascript" src="./js/tologin_register.js">
 
   </script>
