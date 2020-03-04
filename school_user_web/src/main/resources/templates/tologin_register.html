@@ -155,7 +155,7 @@
          <div class="control-group code">
           <div class="input-append">
            <input v-model.trim="verifyCode" type="text" placeholder="邮箱验证码" class="span2 input-large msg-input" />
-           <button type="button" v-if="show" class="sui-btn msg-btn" @click="getCode()">获取验证码</button>
+           <button type="button" v-if="show" class="sui-btn msg-btn" @click="updatePassCode()">获取验证码</button>
            <button type="button" v-if="!show" class="sui-btn msg-btn">{{count}} s</button>
           </div>
          </div>
@@ -189,162 +189,9 @@
    <!--登录和修改密码-->
 
   </div>
-
-  <script type="text/javascript">
-   <!--登录vue-->
-    var userlogin = new Vue({
-            el:"#loginApp",
-            data:{
-                user: {},
-                result:{
-                    message:""
-                },
-                rememberme:false,
-                registerLoginFlag:true,  //true表示显示登陆 false表示显示修改密码
-                show:true,   //验证码倒计时，默认是显示发送按钮，点击后显示倒计时，倒计时结束后，又变成发送按钮
-                count: '',
-                timer: null,
-                verifyCode:"", //验证码
-
-
-            },
-        methods:{
-
-            login: function () {
-                this.result.message="";
-                var regEmail = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-                if(this.user.mobile==null||this.user.mobile==""){
-                    this.result.message="邮箱不能为空";
-                }else if(!regEmail.test(this.user.mobile)){
-                    this.result.message="邮箱格式不正确";
-                }else if(this.user.password==null||this.user.password==""){
-                    this.result.message="密码不能为空";
-                }else{
-                    var url = "http://localhost:9001/user/login";
-                    var _this = this;
-                    //post必须用这种方式
-                    var params = new URLSearchParams()
-                    params.append('mobile', this.user.mobile)
-                    params.append('password',this.user.password)
-                    //post必须用这种方式
-                    axios.post(url, params).then(function (response) {
-                        _this.result = response.data;
-                        window.localStorage.setItem("nickName_school",_this.result.data.name);
-                        window.localStorage.setItem("mobile_school",_this.user.mobile);
-                        window.localStorage.setItem("token_school",_this.result.data.token);
-                        if (_this.rememberme==true){  //如果为true下次登录就直接显示了
-                            window.localStorage.setItem("userpass_school",_this.user.password);
-                        } else {  //如果为false，就将密码删除
-                            window.localStorage.removeItem("userpass_school");
-                        }
-                    }).catch(function (err) {
-                        console.log("网络错误");
-                    });
-                }
-
-            },  //login方法
-            loadInit: function(){
-                var userpass_school = window.localStorage.getItem("userpass_school");
-                if (userpass_school!=null){
-                   this.user.mobile = window.localStorage.getItem("mobile_school");
-                   this.user.password = userpass_school;
-                   this.rememberme=true;
-                }
-            },
-            registerLoginComeBack:function () {
-                this.registerLoginFlag = !this.registerLoginFlag;
-            }
-        },  //methods
-        created(){
-            this.loadInit();
-        }
-    });
-
-
-  //  注册vue
-   var userRegister = new Vue({
-       el:"#registerApp",
-       data:{
-           user: {},  //用户
-           verifyCode:"", //验证码
-           result:{}, //服务器返回结果
-           checkflag:true,  //是否同意协议，默认同意
-           show:true,   //验证码倒计时，默认是显示发送按钮，点击后显示倒计时，倒计时结束后，又变成发送按钮
-           count: '',
-           timer: null,
-           error:""
-       },
-       methods:{
-           getCode:function () {
-               this.error="";
-               //邮箱正则表达式
-               var regEmail = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-               if(this.user.mobile==null||this.user.mobile==""){
-                  this.error="邮箱不能为空";
-               }else if(!regEmail.test(this.user.mobile)){
-                   this.error="邮箱格式不正确"
-               }else{
-                   var url = "http://localhost:9001/user/sendsms/"+this.user.mobile;
-                   var _this = this;
-
-                   axios.post(url).then(function (response) {
-                       var TIME_COUNT = 30;
-                       _this.show = false;
-                       console.log(_this.timer);  //null
-                       if (!_this.timer) {  //非空
-                           _this.count = TIME_COUNT;
-
-                           _this.timer=setInterval(() =>{
-                               if (_this.count > 0 && _this.count <= TIME_COUNT) {
-                               _this.count--;
-                           } else{
-                               _this.show = true;
-                               clearInterval(_this.timer);
-                               _this.timer = null;
-                           }
-                       },1000);
-
-                       }
-                   }).catch(function (err) {
-                       console.log("网络错误");
-                   });
-               }  //else
-
-           },  //getcode
-           //注册方法
-           register:function () {
-               this.error="";
-               var regEmail = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-               if(this.user.nickname==null||this.user.nickname==""){
-                   this.error="名字不能为空";
-               }else if(this.user.mobile==null||this.user.mobile==""){
-                   this.error="邮箱不能为空";
-               }else if(!regEmail.test(this.user.mobile)){
-                   this.error="邮箱格式不正确";
-               }else if(this.verifyCode==null||this.verifyCode==""){
-                   this.error="验证码不能为空";
-               }else if(this.user.password==null||this.user.password==""){
-                   this.error="密码不能为空";
-               }else if(this.checkflag == false){
-                   this.error="你必须同意服务条款才能注册";
-               }else{
-                   var url = "http://localhost:9001/user/register/"+this.verifyCode;
-                   var _this = this;
-                   //json请求用默认方式
-                   axios.post(url, _this.user
-                   ).then(function (response) {
-                       _this.result = response.data;
-                       _this.error = _this.result.message;
-                   }).catch(function (err) {
-                       console.log("网络错误");
-                   });
-               }
-
-
-
-           }
-       }
-   });
+<script src="./js/schoolUrl.js"></script>
+  <!--将此页vuey代码引进来-->
+  <script type="text/javascript" src="./js/tologin_register.js">
 
   </script>
 

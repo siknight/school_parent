@@ -61,6 +61,13 @@ public class UserController {
 		return new Result(true,StatusCode.OK,"注册成功");
 
 	}
+
+	@RequestMapping(value="/pass/{code}",method=RequestMethod.PUT)
+	public Result updatePass(@RequestBody User user , @PathVariable String code){
+		userService.updatePass(user,code);
+		return new Result(true,StatusCode.OK,"密码修改成功，请登录");
+
+	}
 	
 	/**
 	 * 查询全部数据

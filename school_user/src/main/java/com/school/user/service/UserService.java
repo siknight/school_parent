@@ -78,6 +78,36 @@ public class UserService {
 	}
 
 	/**
+	 * 修改密码
+	 * @param user
+	 * @param code
+	 */
+	public void updatePass(User user,String code) {
+        //判断验证码是否正确
+		String syscode = (String)redisTemplate.opsForValue().get("smscode_" + user.getMobile());
+		System.out.println("syscode redis="+syscode);
+		//提取系统正确的验证码
+		if(syscode==null){
+			throw new RuntimeException("请点击获取短信验证码");
+		}
+
+		if(!syscode.equals(code)){
+			throw new RuntimeException("验证码输入不正确");
+		}
+		User byMobile = userDao.findByMobile(user.getMobile());
+		if (byMobile==null){
+			throw new RuntimeException("该邮箱尚未注册");
+		}
+
+		//密码加密
+		String newpassword = encoder.encode(user.getPassword());//加密后的密码
+		user.setPassword(newpassword);
+
+		userDao.updatePass(user.getMobile(),newpassword);
+
+	}
+
+	/**
 	 * 添加用户
 	 * @param user
 	 * @param code
@@ -256,3 +286,22 @@ public class UserService {
 	}
 
 }
+
+/*
+*
+  mail:
+    host: smtp.qq.com 	#邮箱服务器地址
+    username: 1786678583@qq.com  #邮箱账号
+    password: ihypidhglruvbigd	#邮箱密码
+    default-encoding: utf-8	#默认编码
+    --------
+    spring.mail.host=smtp.163.com
+//spring.mail.port=587 这是qq的端口，网易不需要
+spring.mail.username=hufei1639670695@163.com
+spring.mail.password=merryhappy123456
+spring.mail.default-encoding=utf-8
+spring.mail.properties.mail.smtp.socketFactory.class=javax.net.ssl.SSLSocketFactory
+//将发送邮件得过程打印在控制台
+spring.mail.properties.mail.debug=true//打印日志
+
+ */

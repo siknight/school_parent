@@ -16,6 +16,15 @@ public interface UserDao extends JpaRepository<User,String>,JpaSpecificationExec
     public User findByMobile(String mobile);
 
     /**
+     * 修改密码
+     * @param mobile
+     * @param password
+     */
+    @Modifying
+    @Query("update User u set u.password=?2 where u.mobile=?1")
+    public void updatePass(String mobile, String password);
+
+    /**
      * 跟新粉丝数
      * @param userid
      * @param x
