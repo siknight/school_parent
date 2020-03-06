@@ -75,24 +75,19 @@
 </header>
     
 
-    </div>
-    <!--二层导航-->
-    <div class="tab-nav ">
 
-     </div>
-    <!--二层导航-->
     <!--两列布局-->
     <div class="wrapper">
         <div class="submit-headline">
-            <!--左侧发布-->
-    <div class="left-box">
+            <!--左侧发布 绑定-->
+    <div class="left-box" id="articleApp">
         <h3 class="tit">
             <span>发布头条</span>
         </h3>
         <form class="sui-form form-horizontal">
             <div class="control-group">
                 <div class="controls title-input">
-                    <input type="text" id="inputEmail" placeholder="标题：不超过30个字符">
+                    <input type="text" id="inputEmail" 　 placeholder="标题：不超过30个字符">
                 </div>
             </div>
             <div class="control-group select">
@@ -136,6 +131,14 @@
             </div>
         </form>
     </div>
+            <script type="text/javascript">
+                var articleVue = new Vue({
+                    el:"#articleApp",
+                    data:{
+
+                    }
+                });
+            </script>
      <!--左侧发布-->
       <!--右侧发布-->
     <div class="right-tips">

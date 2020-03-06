@@ -8,7 +8,6 @@ import java.io.IOException;
 /**
  * 跨域请求处理工具类
  * @author Think
- *
  */
 @Component
 public class DomainFilter implements Filter {
