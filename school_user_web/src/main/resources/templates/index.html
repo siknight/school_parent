@@ -23,10 +23,7 @@
   <script src="./js/vuejs-2.5.16.js"></script>
   <script src="./js/axios-0.18.0.js"></script>
   <script src="./js/schoolUrl.js"></script>
-  <!--引入elementui-->
-  <link rel="stylesheet" type="text/css" href="./js/elementui/elementui.css">
-  <script src="./js/elementui/elementui.js"></script>
-  <!--引入elementui-->
+
   <style>
    [v-cloak]{
     display: none;
@@ -45,7 +42,10 @@
          <a href="#" class="sui-brand">
           <!--<div >开心校园</div>-->
           <!--图标-->
-          <img src="./img/asset-logo-black.png" alt="社交" />
+          <!--./img/asset-favicon.ico
+          ./img/asset-logo-black.png
+          -->
+          <img src="./img/asset-logo-black.png"  alt="社交" />
       </a>
       <ul class="sui-nav"> 
        <li class="active"><a href="./headline-logined.html">头条</a></li> 
@@ -53,34 +53,32 @@
        <li><a href="./activity-index.html">活动</a></li> 
        <li><a href="./makeFriends-index.html">交友</a></li> 
        <li><a href="./spit-index.html">吐槽</a></li> 
-       <li><a href="./recruit-index.html">招聘</a></li> 
-      </ul> 
-      <form class="sui-form sui-form pull-left"> 
+       <li><a href="./recruit-index.html">招聘</a></li>
+      </ul>
+      <form class="sui-form -pull-right">
        <input type="text" placeholder="输入关键词..." />
-       <!--搜索按钮-->
-       <!--<span class="btn-search fa fa-search"></span>-->
-       <!--<el-button type="primary" icon="el-icon-search">搜索</el-button>-->
-       <el-button  icon="el-icon-search"></el-button>
-       <!--搜索按钮-->
+       <span class="btn-search fa fa-search"></span>
+       <!--搜索-->
+
+       <!--这部分为用户管理部分 没有登录状况-->
+       <div class="sui-nav pull-right info" v-show="show">
+        <li><a href="tologin_register.html" target="_blank">注册</a></li>
+        <li><a href="tologin_register.html" target="_blank" class="sui-btn btn-login">登录</a></li>
+       </div>
+       <!--这部分为用户管理部分 没有登录状况-->
+       <!--这部分为用户管理部分 登录后状况-->
+       <div class="sui-nav pull-right info" v-show="!show">
+        <li><a href="./other-notice.html" target="_blank" class="notice">通知</a></li>
+        <li class="hover"> <span class="fa fa-plus "></span>
+         <ul class="hoverinfo">
+          <li><i class="fa fa-share-alt" aria-hidden="true"></i> <a href="boke-submit.html">去分享</a></li>
+          <li><i class="fa fa-question-circle" aria-hidden="true"></i> <a href="./qa-submit.html" target="_blank">提问题</a></li>
+          <li><i class="fa fa-comments" aria-hidden="true"></i><a href="./spit-submit.html" target="_blank">去吐槽</a></li>
+          <li><i class="fa fa-heartbeat" aria-hidden="true"></i> <a href="./makeFriends-submit.html" target="_blank">发约会</a></li>
+         </ul> </li>
+        <li><a href="./person-homepage.html" target="_blank" class="homego"><img src="./img/widget-photo.png" alt="用户头像" /></a></li>
+       </div>
       </form>
-      <!--这部分为用户管理部分 没有登录状况-->
-      <div class="sui-nav pull-right info" v-show="show">
-       <li><a href="tologin_register.html" target="_blank">注册</a></li>
-       <li><a href="tologin_register.html" target="_blank" class="sui-btn btn-login">登录</a></li>
-      </div>
-      <!--这部分为用户管理部分 没有登录状况-->
-      <!--这部分为用户管理部分 登录后状况-->
-      <div class="sui-nav pull-right info" v-show="!show">
-       <li><a href="./other-notice.html" target="_blank" class="notice">通知</a></li> 
-       <li class="hover"> <span class="fa fa-plus "></span> 
-        <ul class="hoverinfo"> 
-         <li><i class="fa fa-share-alt" aria-hidden="true"></i> <a href="./headline-submit.html">去分享</a></li> 
-         <li><i class="fa fa-question-circle" aria-hidden="true"></i> <a href="./qa-submit.html" target="_blank">提问题</a></li> 
-         <li><i class="fa fa-comments" aria-hidden="true"></i><a href="./spit-submit.html" target="_blank">去吐槽</a></li> 
-         <li><i class="fa fa-heartbeat" aria-hidden="true"></i> <a href="./makeFriends-submit.html" target="_blank">发约会</a></li> 
-        </ul> </li> 
-       <li><a href="./person-homepage.html" target="_blank" class="homego"><img src="./img/widget-photo.png" alt="用户头像" /></a></li> 
-      </div>
       <!--这部分为用户管理部分 登录后状况-->
      </div> 
     </div> 
@@ -90,20 +88,18 @@
 
       <!--左中右部分三列布局-->
 
-   <div class="sj-content">
-    <!--左侧部分-->
+   <div class="sj-content" >
     <div class="left-nav">
      <div class="float-nav" id="float-nav">
       <ul class="sui-nav nav-tabs nav-xlarge tab-navbar tab-vertical">
-       <li class="active" style="height: 1000px"><a>热门问答</a></li>
-       <!--<li><a href="#">请问有这道题怎么解答</a></li>-->
-
+       <li class="active"><a>热门</a></li>
+       <li><a href="#">牛人专区</a></li>
       </ul>
      </div>
     </div>
     <!--左侧部分-->
     <!--中右部分-->
-    <div class="right-content">
+    <div class="right-content" >
      <!--中间文章展示部分-->
      <div class="fl middle">
       <div class="carousel"> 
@@ -133,7 +129,9 @@
           <img src="" /> 
          </div> 
          <div class="words"> 
-          <h3>Drive.ai融资5000万吴恩达加入董事会 <span><img src="./img/widget-vip.png" class="vip" /></span></h3> 
+          <h3>
+           <a href="boke-detail.html">Drive.ai融资5000万吴恩达加入董事会</a>
+           <span><img src="./img/widget-vip.png" class="vip" /></span></h3>
           <h5 class="author"> 
            <div class="fl"> 
             <span class="authorName"> <img src="./img/widget-photo.png" alt="" /> 玻璃通 </span> 
@@ -166,7 +164,7 @@
       </div> 
       <div class="block-btn"> 
        <p>今天，有什么好东西要和大家分享么?</p> 
-       <a class="sui-btn btn-block btn-share" href="./headline-submit.html" target="_blank">发布分享</a> 
+       <a class="sui-btn btn-block btn-share" href="boke-submit.html" target="_blank">发布分享</a>
       </div> 
       <div class="question-list"> 
        <h3 class="title">热门回答</h3> 
@@ -271,31 +269,8 @@
   <!--中间部分-->
 
   <!--将此页vue代码引进来-->
-  <script type="text/javascript">
-     var loginManager = new Vue({
-         el:"#index_header",
-         data:{
-             show:true,  //默认显示登陆和注册
-             user: {}, //用户
-             result:{}, //服务器返回结果
+  <script type="text/javascript" src="./js/Nav_loginManager.js">
 
-         },
-         methods:{
-             showloginManager:function () {
-                 //取值，判断是否登录
-                 this.user.mobile = window.sessionStorage.getItem("mobile_school");
-                 this.result.token_school = window.sessionStorage.getItem("mobile_school");
-                 if (this.user.mobile==null||this.user.mobile==""){
-                     this.show=true;
-                 }else{
-                     this.show=false;
-                 }
-             }
-         },
-         created(){
-             this.showloginManager();
-         }
-      });
   </script>
 
   <!--尾部-->

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="./img/asset-favicon.ico">
+    <title>社交-提交头条</title>
+
+    <!-- 页面 css js -->
+    <!-- <script type="text/javascript" src="../../plugins/sui/sui.min.js"></script> -->
+
+    <link rel="stylesheet" type="text/css" href="./plugins/normalize-css/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="./plugins/yui/cssgrids-min.css" />
+    <link rel="stylesheet" type="text/css" href="./plugins/sui/sui.min.css" />
+    <link rel="stylesheet" type="text/css" href="./plugins/sui/sui-append.min.css" />
+    <link rel="stylesheet" type="text/css" href="./plugins/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="./css/widget-base.css" />
+    <link rel="stylesheet" type="text/css" href="./css/widget-head-foot.css" />
+    <link rel="stylesheet" type="text/css" href="./css/page-sj-headline-submit.css" />
+<!--引入-->
+    <script src="./js/jquery-3.4.1.js"></script>
+    <script src="./js/vuejs-2.5.16.js"></script>
+    <script src="./js/axios-0.18.0.js"></script>
+    <script src="./js/schoolUrl.js"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <!--引用组件-->
+        <!--头部导航-->
+ <header id="index_header">
+  <div class="sui-navbar">
+    <div class="navbar-inner">
+      <a href="index-logined.html" class="sui-brand"><img src="./img/asset-logo-black.png" alt="社交"/></a>
+      <ul class="sui-nav">
+        <li class="active"><a href="./index.html">头条</a></li>
+        <li><a href="./qa-logined.html" >问答</a></li>
+        <li><a href="./activity-index.html" >活动</a></li>
+        <li><a href="./makeFriends-index.html" >交友</a></li>
+        <li><a href="./spit-index.html" >吐槽</a></li>
+        <li><a href="./recruit-index.html"  >招聘</a></li>
+      </ul>
+        <form class="sui-form -pull-right">
+            <input type="text" placeholder="输入关键词..." />
+            <span class="btn-search fa fa-search"></span>
+            <!--搜索-->
+
+            <!--这部分为用户管理部分 没有登录状况-->
+            <div class="sui-nav pull-right info" v-show="show">
+                <li><a href="tologin_register.html" target="_blank">注册</a></li>
+                <li><a href="tologin_register.html" target="_blank" class="sui-btn btn-login">登录</a></li>
+            </div>
+            <!--这部分为用户管理部分 没有登录状况-->
+            <!--这部分为用户管理部分 登录后状况-->
+            <div class="sui-nav pull-right info" v-show="!show">
+                <li><a href="./other-notice.html" target="_blank" class="notice">通知</a></li>
+                <li class="hover"> <span class="fa fa-plus "></span>
+                    <ul class="hoverinfo">
+                        <li><i class="fa fa-share-alt" aria-hidden="true"></i> <a href="boke-submit.html">去分享</a></li>
+                        <li><i class="fa fa-question-circle" aria-hidden="true"></i> <a href="./qa-submit.html" target="_blank">提问题</a></li>
+                        <li><i class="fa fa-comments" aria-hidden="true"></i><a href="./spit-submit.html" target="_blank">去吐槽</a></li>
+                        <li><i class="fa fa-heartbeat" aria-hidden="true"></i> <a href="./makeFriends-submit.html" target="_blank">发约会</a></li>
+                    </ul> </li>
+                <li><a href="./person-homepage.html" target="_blank" class="homego"><img src="./img/widget-photo.png" alt="用户头像" /></a></li>
+            </div>
+        </form>
+        <!--这部分为用户管理部分 登录后状况-->
+  </div>
+  </div>
+  
+</header>
+    
+
+    </div>
+    <!--二层导航-->
+    <div class="tab-nav ">
+
+     </div>
+    <!--二层导航-->
+    <!--两列布局-->
+    <div class="wrapper">
+        <div class="submit-headline">
+            <!--左侧发布-->
+    <div class="left-box">
+        <h3 class="tit">
+            <span>发布头条</span>
+        </h3>
+        <form class="sui-form form-horizontal">
+            <div class="control-group">
+                <div class="controls title-input">
+                    <input type="text" id="inputEmail" placeholder="标题：不超过30个字符">
+                </div>
+            </div>
+            <div class="control-group select">
+                <span class="sui-dropdown dropdown-bordered select">
+                        <span class="dropdown-inner">
+                            <a id="drop12" role="button" data-toggle="dropdown" href="#" class="dropdown-toggle">
+                            <input value="hz" name="city" type="hidden"><i class="caret"></i><span>全部</span></a>
+                <ul id="menu12" role="menu" aria-labelledby="drop12" class="sui-dropdown-menu">
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="bj">前端</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="sb">后端</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="sb">iOS</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="sb">Android</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="sb">工具</a></li>
+                </ul>
+                </span>
+                </span>
+            </div>
+            <div class="tags-area">
+                <div class="input-tags">
+                    <input type="text" placeholder="标签" class="input-xfat input-xxlarge" id="tags">
+                </div>
+                <div class="tags-box">
+                    <ul class="sui-tag tag-bordered">
+                        <li class="tag-item">javascript</li>
+                        <li class="tag-item">php</li>
+                        <li class="tag-item">css</li>
+                        <li class="tag-item">html</li>
+                        <li class="tag-item">java</li>
+                        <li class="tag-item">python</li>
+                        <li class="tag-item">html5</li>
+                        <li class="tag-item">node.js</li>
+                        <li class="tag-item">c++</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="editor">
+                <textarea name="editor1"></textarea>
+            </div>
+            <div class="submit">
+                <button type="submit" class="sui-btn btn-xlarge  btn-success">提交</button>
+            </div>
+        </form>
+    </div>
+     <!--左侧发布-->
+      <!--右侧发布-->
+    <div class="right-tips">
+        <h3>发帖指南</h3>
+        <ul>
+            <li>独立思考、自由探索</li>
+            <li>发布的内容和互联网、编程开发、产品设计有关</li>
+            <li>标题能准确描述的内容，不要发重复的内容</li>
+            <li>客观投票，确保你看过这篇内容</li>
+            <li>如果你遇到了具体的编程难题，请到 问答平台 提问</li>
+            <li>保持友善，禁止任何形式的广告、SEO 推广</li>
+            <li>遵循 用户服务条款</li>
+        </ul>
+    </div>
+        <!--右侧发布-->
+  </div>
+<script>
+    $(function () {
+        $("#tags").focus(function () {
+            $(".tags-box").css("display", "block");
+            $(".tag-item").click(function () {
+                var text = $(this).text();
+                $("#tags").before("<span class='tags-detail with-x'>" + text + "<i>×</i></span>");
+                $(this).css('width', $('.tags-detail').width()+'px');
+                $(".tags-detail").click(function () {
+                    $(this).remove();
+                })
+            });
+        });
+
+    })
+</script>
+<script type="text/javascript">
+    $(document).click(function () {
+        $(".tags-box").hide();
+    });
+    $(".tags-area").click(function (event) {
+        event.stopPropagation();
+    });
+</script>
+    </div>
+
+    <!--将此页导航登录vue代码引进来-->
+    <script type="text/javascript" src="./js/Nav_loginManager.js">
+
+    </script>
+    <!--尾部-->
+    <div id="footer">
+
+    </div>
+    <script>
+        $('#footer').load('footer.html');
+    </script>
+    <!--尾部-->
+
+
+<script>
+// $(function(){
+//   $(".hover").hover(function(){
+//     $(".hoverinfo").stop().animate({
+//        opacity: "show"
+//     },"slow");
+//     $(this).find(".fa-plus").css("color","#e64620");
+//   },function(){
+//     $(".hoverinfo").stop().animate({
+//        opacity: "hide"
+//     },"slow");
+//     $(this).find(".fa-plus").css("color","#000");
+//   })
+// })
+</script>
+<script src="./plugins/ckeditor/ckeditor.js"></script>
+<script>
+    CKEDITOR.replace('editor1');
+</script>
+</body>

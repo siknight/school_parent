@@ -38,13 +38,13 @@ var userlogin = new Vue({
                 axios.post(url, params).then(function (response) {
                     _this.result = response.data;
                     if(_this.result.code==20000){  //表示登录成功
-                        window.sessionStorage.setItem("nickName_school",_this.result.data.name);
-                        window.sessionStorage.setItem("mobile_school",_this.user.mobile);
-                        window.sessionStorage.setItem("token_school",_this.result.data.token);
+                        window.localStorage.setItem("nickName_school",_this.result.data.name);
+                        window.localStorage.setItem("mobile_school",_this.user.mobile);
+                        window.localStorage.setItem("token_school",_this.result.data.token);
                         if (_this.rememberme==true){  //如果为true下次登录就直接显示了
-                            window.sessionStorage.setItem("userpass_school",_this.user.password);
+                            window.localStorage.setItem("userpass_school",_this.user.password);
                         } else {  //如果为false，就将密码删除
-                            window.sessionStorage.removeItem("userpass_school");
+                            window.localStorage.removeItem("userpass_school");
                         }
 
                         window.location.href=user_web_url+"/index.html";
@@ -65,9 +65,9 @@ var userlogin = new Vue({
         },  //login方法
         //登录初始化，判断是否有记住操作，有的话在输入框显示用户名，密码，没有的话不显示
         loadInit: function(){
-            var userpass_school = window.sessionStorage.getItem("userpass_school");
+            var userpass_school = window.localStorage.getItem("userpass_school");
             if (userpass_school!=null){
-                this.user.mobile = window.sessionStorage.getItem("mobile_school");
+                this.user.mobile = window.localStorage.getItem("mobile_school");
                 this.user.password = userpass_school;
                 this.rememberme=true;
             }
@@ -132,7 +132,7 @@ var userlogin = new Vue({
                 axios.put(url, _this.user
                 ).then(function (response) {
                     //将密码删除
-                    window.sessionStorage.removeItem("userpass_school");
+                    window.localStorage.removeItem("userpass_school");
                     _this.result = response.data;
                     if(_this.result.code==20000){  //表示修改成功
                         //修改成功后跳转
