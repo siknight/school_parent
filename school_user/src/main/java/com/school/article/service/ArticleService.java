@@ -17,6 +17,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -94,6 +95,12 @@ public class ArticleService {
 	 */
 	public void add(Article article) {
 		article.setId( idWorker.nextId()+"" );
+		article.setThumbup(0); //点赞数
+		article.setVisits(0);//点赞数
+		article.setComment(0);//评论数
+		article.setCreatetime(new Date());
+		article.setUpdatetime(new Date());
+		System.out.println("正在保存文章");
 		articleDao.save(article);
 	}
 

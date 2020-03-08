@@ -28,7 +28,7 @@
     <script src="./js/schoolUrl.js"></script>
     <!--引入百度富文本编辑器-->
     <script src="./ueditor/ueditor.config.js"></script>
-    <script src="./ueditor/ueditor.all.js"></script>
+    <script src="./ueditor/ueditor.all.min.js"></script>
     <script src="./ueditor/lang/zh-cn/zh-cn.js"></script>
 
 </head>
@@ -95,13 +95,6 @@
               <h4 class="tit"> 分类:</h4>
                <select v-model="article.columnid">
                     <option :value ="com.id" v-for="com in columnList" v-text="com.name"></option>
-                    <!--<option value="2" v-text="column.name">建筑</option>-->
-                    <!--<option value="3" v-text="column.name">会计</option>-->
-                    <!--<option value="4" v-text="column.name">金融</option>-->
-                    <!--<option value ="5" v-text="column.name">艺术</option>-->
-                    <!--<option value="6">英语</option>-->
-                    <!--<option value="7">园林</option>-->
-                    <!--<option value="8">其他</option>-->
                </select>
 
 
@@ -109,16 +102,18 @@
             <textarea style="width: 100%;height: 250px" id="container"  name="content" type="text/plain">
                  请发布你的文章
             </textarea>
+            <div v-text="successMsg" style="color: red"></div>
             <!--文本编辑器-->
-            <div class="submit">
-                <button type="submit" class="sui-btn btn-xlarge  btn-success">提交</button>
+            <!--<div class="submit">-->
+                <div >
+                <button type="submit" @click.prevent="addArticle()" class="sui-btn btn-xlarge  btn-success">提交</button>
             </div>
         </form>
     </div>
         <script>
             var editor =  UE.getEditor('container');
-            var content = editor.getContent();
-            console.info(editor.getContent());
+
+
         </script>
 
             <script type="text/javascript">
@@ -131,10 +126,10 @@
                         column:{
                         },
                         result:{},
+                        successMsg:""
                     },
                     methods:{
                         findAllColumn:function () {
-                            console.info("findAllColumn")
                             var url = school_user_server+"/column";
                             var _this = this;
                             //json请求用默认方式
@@ -146,6 +141,43 @@
                             }).catch(function (err) {
                                 console.log("网络错误");
                             });
+                        },
+                        addArticle:function () {
+                            if(this.article.title==null||this.article.title==""){
+                                // this.result.message="邮箱不能为空";
+                                alert("标题不能为空");
+                            }else{
+                                //获取ueditor文章content赋值
+                                this.article.content = editor.getContent();
+                                //获取id，因为token里存的有，所以这里省略
+                                // this.article.userid = window.localStorage.getItem("userId_school");
+                                var token=window.localStorage.getItem("token_school");  //获取token
+                                console.info("userid=")
+                                var url = school_user_server+"/article";
+                                var _this = this;
+                                //json请求用默认方式
+                                axios.post(url,_this.article,{
+                                    headers:{
+                                        //请求时添加token，验证是否登录
+                                        'Authorization':"Bearer "+token
+                                    }
+                                }).then(function (response) {
+                                    _this.result = response.data;
+                                    _this.successMsg= _this.result.message;
+                                    alert( _this.successMsg);
+                                    // if( _this.result.code=="2000"){  //添加成功
+                                    //     alert( _this.successMsg);
+                                    //     window.location.href=user_web_url+"/index.html";
+                                    // }else if (_this.result.code=="20003"){
+                                    //     alert( _this.successMsg+",请先登录");
+                                    //     window.location.href=user_web_url+"/tologin_register.html";
+                                    // }
+
+                                }).catch(function (err) {
+                                    alert("网络错误");
+                                });
+                            }
+
                         }
 
                     },  //methods
