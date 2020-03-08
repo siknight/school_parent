@@ -122,6 +122,7 @@ public class UserController {
 			String token = jwtUtil.createJWT(user.getId(), user.getNickname(), "user");
 			Map map=new HashMap();
 			map.put("token",token);  //里面包含id，nickname
+			map.put("userId",user.getId());   //id
 			map.put("name",user.getNickname());//昵称
 			map.put("avatar",user.getAvatar());//头像
 			return new Result(true,StatusCode.OK,"登陆成功",map);

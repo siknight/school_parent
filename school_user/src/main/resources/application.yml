@@ -1,5 +1,5 @@
 server: 
-  port: 9001
+  port: 9002
 spring:
 #项目名
   application:  
@@ -17,6 +17,8 @@ spring:
 #    redis缓存
   redis:
     host: 127.0.0.1
+  resources:
+    static-locations: classpath:/templates/
 #    邮箱
 #  mail:
 #    host: smtp.qq.com 	#邮箱服务器地址
@@ -34,3 +36,4 @@ jwt:
     key: school
     ttl: 3600000
 #    ihypidhglruvbigd
+

@@ -24,14 +24,14 @@ public class Article implements Serializable{
 	private String content;//文章正文，用于存储具体内容
 	private String image;//文章封面
 	private java.util.Date createtime;//发表日期
-	private java.util.Date updatetime;//修改日期
-	private String ispublic;//是否公开
-	private String istop;//是否置顶
+	private java.util.Date updatetime;//修改日期,我这个应该用不到
+	private String ispublic;//是否公开，我这个暂时不用
+	private String istop;//是否置顶，我这个暂时不用
 	private Integer visits;//浏览量
 	private Integer thumbup;//点赞数
 	private Integer comment;//评论数
 	private String state;//审核状态，这个属性，我这项目不用了
-	private String channelid;//所属频道
+	private String channelid;//所属频道,对应另一张表，我这个暂时不用
 	private String url;//URL
 	private String type;//类型
 

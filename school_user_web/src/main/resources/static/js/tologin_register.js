@@ -37,7 +37,11 @@ var userlogin = new Vue({
                 //post必须用这种方式
                 axios.post(url, params).then(function (response) {
                     _this.result = response.data;
-                    if(_this.result.code==20000){  //表示登录成功
+                    if(_this.result.code==20000){
+                        //开始时应将所有存的都删掉，以后再加
+
+                        //表示登录成功
+                        window.localStorage.setItem("userId_school",_this.result.data.userId);
                         window.localStorage.setItem("nickName_school",_this.result.data.name);
                         window.localStorage.setItem("mobile_school",_this.user.mobile);
                         window.localStorage.setItem("token_school",_this.result.data.token);

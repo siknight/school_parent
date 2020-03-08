@@ -21,11 +21,16 @@
     <link rel="stylesheet" type="text/css" href="./css/widget-base.css" />
     <link rel="stylesheet" type="text/css" href="./css/widget-head-foot.css" />
     <link rel="stylesheet" type="text/css" href="./css/page-sj-headline-submit.css" />
-<!--引入-->
+   <!--引入-->
     <script src="./js/jquery-3.4.1.js"></script>
     <script src="./js/vuejs-2.5.16.js"></script>
     <script src="./js/axios-0.18.0.js"></script>
     <script src="./js/schoolUrl.js"></script>
+    <!--引入百度富文本编辑器-->
+    <script src="./ueditor/ueditor.config.js"></script>
+    <script src="./ueditor/ueditor.all.js"></script>
+    <script src="./ueditor/lang/zh-cn/zh-cn.js"></script>
+
 </head>
 
 <body>
@@ -73,68 +78,80 @@
   </div>
   
 </header>
-    
-
 
     <!--两列布局-->
-    <div class="wrapper">
-        <div class="submit-headline">
+ <div class="wrapper">
+    <div class="submit-headline">
             <!--左侧发布 绑定-->
-    <div class="left-box" id="articleApp">
+     <div class="left-box" id="articleApp">
         <h3 class="tit">
             <span>发布头条</span>
         </h3>
+
         <form class="sui-form form-horizontal">
-            <div class="control-group">
-                <div class="controls title-input">
-                    <input type="text" id="inputEmail" 　 placeholder="标题：不超过30个字符">
-                </div>
-            </div>
-            <div class="control-group select">
-                <span class="sui-dropdown dropdown-bordered select">
-                        <span class="dropdown-inner">
-                            <a id="drop12" role="button" data-toggle="dropdown" href="#" class="dropdown-toggle">
-                            <input value="hz" name="city" type="hidden"><i class="caret"></i><span>全部</span></a>
-                <ul id="menu12" role="menu" aria-labelledby="drop12" class="sui-dropdown-menu">
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="bj">前端</a></li>
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="sb">后端</a></li>
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="sb">iOS</a></li>
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="sb">Android</a></li>
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="sb">工具</a></li>
-                </ul>
-                </span>
-                </span>
-            </div>
-            <div class="tags-area">
-                <div class="input-tags">
-                    <input type="text" placeholder="标签" class="input-xfat input-xxlarge" id="tags">
-                </div>
-                <div class="tags-box">
-                    <ul class="sui-tag tag-bordered">
-                        <li class="tag-item">javascript</li>
-                        <li class="tag-item">php</li>
-                        <li class="tag-item">css</li>
-                        <li class="tag-item">html</li>
-                        <li class="tag-item">java</li>
-                        <li class="tag-item">python</li>
-                        <li class="tag-item">html5</li>
-                        <li class="tag-item">node.js</li>
-                        <li class="tag-item">c++</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="editor">
-                <textarea name="editor1"></textarea>
-            </div>
+              <h4 class="tit" >标题:</h4>
+              <input type="text" v-model="article.title" style="width: 100%" id="inputEmail" placeholder="标题：不超过30个字符"/>
+
+              <h4 class="tit"> 分类:</h4>
+               <select v-model="article.columnid">
+                    <option :value ="com.id" v-for="com in columnList" v-text="com.name"></option>
+                    <!--<option value="2" v-text="column.name">建筑</option>-->
+                    <!--<option value="3" v-text="column.name">会计</option>-->
+                    <!--<option value="4" v-text="column.name">金融</option>-->
+                    <!--<option value ="5" v-text="column.name">艺术</option>-->
+                    <!--<option value="6">英语</option>-->
+                    <!--<option value="7">园林</option>-->
+                    <!--<option value="8">其他</option>-->
+               </select>
+
+
+            <h4 class="tit">正文:</h4>
+            <textarea style="width: 100%;height: 250px" id="container"  name="content" type="text/plain">
+                 请发布你的文章
+            </textarea>
+            <!--文本编辑器-->
             <div class="submit">
                 <button type="submit" class="sui-btn btn-xlarge  btn-success">提交</button>
             </div>
         </form>
     </div>
+        <script>
+            var editor =  UE.getEditor('container');
+            var content = editor.getContent();
+            console.info(editor.getContent());
+        </script>
+
             <script type="text/javascript">
+
                 var articleVue = new Vue({
                     el:"#articleApp",
                     data:{
+                        article:{},   //对象
+                        columnList:[],
+                        column:{
+                        },
+                        result:{},
+                    },
+                    methods:{
+                        findAllColumn:function () {
+                            console.info("findAllColumn")
+                            var url = school_user_server+"/column";
+                            var _this = this;
+                            //json请求用默认方式
+                            axios.get(url).then(function (response) {
+                                _this.result = response.data;
+                                _this.columnList = _this.result.data;
+                                //如果没有这句代码，select中初始化会是空白的，默认选中就无法实现
+                                _this.article.columnid =  _this.columnList[0].id;
+                            }).catch(function (err) {
+                                console.log("网络错误");
+                            });
+                        }
+
+                    },  //methods
+                    created(){
+                        this.findAllColumn();
+
 
                     }
                 });
@@ -155,31 +172,8 @@
     </div>
         <!--右侧发布-->
   </div>
-<script>
-    $(function () {
-        $("#tags").focus(function () {
-            $(".tags-box").css("display", "block");
-            $(".tag-item").click(function () {
-                var text = $(this).text();
-                $("#tags").before("<span class='tags-detail with-x'>" + text + "<i>×</i></span>");
-                $(this).css('width', $('.tags-detail').width()+'px');
-                $(".tags-detail").click(function () {
-                    $(this).remove();
-                })
-            });
-        });
-
-    })
-</script>
-<script type="text/javascript">
-    $(document).click(function () {
-        $(".tags-box").hide();
-    });
-    $(".tags-area").click(function (event) {
-        event.stopPropagation();
-    });
-</script>
-    </div>
+ </div>
+</div>
 
     <!--将此页导航登录vue代码引进来-->
     <script type="text/javascript" src="./js/Nav_loginManager.js">
@@ -195,23 +189,7 @@
     <!--尾部-->
 
 
-<script>
-// $(function(){
-//   $(".hover").hover(function(){
-//     $(".hoverinfo").stop().animate({
-//        opacity: "show"
-//     },"slow");
-//     $(this).find(".fa-plus").css("color","#e64620");
-//   },function(){
-//     $(".hoverinfo").stop().animate({
-//        opacity: "hide"
-//     },"slow");
-//     $(this).find(".fa-plus").css("color","#000");
-//   })
-// })
-</script>
-<script src="./plugins/ckeditor/ckeditor.js"></script>
-<script>
-    CKEDITOR.replace('editor1');
-</script>
+
+
+
 </body>
