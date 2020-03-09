@@ -17,26 +17,70 @@ public class User implements Serializable{
 	@Id
 	private String id;//ID
 
-
 	
 	private String mobile;//手机号码
 	private String password;//密码
 	private String nickname;//昵称
 	private String sex;//性别
+//	private String qq;//qq号 ，用于聊天使用
 	private java.util.Date birthday;//出生年月日
 	private String avatar;//头像
 	private String email;//E-Mail
 	private java.util.Date regdate;//注册日期
 	private java.util.Date updatedate;//修改日期
 	private java.util.Date lastdate;//最后登陆日期
-	private Long online;//在线时长（分钟）
+	private Long online;//在线时长（分钟），暂时不用
 	private String interest;//兴趣
-	private String personality;//个性
+	private String personality;//个性，写成个人简介
 	private Integer fanscount;//粉丝数
 	private Integer followcount;//关注数
+	private String myqq; //QQ号
+	private String myschool;  //所在学校
+	private String mygrade; //所在年级
+	private String myprofessional; //所在专业
+	private String nowcity; //所在城市
 
-	
-	public String getId() {		
+	public String getMyqq() {
+		return myqq;
+	}
+
+	public void setMyqq(String myqq) {
+		this.myqq = myqq;
+	}
+
+	public String getMyschool() {
+		return myschool;
+	}
+
+	public void setMyschool(String myschool) {
+		this.myschool = myschool;
+	}
+
+	public String getMygrade() {
+		return mygrade;
+	}
+
+	public void setMygrade(String mygrade) {
+		this.mygrade = mygrade;
+	}
+
+	public String getMyprofessional() {
+		return myprofessional;
+	}
+
+	public void setMyprofessional(String myprofessional) {
+		this.myprofessional = myprofessional;
+	}
+
+	public String getNowcity() {
+		return nowcity;
+	}
+
+	public void setNowcity(String nowcity) {
+		this.nowcity = nowcity;
+	}
+
+	public String getId() {
 		return id;
 	}
 	public void setId(String id) {

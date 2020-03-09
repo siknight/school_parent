@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+ <head> 
+  <meta charset="utf-8" /> 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
+  <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ --> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <link rel="icon" href="./img/asset-favicon.ico" /> 
+  <title>社交-我的档案</title> 
+  <!-- 页面 css js --> 
+  <!-- <script type="text/javascript" src="../../plugins/sui/sui.min.js"></script> --> 
+  <link rel="stylesheet" type="text/css" href="./plugins/normalize-css/normalize.css" /> 
+  <link rel="stylesheet" type="text/css" href="./plugins/yui/cssgrids-min.css" /> 
+  <link rel="stylesheet" type="text/css" href="./plugins/sui/sui.min.css" /> 
+  <link rel="stylesheet" type="text/css" href="./plugins/sui/sui-append.min.css" /> 
+  <link rel="stylesheet" type="text/css" href="./plugins/font-awesome/css/font-awesome.min.css" /> 
+  <link rel="stylesheet" type="text/css" href="./css/widget-base.css" /> 
+  <link rel="stylesheet" type="text/css" href="./css/widget-head-foot.css" /> 
+  <link rel="stylesheet" type="text/css" href="./css/page-sj-person-myfile.css" />
+  <!--引入-->
+  <script src="./js/jquery-3.4.1.js"></script>
+  <script src="./js/vuejs-2.5.16.js"></script>
+  <script src="./js/axios-0.18.0.js"></script>
+  <script src="./js/schoolUrl.js"></script>
+ </head> 
+ <body> 
+  <div class="wrapper"> 
+   <!--引用组件-->
+   <!--头部导航-->
+   <header id="index_header">
+    <div class="sui-navbar" >
+     <div class="navbar-inner">
+      <!--<a href="index-logined.html" class="sui-brand">-->
+      <a href="#" class="sui-brand">
+       <img src="./img/asset-logo-black.png"  alt="社交" />
+      </a>
+      <ul class="sui-nav">
+       <li class="active"><a href="./index.html">头条</a></li>
+       <li><a href="./qa-logined.html">问答</a></li>
+       <li><a href="./activity-index.html">活动</a></li>
+       <li><a href="./makeFriends-index.html">交友</a></li>
+       <li><a href="./spit-index.html">吐槽</a></li>
+       <li><a href="./recruit-index.html">招聘</a></li>
+      </ul>
+      <form class="sui-form -pull-right">
+       <input type="text" placeholder="输入关键词..." />
+       <span class="btn-search fa fa-search"></span>
+       <!--搜索-->
+
+       <!--这部分为用户管理部分 没有登录状况-->
+       <div class="sui-nav pull-right info" v-show="show">
+        <li><a href="tologin_register.html" target="_blank">注册</a></li>
+        <li><a href="tologin_register.html" target="_blank" class="sui-btn btn-login">登录</a></li>
+       </div>
+       <!--这部分为用户管理部分 没有登录状况-->
+       <!--这部分为用户管理部分 登录后状况-->
+       <div class="sui-nav pull-right info" v-show="!show">
+        <li><a href="./other-notice.html" target="_blank" class="notice">通知</a></li>
+        <!--中间加号-->
+        <li class="hover">
+         <span class="fa fa-plus "></span>
+         <ul class="hoverinfo">
+          <li><i class="fa fa-share-alt" ></i> <a href="boke-submit.html">去分享</a></li>
+          <li><i class="fa fa-question-circle" aria-hidden="true"></i> <a href="./qa-submit.html" target="_blank">提问题</a></li>
+          <li><i class="fa fa-comments" aria-hidden="true"></i><a href="./spit-submit.html" target="_blank">去吐槽</a></li>
+          <li><i class="fa fa-heartbeat" aria-hidden="true"></i> <a href="./makeFriends-submit.html" target="_blank">发约会</a></li>
+         </ul> </li>
+        <!--中间加号-->
+        <li><a href="./person-myfile.html" target="_blank" class="homego"><img src="./img/widget-photo.png" alt="用户头像" /></a></li>
+       </div>
+      </form>
+      <!--这部分为用户管理部分 登录后状况-->
+     </div>
+    </div>
+   </header>
+   <!--头部导航-->
+<!--下面是正文部分-->
+  </div>
+  <!--第二段公共部分-->
+  <div class="myhome-personinfo" style="background-color:#AEDD81" id="personBaseInfoApp">
+   <div class="wrapper">
+    <!--左侧编辑-->
+    <div class="person-baseinfo"> 
+     <!--头像信息--> 
+     <div class="photo"> 
+      <img src="./img/widget-myphoto.jpg" alt="" class="person" /> 
+      <div class="share">
+       <h2>Web爱好者</h2>
+      </div>
+     </div> 
+     <!--文字信息--> 
+     <div class="info"> 
+      <h1><span class="allinfo"><a href="./person-myfile.html" target="_blank">查看完整档案</a></span></h1>
+      <ul class="fill">
+       <li> <i  aria-hidden="true">QQ</i> <span class="edit-item"> 填写个人qq(必填)</span>
+        <form action="" class="sui-form form-inline">
+         <input type="text" placeholder="qq" />
+         <button class="sui-btn btn-danger save-btn">保存</button>
+         <button class="sui-btn btn-danger save-btn">取消</button>
+        </form> </li>
+
+       <li> <i class="fa fa-graduation-cap" aria-hidden="true"></i> <span class="edit-item"> 填写所在学校(必填)</span>
+        <form action="" class="sui-form form-inline"> 
+         <input type="text" placeholder="学校名称" />
+         <button class="sui-btn btn-danger save-btn">保存</button> 
+        </form> </li>
+       <li>
+        <i class="fa fa-map-marker" aria-hidden="true"></i> <span class="edit-item"> 填写所在学院(必填)</span>
+        <form action="" class="sui-form form-inline">
+          <input type="text" placeholder="所在学院" />
+          <button class="sui-btn btn-danger save-btn">保存</button>
+        </form>
+       </li>
+       <li> <i class="fa fa-shopping-bag" aria-hidden="true"></i> <span class="edit-item"> 填写所在年级(必填)</span>
+        <form action="" class="sui-form form-inline"> 
+         <input type="text" placeholder="所在年级" />
+         <button class="sui-btn btn-danger save-btn">保存</button> 
+        </form>
+       </li>
+      </ul> 
+     </div> 
+    </div>
+    <!--左侧编辑-->
+    <!--右侧编辑--> 
+    <div class="edit-info"> 
+     <h4>个人简介<span class="addedit">
+      <img src="./img/widget-edit.png" width="12" height="12" />编辑</span></h4>
+     <div class="info-box"> 
+      <div class="edit-intro">
+       暂时没有个人简介
+      </div> 
+     </div> 
+    </div>
+    <!--右侧编辑-->
+    <div class="clearfix"></div> 
+   </div>
+  </div>
+  <!--第二段公共部分-->
+  <script type="text/javascript">
+       var personBaseInfoApp = new Vue({
+           el:"#personBaseInfoApp",
+           data:{
+               qqFlag:true,  //用于判断qq是文本显示还是输入框显示
+               schoolFlag:true,// 用于判断school是文本显示还是输入框显示
+
+
+
+           },
+           methods:{
+
+           },  //methods
+           created(){
+
+           }
+
+       });
+  </script>
+  <!--<script>-->
+    <!--$(function(){-->
+        <!--$(".share .fa").hover(function(){-->
+            <!--$(this).css("opacity","1.0");-->
+        <!--},function(){-->
+            <!--$(this).css("opacity","0.6")-->
+        <!--})-->
+    <!--})-->
+<!--</script>-->
+<!--<script>-->
+<!--$(function(){-->
+    <!--// 个人简介-->
+    <!--$(".addedit").click(function(){-->
+        <!--var editBox = $(".edit-intro");-->
+        <!--var editBoxtxt = editBox.text();-->
+        <!--var input = $("<div><textarea class='editarea' type='text' /><div class='btns'><button class='sui-btn btn-default btn-cancel'>取消</button><button class='sui-btn btn-info btn-save'>保存</button></div></div>");-->
+        <!--editBox.html(input);-->
+
+        <!--// 点击保存-->
+        <!--$(".edit-intro .btn-save").click(function(){-->
+            <!--var newval = $(".editarea").val();-->
+            <!--if(newval == ""){-->
+              <!--editBox.html("暂时没有个人简介")-->
+            <!--}else if($.trim(newval) != $.trim(editBoxtxt)){-->
+               <!--editBox.html(newval);-->
+            <!--}-->
+        <!--})-->
+        <!--//点击取消-->
+        <!--$(".edit-intro .btn-cancel").click(function(){-->
+          <!--editBox.html("暂时没有个人简介")-->
+        <!--})-->
+
+    <!--});-->
+    <!--$(".edit-item").click(function(){-->
+        <!--var txt = $(this).text();  //可变的值-->
+
+        <!--var rightform = $(this).siblings(".sui-form");-->
+        <!--var rightinput = $(this).siblings(".sui-form input").val(); // 输入的值-->
+
+        <!--rightform.show();-->
+
+        <!--$(".save-btn").click(function(){-->
+            <!--console.log(rightinput);-->
+        <!--})-->
+
+
+
+    <!--})-->
+
+
+<!--})-->
+<!--</script>-->
+  <!--两列布局--> 
+  <div class="wrapper  myhome"> 
+   <div class="sui-layout layout3"> 
+    <div class="sidebar"> 
+     <div class="myhome-list"> 
+      <ul class="home-list"> 
+       <li class="active"><a href="./person-homepage.html">我的主页</a></li> 
+       <li><a href="./person-myanswer.html">我的回答</a></li> 
+       <li><a href="./person-myquestion.html">我的提问</a></li> 
+       <li><a href="./person-myshare.html">我的分享</a></li> 
+      </ul> 
+      <ul class="home-list bottom"> 
+       <li><a href="./person-dynamic.html">个人动态</a></li> 
+       <li><a href="./person-myfocus.html">我的关注</a></li> 
+       <li><a href="./person-mycollect.html">我的收藏</a></li> 
+       <li><a href="./person-myreaded.html">浏览记录</a></li> 
+       <li><a href="./person-account.html">账户设置</a></li> 
+      </ul> 
+     </div> 
+      <script>
+          $(function(){
+              $(".home-list li").click(function(){
+                  $(this).addClass("active");
+                  $(this).siblings().removeClass("active");
+              })
+          })
+   </script>
+    </div> 
+    <div class="content"> 
+     <div class="file-edit"> 
+      <div class="info">
+
+       <h3 class="tit"><span>个人档案</span></h3> 
+       <!-- 个人信息 --> 
+       <div class="sui-row-fluid person canadd"> 
+        <div class="span4 item"> 
+         <h3 class="name">真人头像</h3> 
+         <img src="./img/widget-o-photo.png" alt="" /> 
+        </div> 
+        <div class="span4 item"> 
+         <h3 class="name">用户名</h3>
+         <p>暂无</p> 
+         <h3 class="name">出生日期</h3> 
+         <p>暂无</p> 
+         <h3 class="name">手机号码</h3> 
+         <p>暂无</p> 
+         <h3 class="name">现居城市</h3> 
+         <p>暂无</p>
+         <h3 class="name">性别</h3>
+         <p>暂无</p>
+        </div> 
+        <div class="span3 item">
+         <h3 class="name">QQ号</h3>
+         <p>暂无</p>
+         <h3 class="name">所在院校</h3>
+         <p>暂无</p>
+         <h3 class="name">所在专业</h3>
+         <p>暂无</p>
+         <h3 class="name">所在年级</h3>
+         <p>暂无</p>
+         <h3 class="name">兴趣</h3>
+         <p>暂无</p> 
+
+        </div> 
+        <div class="span1 edit"> 
+         <span class="gray"><i class="fa fa-pencil" aria-hidden="true"></i>编辑</span>
+        </div> 
+        <div style="clear:both"></div> 
+        <!-- info form --> 
+        <div class="form-show"> 
+         <div class="photo"> 
+          <img src="./img/widget-o-photo.png" alt="" /> 
+          <div class="text"> 
+           <button class="sui-btn btn-default">上传真人头像</button> 
+           <p>支持 jpg/jpeg/png 格式，大小不要超过 2MB</p> 
+          </div> 
+         </div> 
+         <form action="" class="sui-form"> 
+          <div class="sui-row-fluid"> 
+           <div class="span6"> 
+            <div class="control-group"> 
+             <label for="name" class="control-label">登录姓名</label>
+             <div class="controls"> 
+              <input type="text" id="name" class="input-large" placeholder="真实姓名" name="name" /> 
+             </div> 
+            </div> 
+            <div class="control-group"> 
+             <label for="birthday" class="control-label">出生日期</label>
+             <div class="controls"> 
+              <input type="text" id="birthday" class="input-large" placeholder="1970/01/01" name="birthday" /> 
+             </div> 
+            </div> 
+            <div class="control-group"> 
+             <label for="telphone" class="control-label">手机号码</label>
+             <div class="controls"> 
+              <input type="text" id="telphone" class="input-large" placeholder="11位手机号码" name="telphone" /> 
+             </div> 
+            </div> 
+            <div class="control-group"> 
+             <label for="city2" class="control-label">现居城市</label>
+             <div class="controls"> 
+              <input type="text" id="city2" class="input-large" placeholder="当前现居城市" name="city" />
+             </div> 
+            </div> 
+           </div> 
+           <div class="span6"> 
+            <div class="control-group" style="height: 60px;"> 
+             <label class="control-label">性别</label>
+             <div class="controls"> 
+              <label data-toggle="radio" class="radio-pretty inline checked"> <input type="radio" checked="checked" name="qudao" /><span>保密</span> </label> 
+              <label data-toggle="radio" class="radio-pretty inline"> <input type="radio" name="qudao" /><span>男</span> </label> 
+              <label data-toggle="radio" class="radio-pretty inline"> <input type="radio" name="qudao" /><span>女</span> </label> 
+             </div> 
+            </div> 
+            <div class="control-group"> 
+             <label for="net" class="control-label">个人网站</label>
+             <div class="controls"> 
+              <input type="text" id="net" class="input-large" placeholder="example.com" name="net" /> 
+             </div> 
+            </div> 
+            <div class="control-group"> 
+             <label for="email" class="control-label">Email</label>
+             <div class="controls"> 
+              <input type="text" id="email" class="input-large" placeholder="用于收取通知，找回密码" name="email" /> 
+             </div> 
+            </div> 
+            <div class="control-group"> 
+             <label for="city" class="control-label">通讯地址</label>
+             <div class="controls"> 
+              <input type="text" id="city" class="input-large" placeholder="当前通讯地址" name="city" /> 
+             </div> 
+            </div> 
+            <div class="control-group btns"> 
+             <button class="sui-btn btn-cancel">取消</button> 
+             <button class="sui-btn btn-save">保存</button> 
+            </div> 
+           </div> 
+          </div> 
+         </form> 
+        </div> 
+       </div>
+      </div> 
+
+     </div> 
+    </div> 
+
+   </div> 
+   <div class="clearfix"></div> 
+  </div>
+  <!--判断是否登录代码  判断登录通用代码，没登录会跳到登录页-->
+  <script type="text/javascript" src="./js/loginFlag.js" >
+  </script>
+  <!--判断是否登录代码-->
+
+  <!--将导航栏判断此页vue代码引进来-->
+  <script type="text/javascript" src="./js/Nav_loginManager.js">
+
+  </script>
+  <!--尾部-->
+  <div id="footer">
+
+  </div>
+  <script>
+      $('#footer').load('footer.html');
+  </script>
+  <!--尾部-->
+ </body>
+</html>
