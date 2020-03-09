@@ -37,7 +37,7 @@ public class User implements Serializable{
 	private String myqq; //QQ号
 	private String myschool;  //所在学校
 	private String mygrade; //所在年级
-	private String myprofessional; //所在专业
+	private String myprofessional; //所在学院
 	private String nowcity; //所在城市
 
 	public String getMyqq() {

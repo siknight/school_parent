@@ -23,12 +23,18 @@
   <script src="./js/vuejs-2.5.16.js"></script>
   <script src="./js/axios-0.18.0.js"></script>
   <script src="./js/schoolUrl.js"></script>
+  <style>
+   /* 在引入的css文件中写入这个*/
+   [v-cloak]{
+    display: none;
+   }
+  </style>
  </head> 
  <body> 
   <div class="wrapper"> 
    <!--引用组件-->
    <!--头部导航-->
-   <header id="index_header">
+   <header id="index_header" v-cloak>
     <div class="sui-navbar" >
      <div class="navbar-inner">
       <!--<a href="index-logined.html" class="sui-brand">-->
@@ -78,7 +84,7 @@
 <!--下面是正文部分-->
   </div>
   <!--第二段公共部分-->
-  <div class="myhome-personinfo" style="background-color:#AEDD81" id="personBaseInfoApp">
+  <div class="myhome-personinfo" style="background-color:#AEDD81" id="personBaseInfoApp" v-cloak>
    <div class="wrapper">
     <!--左侧编辑-->
     <div class="person-baseinfo"> 
@@ -93,29 +99,38 @@
      <div class="info"> 
       <h1><span class="allinfo"><a href="./person-myfile.html" target="_blank">查看完整档案</a></span></h1>
       <ul class="fill">
-       <li> <i  aria-hidden="true">QQ</i> <span class="edit-item"> 填写个人qq(必填)</span>
-        <form action="" class="sui-form form-inline">
+       <li>
+        <i  aria-hidden="true">QQ</i>
+        <span class="edit-item" v-show="qqFlag" @click="qqFlagChange()" v-text="user.myqq"></span>
+        <form class="form-inline" style="display: inline-block" v-show="!qqFlag">
          <input type="text" placeholder="qq" />
-         <button class="sui-btn btn-danger save-btn">保存</button>
-         <button class="sui-btn btn-danger save-btn">取消</button>
+         <button class="sui-btn btn-danger save-btn" @click.prevent="qqUpdate()">保存</button>
+         <button class="sui-btn btn-danger save-btn" @click.prevent="qqFlagChange()">取消</button>
         </form> </li>
 
-       <li> <i class="fa fa-graduation-cap" aria-hidden="true"></i> <span class="edit-item"> 填写所在学校(必填)</span>
-        <form action="" class="sui-form form-inline"> 
+       <li>
+        <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+        <span class="edit-item" v-show="schoolFlag" @click="schoolFlagChange()" v-text="user.myschool"></span>
+        <form class="form-inline" style="display: inline-block" v-show="!schoolFlag">
          <input type="text" placeholder="学校名称" />
-         <button class="sui-btn btn-danger save-btn">保存</button> 
+         <button class="sui-btn btn-danger save-btn"  @click.prevent="schoolUpdate()">保存</button>
+         <button class="sui-btn btn-danger save-btn" @click.prevent="schoolFlagChange()">取消</button>
         </form> </li>
        <li>
-        <i class="fa fa-map-marker" aria-hidden="true"></i> <span class="edit-item"> 填写所在学院(必填)</span>
-        <form action="" class="sui-form form-inline">
+        <i class="fa fa-map-marker" aria-hidden="true"></i>
+        <span class="edit-item" v-show="professionalFlag" @click="professionalFlagChange()" v-text="user.myprofessional"></span>
+        <form class="form-inline" style="display: inline-block" v-show="!professionalFlag">
           <input type="text" placeholder="所在学院" />
-          <button class="sui-btn btn-danger save-btn">保存</button>
+          <button class="sui-btn btn-danger save-btn"  @click.prevent="professionalUpdate()">保存</button>
+          <button class="sui-btn btn-danger save-btn" @click.prevent="professionalFlagChange()">取消</button>
         </form>
        </li>
-       <li> <i class="fa fa-shopping-bag" aria-hidden="true"></i> <span class="edit-item"> 填写所在年级(必填)</span>
-        <form action="" class="sui-form form-inline"> 
+       <li> <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+        <span class="edit-item" v-show="gradeFlag" @click="gradeFlagChange()" v-model="user.mygrade"></span>
+        <form class="form-inline" style="display: inline-block" v-show="!gradeFlag">
          <input type="text" placeholder="所在年级" />
-         <button class="sui-btn btn-danger save-btn">保存</button> 
+         <button class="sui-btn btn-danger save-btn"  @click.prevent="gradeUpdate()">保存</button>
+         <button class="sui-btn btn-danger save-btn" @click.prevent="gradeFlagChange()">取消</button>
         </form>
        </li>
       </ul> 
@@ -143,11 +158,47 @@
            data:{
                qqFlag:true,  //用于判断qq是文本显示还是输入框显示
                schoolFlag:true,// 用于判断school是文本显示还是输入框显示
-
-
-
+               professionalFlag:true,// 用于判断学院是文本显示还是输入框显示
+               gradeFlag:true, //用于判断年级是文本显示还是输入框显示
+               user:{
+                   myqq:" 填写个人qq(必填)",
+                   myschool:" 填写所在学校(必填)",
+                   mygrade:" 填写所在年级(必填)",
+                   myprofessional:" 填写所在学院(必填)"
+               }
            },
            methods:{
+               qqFlagChange:function () { //qq取反
+                   this.qqFlag=!this.qqFlag;
+               },
+               schoolFlagChange:function () { //学校取反
+                   this.schoolFlag  = !this.schoolFlag;
+               },
+               professionalFlagChange:function () {  //专业取反
+                   this.professionalFlag = !this.professionalFlag;
+               },
+               gradeFlagChange:function () { // 年级取反
+                   this.gradeFlag = !this.gradeFlag;
+               },
+               qqUpdate:function () { //qq修改
+                   var url = school_user_server+"/user/register/"+this.verifyCode;
+                   var _this = this;
+                   axios.post(url, _this.user).then(function (response) {
+                       _this.result = response.data;
+                       _this.error = _this.result.message;
+                   }).catch(function (err) {
+                       console.log("网络错误");
+                   });
+               },
+               schoolUpdate:function () {  //school 修改
+
+               },
+               professionalUpdate:function () {   //学院修改
+
+               },
+               gradeUpdate:function () { //年级修改
+
+               }
 
            },  //methods
            created(){

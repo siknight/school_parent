@@ -30,14 +30,18 @@
     <script src="./ueditor/ueditor.config.js"></script>
     <script src="./ueditor/ueditor.all.min.js"></script>
     <script src="./ueditor/lang/zh-cn/zh-cn.js"></script>
-
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
     <div class="wrapper">
         <!--引用组件-->
         <!--头部导航-->
- <header id="index_header">
+ <header id="index_header" v-cloak>
   <div class="sui-navbar">
     <div class="navbar-inner">
       <a href="index-logined.html" class="sui-brand"><img src="./img/asset-logo-black.png" alt="社交"/></a>
