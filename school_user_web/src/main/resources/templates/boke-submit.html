@@ -110,14 +110,10 @@
             </div>
         </form>
     </div>
-        <script>
-            var editor =  UE.getEditor('container');
 
-
-        </script>
 
             <script type="text/javascript">
-
+                var editor =  UE.getEditor('container');
                 var articleVue = new Vue({
                     el:"#articleApp",
                     data:{
@@ -143,6 +139,7 @@
                             });
                         },
                         addArticle:function () {
+                            this.successMsg="";
                             if(this.article.title==null||this.article.title==""){
                                 // this.result.message="邮箱不能为空";
                                 alert("标题不能为空");
@@ -165,13 +162,7 @@
                                     _this.result = response.data;
                                     _this.successMsg= _this.result.message;
                                     alert( _this.successMsg);
-                                    // if( _this.result.code=="2000"){  //添加成功
-                                    //     alert( _this.successMsg);
-                                    //     window.location.href=user_web_url+"/index.html";
-                                    // }else if (_this.result.code=="20003"){
-                                    //     alert( _this.successMsg+",请先登录");
-                                    //     window.location.href=user_web_url+"/tologin_register.html";
-                                    // }
+                                    window.location.href=user_web_url+"/index.html";
 
                                 }).catch(function (err) {
                                     alert("网络错误");
@@ -206,14 +197,15 @@
   </div>
  </div>
 </div>
-
+    <!--判断是否登录代码-->
+    <script type="text/javascript" src="./js/loginFlag.js" >
+    </script>
+    <!--判断是否登录代码-->
     <!--将此页导航登录vue代码引进来-->
     <script type="text/javascript" src="./js/Nav_loginManager.js">
-
     </script>
     <!--尾部-->
     <div id="footer">
-
     </div>
     <script>
         $('#footer').load('footer.html');

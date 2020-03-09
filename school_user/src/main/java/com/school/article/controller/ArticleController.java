@@ -32,8 +32,6 @@ public class ArticleController {
 	private HttpServletRequest request;
 
 
-//	@Autowired
-//	private JwtUtil jwtUtil;
 	/**
 	 * 查询全部数据
 	 * @return
