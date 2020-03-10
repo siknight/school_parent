@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+ <head> 
+  <meta charset="utf-8" /> 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
+  <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ --> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <link rel="icon" href="./img/asset-favicon.ico" /> 
+  <title>社交-我的档案</title> 
+  <!-- 页面 css js --> 
+  <!-- <script type="text/javascript" src="../../plugins/sui/sui.min.js"></script> --> 
+  <link rel="stylesheet" type="text/css" href="./plugins/normalize-css/normalize.css" /> 
+  <link rel="stylesheet" type="text/css" href="./plugins/yui/cssgrids-min.css" /> 
+  <link rel="stylesheet" type="text/css" href="./plugins/sui/sui.min.css" /> 
+  <link rel="stylesheet" type="text/css" href="./plugins/sui/sui-append.min.css" /> 
+  <link rel="stylesheet" type="text/css" href="./plugins/font-awesome/css/font-awesome.min.css" /> 
+  <link rel="stylesheet" type="text/css" href="./css/widget-base.css" /> 
+  <link rel="stylesheet" type="text/css" href="./css/widget-head-foot.css" /> 
+  <link rel="stylesheet" type="text/css" href="./css/page-sj-person-myfile.css" />
+  <!--引入-->
+  <script src="./js/jquery-3.4.1.js"></script>
+  <script src="./js/vuejs-2.5.16.js"></script>
+  <script src="./js/axios-0.18.0.js"></script>
+  <script src="./js/schoolUrl.js"></script>
+  <style>
+   /* 在引入的css文件中写入这个*/
+   [v-cloak]{
+    display: none;
+   }
+  </style>
+ </head> 
+ <body> 
+
+  <!--第二段公共部分-->
+  <div class="myhome-personinfo" style="background-color:#AEDD81" id="personBaseInfoApp" v-cloak>
+   <div class="wrapper">
+    <!--左侧编辑-->
+    <div class="person-baseinfo"> 
+     <!--头像信息--> 
+     <div class="photo"> 
+      <img src="./img/widget-myphoto.jpg" alt="" class="person" /> 
+      <div class="share" style="text-align: center">
+       <h2 v-text="user.nickname"></h2>
+      </div>
+     </div> 
+     <!--文字信息--> 
+     <div class="info"> 
+      <h1><span class="allinfo"><a href="./person-myfile.html" target="_blank">查看完整档案</a></span></h1>
+      <ul class="fill">
+       <li>
+        <i  aria-hidden="true">QQ</i>
+        <span class="edit-item" v-show="qqFlag" @click="qqFlagChange()" v-text="user.myqq"></span>
+        <form class="form-inline" style="display: inline-block" v-show="!qqFlag">
+         <input type="text" v-model="user.myqq" placeholder="qq" />
+         <button class="sui-btn btn-danger save-btn" @click.prevent="qqUpdate()">保存</button>
+         <button class="sui-btn btn-danger save-btn" @click.prevent="qqFlagChange2()">取消</button>
+        </form> </li>
+
+       <li>
+        <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+        <span class="edit-item" v-show="schoolFlag" @click="schoolFlagChange()" v-text="user.myschool"></span>
+        <form class="form-inline" style="display: inline-block" v-show="!schoolFlag">
+         <!--<input type="text" placeholder="学校名称" v-model="user.myschool"/>-->
+         <select v-model="user.myschool">
+          <option value ="天津城建大学" >天津城建大学</option>
+          <option value ="天津农学院" >天津农学院</option>
+          <option value ="南开大学" >南开大学</option>
+         </select>
+         <button class="sui-btn btn-danger save-btn"  @click.prevent="schoolUpdate()">保存</button>
+         <button class="sui-btn btn-danger save-btn" @click.prevent="schoolFlagChange2()">取消</button>
+        </form> </li>
+       <li>
+        <i class="fa fa-map-marker" aria-hidden="true"></i>
+        <span class="edit-item" v-show="professionalFlag" @click="professionalFlagChange()" v-text="user.myprofessional"></span>
+        <form class="form-inline" style="display: inline-block" v-show="!professionalFlag">
+          <!--<input type="text" placeholder="所在学院" v-model="user.myprofessional"/>-->
+         <select v-model="user.myprofessional">
+           <option value ="计算机学院" >计算机学院</option>
+           <option value ="会计学院" >会计学院</option>
+           <option value ="金融学院" >金融学院</option>
+         </select>
+          <button class="sui-btn btn-danger save-btn"  @click.prevent="professionalUpdate()">保存</button>
+          <button class="sui-btn btn-danger save-btn" @click.prevent="professionalFlagChange2()">取消</button>
+        </form>
+       </li>
+       <li> <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+        <span class="edit-item" v-show="gradeFlag" @click="gradeFlagChange()" v-text="user.mygrade"></span>
+        <form class="form-inline" style="display: inline-block" v-show="!gradeFlag">
+         <!--<input type="text" placeholder="所在年级" v-model="user.mygrade"/>-->
+         <select v-model="user.mygrade">
+          <option value ="大一" >大一</option>
+          <option value ="大二" >大二</option>
+          <option value ="大三" >大三</option>
+          <option value ="大四" >大四</option>
+          <option value ="大五" >大五</option>
+          <option value ="还未入学" >还未入学</option>
+          <option value ="研究生" >研究生</option>
+         </select>
+         <button class="sui-btn btn-danger save-btn"  @click.prevent="gradeUpdate()">保存</button>
+         <button class="sui-btn btn-danger save-btn" @click.prevent="gradeFlagChange2()">取消</button>
+        </form>
+       </li>
+      </ul> 
+     </div> 
+    </div>
+    <!--左侧编辑-->
+    <!--右侧编辑--> 
+    <div class="edit-info"> 
+     <h4>个人简介<span class="addedit" @click="personalityFlagChange()">
+      <img src="./img/widget-edit.png" width="12" height="12" />编辑</span></h4>
+     <div class="info-box">
+      <div class="edit-intro" v-show="personalityFlag" v-text="user.personality">
+
+      </div>
+      <div class="edit-intro" v-show="!personalityFlag">
+
+        <textarea  v-model="user.personality" style="width: 100%;height: 80px; margin: 0px auto" >
+        </textarea>
+
+       <br/><br/>
+       <button class="sui-btn btn-danger save-btn"  @click.prevent="updatePersonality()">保存</button>
+       <button class="sui-btn btn-danger save-btn" @click.prevent="personalityFlagChange2()">取消</button>
+      </div>
+     </div>
+    </div>
+    <!--右侧编辑-->
+    <div class="clearfix"></div> 
+   </div>
+  </div>
+  <!--第二段公共部分 引入vue脚本代码-->
+  <script type="text/javascript" src="./js/person-myfile-must.js">
+
+  </script>
+
+
+ </body>
+</html>

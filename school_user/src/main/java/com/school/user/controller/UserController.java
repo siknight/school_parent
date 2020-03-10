@@ -199,11 +199,15 @@ public class UserController {
 			userDB.setMyprofessional(user.getMyprofessional());
 		}else if ("grade".equals(updateType)){
 			userDB.setMygrade(user.getMygrade());
+		}else if ("personality".equals(updateType)){
+			userDB.setPersonality(user.getPersonality());
+			System.out.println("修改个人简介");
 		}else if ("all".equals(updateType)){
 //			userDB
 		}
 		System.out.println("正在修改");
 		userService.update(userDB);
+		userDB.setPassword(null);
 		return new Result(true,StatusCode.OK,"修改成功",userDB);
 	}
 	
