@@ -103,7 +103,7 @@
         <i  aria-hidden="true">QQ</i>
         <span class="edit-item" v-show="qqFlag" @click="qqFlagChange()" v-text="user.myqq"></span>
         <form class="form-inline" style="display: inline-block" v-show="!qqFlag">
-         <input type="text" placeholder="qq" />
+         <input type="text" v-model="user.myqq" placeholder="qq" />
          <button class="sui-btn btn-danger save-btn" @click.prevent="qqUpdate()">保存</button>
          <button class="sui-btn btn-danger save-btn" @click.prevent="qqFlagChange()">取消</button>
         </form> </li>
@@ -112,7 +112,7 @@
         <i class="fa fa-graduation-cap" aria-hidden="true"></i>
         <span class="edit-item" v-show="schoolFlag" @click="schoolFlagChange()" v-text="user.myschool"></span>
         <form class="form-inline" style="display: inline-block" v-show="!schoolFlag">
-         <input type="text" placeholder="学校名称" />
+         <input type="text" placeholder="学校名称" v-model="user.myschool"/>
          <button class="sui-btn btn-danger save-btn"  @click.prevent="schoolUpdate()">保存</button>
          <button class="sui-btn btn-danger save-btn" @click.prevent="schoolFlagChange()">取消</button>
         </form> </li>
@@ -120,15 +120,15 @@
         <i class="fa fa-map-marker" aria-hidden="true"></i>
         <span class="edit-item" v-show="professionalFlag" @click="professionalFlagChange()" v-text="user.myprofessional"></span>
         <form class="form-inline" style="display: inline-block" v-show="!professionalFlag">
-          <input type="text" placeholder="所在学院" />
+          <input type="text" placeholder="所在学院" v-model="user.myprofessional"/>
           <button class="sui-btn btn-danger save-btn"  @click.prevent="professionalUpdate()">保存</button>
           <button class="sui-btn btn-danger save-btn" @click.prevent="professionalFlagChange()">取消</button>
         </form>
        </li>
        <li> <i class="fa fa-shopping-bag" aria-hidden="true"></i>
-        <span class="edit-item" v-show="gradeFlag" @click="gradeFlagChange()" v-model="user.mygrade"></span>
+        <span class="edit-item" v-show="gradeFlag" @click="gradeFlagChange()" v-text="user.mygrade"></span>
         <form class="form-inline" style="display: inline-block" v-show="!gradeFlag">
-         <input type="text" placeholder="所在年级" />
+         <input type="text" placeholder="所在年级" v-model="user.mygrade"/>
          <button class="sui-btn btn-danger save-btn"  @click.prevent="gradeUpdate()">保存</button>
          <button class="sui-btn btn-danger save-btn" @click.prevent="gradeFlagChange()">取消</button>
         </form>
@@ -165,7 +165,8 @@
                    myschool:" 填写所在学校(必填)",
                    mygrade:" 填写所在年级(必填)",
                    myprofessional:" 填写所在学院(必填)"
-               }
+               },
+               result:{}
            },
            methods:{
                qqFlagChange:function () { //qq取反
@@ -181,28 +182,113 @@
                    this.gradeFlag = !this.gradeFlag;
                },
                qqUpdate:function () { //qq修改
-                   var url = school_user_server+"/user/register/"+this.verifyCode;
+                   var url = school_user_server+"/user/qq";
                    var _this = this;
-                   axios.post(url, _this.user).then(function (response) {
+                   var token=window.localStorage.getItem("token_school");  //获取token
+                   axios.put(url, _this.user,{
+                       headers:{
+                           //请求时添加token，验证是否登录
+                           'Authorization':"Bearer "+token
+                       }
+                   }).then(function (response) {
+                       alert("修改成功")
+                       _this.qqFlagChange();
                        _this.result = response.data;
-                       _this.error = _this.result.message;
+                       _this.user.myqq = _this.result.data.myqq;
+
                    }).catch(function (err) {
-                       console.log("网络错误");
+                       // console.log("网络错误");
                    });
                },
                schoolUpdate:function () {  //school 修改
+                   var url = school_user_server+"/user/school";
+                   var _this = this;
+                   var token=window.localStorage.getItem("token_school");  //获取token
+                   axios.put(url, _this.user,{
+                       headers:{
+                           //请求时添加token，验证是否登录
+                           'Authorization':"Bearer "+token
+                       }
+                   }).then(function (response) {
+                       alert("修改成功")
+                       _this.schoolFlagChange();
+                       _this.result = response.data;
+                       _this.user.myschool = _this.result.data.myschool;
 
+                   }).catch(function (err) {
+                       // console.log("网络错误");
+                   });
                },
                professionalUpdate:function () {   //学院修改
+                   var url = school_user_server+"/user/professional";
+                   var _this = this;
+                   var token=window.localStorage.getItem("token_school");  //获取token
+                   axios.put(url, _this.user,{
+                       headers:{
+                           //请求时添加token，验证是否登录
+                           'Authorization':"Bearer "+token
+                       }
+                   }).then(function (response) {
+                       alert("修改成功")
+                       _this.professionalFlagChange();
+                       _this.result = response.data;
+                       _this.user.myprofessional = _this.result.data.myprofessional;
 
+                   }).catch(function (err) {
+                       // console.log("网络错误");
+                   });
                },
                gradeUpdate:function () { //年级修改
+                   var url = school_user_server+"/user/grade";
+                   var _this = this;
+                   var token=window.localStorage.getItem("token_school");  //获取token
+                   axios.put(url, _this.user,{
+                       headers:{
+                           //请求时添加token，验证是否登录
+                           'Authorization':"Bearer "+token
+                       }
+                   }).then(function (response) {
+                       alert("修改成功")
+                       _this.gradeFlagChange();
+                       _this.result = response.data;
+                       _this.user.mygrade = _this.result.data.mygrade;
 
+                   }).catch(function (err) {
+                       // console.log("网络错误");
+                   });
+               },
+               findUserById:function () {
+                   var url = school_user_server+"/user/findById";
+                   var _this = this;
+                   var token=window.localStorage.getItem("token_school");  //获取token
+                   axios.get(url,{
+                       headers:{
+                           //请求时添加token，验证是否登录
+                           'Authorization':"Bearer "+token
+                       }
+                   }).then(function (response) {
+                       _this.result = response.data;
+                       _this.user = _this.result.data;
+                       if (_this.user.myqq==null||_this.user.myqq==""){
+                           _this.user.myqq=" 填写个人qq(必填)";
+                       }
+                       if (_this.user.mygrade==null||_this.user.mygrade==""){
+                           _this.user.mygrade=" 填写所在年级(必填)";
+                       }
+                       if (_this.user.myschool==null||_this.user.myschool==""){
+                           _this.user.myschool=" 填写所在学校(必填)";
+                       }
+                       if (_this.user.myprofessional==null||_this.user.myprofessional==""){
+                           _this.user.myprofessional=" 填写所学专业(必填)";
+                       }
+                   }).catch(function (err) {
+                       // console.log("网络错误");
+                   });
                }
 
            },  //methods
            created(){
-
+             this.findUserById();
            }
 
        });

@@ -9,6 +9,7 @@ import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import util.JwtUtil;
 
@@ -80,12 +81,18 @@ public class UserController {
 	
 	/**
 	 * 根据ID查询
-	 * @param id ID
 	 * @return
 	 */
-	@RequestMapping(value="/{id}",method= RequestMethod.GET)
-	public Result findById(@PathVariable String id){
-		return new Result(true,StatusCode.OK,"查询成功",userService.findById(id));
+	@RequestMapping(value="/findById",method= RequestMethod.GET)
+	public Result findById(){
+		//判断是否有权限访问
+		Claims claims=(Claims) request.getAttribute("user_claims");
+		if(claims==null){
+			return new Result(true,StatusCode.ACCESSERROR,"无权访问");
+		}
+		//claims.getId()是为了获取token里存的用户id
+		String userId = claims.getId(); //获取到userid
+		return new Result(true,StatusCode.OK,"查询成功",userService.findById(userId));
 
 	}
 
@@ -169,15 +176,35 @@ public class UserController {
 	}
 	
 	/**
-	 * 修改
+	 * 修改 根据条件
 	 * @param user
 	 */
-	@RequestMapping(value="/{id}",method= RequestMethod.PUT)
-	public Result update(@RequestBody User user, @PathVariable String id ){
-//		user.setId(id);
-//		userService.update(user);
-//		return new Result(true,StatusCode.OK,"修改成功");
-		return null;
+	@RequestMapping(value="/{updateType}",method= RequestMethod.PUT)
+	@Transactional
+	public Result update(@RequestBody User user, @PathVariable String updateType ){
+  //判断是否有权限访问
+		Claims claims=(Claims) request.getAttribute("user_claims");
+		if(claims==null){
+			return new Result(true,StatusCode.ACCESSERROR,"无权访问");
+		}
+		//claims.getId()是为了获取token里存的用户id
+		String userId = claims.getId(); //获取到userid
+		User userDB = userService.findById(userId); //通过id查询数据库里的用户
+		//判断类型
+		if ("qq".equals(updateType)){
+			userDB.setMyqq(user.getMyqq());
+		}else if("school".equals(updateType)){ //修改学校
+			userDB.setMyschool(user.getMyschool());
+		}else if("professional".equals(updateType)){  //修改学院
+			userDB.setMyprofessional(user.getMyprofessional());
+		}else if ("grade".equals(updateType)){
+			userDB.setMygrade(user.getMygrade());
+		}else if ("all".equals(updateType)){
+//			userDB
+		}
+		System.out.println("正在修改");
+		userService.update(userDB);
+		return new Result(true,StatusCode.OK,"修改成功",userDB);
 	}
 	
 	/**

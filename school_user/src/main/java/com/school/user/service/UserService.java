@@ -218,6 +218,7 @@ public class UserService {
 	 * @param user
 	 */
 	public void update(User user) {
+
 		userDao.save(user);
 	}
 
