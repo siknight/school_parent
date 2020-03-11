@@ -14,7 +14,12 @@ var articleVue = new Vue({
             var url = school_user_server+"/column";
             var _this = this;
             //json请求用默认方式
-            axios.get(url).then(function (response) {
+            axios.get(url,{
+                headers:{
+                    //请求时添加token，验证是否登录
+                    'Authorization':"Bearer "+token
+                }
+            }).then(function (response) {
                 _this.result = response.data;
                 _this.columnList = _this.result.data;
                 //如果没有这句代码，select中初始化会是空白的，默认选中就无法实现

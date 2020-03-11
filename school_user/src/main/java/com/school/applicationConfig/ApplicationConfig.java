@@ -21,9 +21,10 @@ public class ApplicationConfig extends WebMvcConfigurationSupport {
         registry.addInterceptor(jwtFilter).
                 addPathPatterns("/**").
                 excludePathPatterns("/**/login")  //允许通过 登录
-                  .excludePathPatterns("/**/sendsms")   //发送验证码通过
+                .excludePathPatterns("/**/sendsms")   //发送验证码通过
                 .excludePathPatterns("/**/pass/**")   //密码修改验证通过
-                .excludePathPatterns("/**/register/**");  //修改密码
+                .excludePathPatterns("/**/register/**")//修改密码
+                .excludePathPatterns("/token/**");  //token验证
 
     }
 

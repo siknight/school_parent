@@ -49,7 +49,6 @@ public class UserController {
 	public void sendsms(@RequestParam("mobile") String mobile ){
 		System.out.println("controller mobile="+mobile);
 		userService.sendSms(mobile);
-
 //		return new Result(true,StatusCode.OK,"发送成功");  //这里不注掉的话会抛异常
 	}
 
@@ -81,6 +80,8 @@ public class UserController {
 	public Result findAll(){
 		return new Result(true,StatusCode.OK,"查询成功",userService.findAll());
 	}
+
+
 	
 	/**
 	 * 根据ID查询
@@ -95,8 +96,9 @@ public class UserController {
 		}
 		//claims.getId()是为了获取token里存的用户id
 		String userId = claims.getId(); //获取到userid
-		return new Result(true,StatusCode.OK,"查询成功",userService.findById(userId));
-
+		User user = userService.findById(userId);
+		user.setPassword(null);
+		return new Result(true,StatusCode.OK,"查询成功",user);
 	}
 
 	/**

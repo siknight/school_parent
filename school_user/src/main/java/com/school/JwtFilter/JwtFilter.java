@@ -35,6 +35,8 @@ public class JwtFilter extends HandlerInterceptorAdapter {
                     System.out.println("jwtfilter user");
                     request.setAttribute("user_claims", claims);
                 }
+            }else {  //claims为空
+                throw new Exception("你还没有登录");
             }
 
         }
