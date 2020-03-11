@@ -12,6 +12,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 import util.IdWorker;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -28,7 +29,7 @@ import java.util.concurrent.TimeUnit;
  *
  */
 @Service
-@Transactional
+
 public class UserService {
 
 	@Autowired
@@ -61,6 +62,7 @@ public class UserService {
 	 * @param mobile
 	 */
 	public void sendSms(String mobile){
+
 		//1.生成6位短信验证码
 		Random random=new Random();
 		int max=999999;//最大数
@@ -71,7 +73,9 @@ public class UserService {
 		}
 		System.out.println(mobile+"收到验证码是："+code);
 		//2.将验证码放入redis
-		redisTemplate.opsForValue().set("smscode_"+mobile, code+"" ,5, TimeUnit.HOURS);//五分钟过期
+		redisTemplate.opsForValue().set("smscode_"+mobile, code+"" ,5, TimeUnit.MINUTES);//五分钟过期
+
+
 		//3.发送出去
 		mailService.sendSimpleMail(mobile,"校园社交验证码","尊敬的用户您好,你的验证码为"+code+",五分钟内有效");
 
@@ -82,7 +86,10 @@ public class UserService {
 	 * @param user
 	 * @param code
 	 */
+	@Transactional
 	public void updatePass(User user,String code) {
+		System.out.println("user="+user.getMobile());
+
         //判断验证码是否正确
 		String syscode = (String)redisTemplate.opsForValue().get("smscode_" + user.getMobile());
 		System.out.println("syscode redis="+syscode);

@@ -5,6 +5,7 @@ import com.school.JwtFilter.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 /**
@@ -19,6 +20,15 @@ public class ApplicationConfig extends WebMvcConfigurationSupport {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtFilter).
                 addPathPatterns("/**").
-                excludePathPatterns("/**/login");
+                excludePathPatterns("/**/login")  //允许通过 登录
+                  .excludePathPatterns("/**/sendsms")   //发送验证码通过
+                .excludePathPatterns("/**/pass/**")   //密码修改验证通过
+                .excludePathPatterns("/**/register/**");  //修改密码
+
+    }
+
+    @Override
+    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        super.addResourceHandlers(registry);
     }
 }

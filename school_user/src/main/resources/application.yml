@@ -20,16 +20,16 @@ spring:
   resources:
     static-locations: classpath:/templates/
 #    邮箱
-#  mail:
-#    host: smtp.qq.com 	#邮箱服务器地址
-#    username: 1786678583@qq.com  #邮箱账号
-#    password: ihypidhglruvbigd	#邮箱密码
-#    default-encoding: utf-8	#默认编码
   mail:
-    host: smtp.163.com 	#邮箱服务器地址
-    username: siknight666@163.com  #邮箱账号
-    password: merryhappy123456	#邮箱密码
+    host: smtp.qq.com 	#邮箱服务器地址
+    username: 1786678583@qq.com  #邮箱账号
+    password: ihypidhglruvbigd	#邮箱密码
     default-encoding: utf-8	#默认编码
+#  mail:
+#    host: smtp.163.com 	#邮箱服务器地址
+#    username: siknight666@163.com  #邮箱账号
+#    password: merryhappy123456	#邮箱密码
+#    default-encoding: utf-8	#默认编码
 #    token生成
 jwt:
   config:

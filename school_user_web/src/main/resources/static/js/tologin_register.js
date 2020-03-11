@@ -2,7 +2,9 @@
 var userlogin = new Vue({
     el:"#loginApp",
     data:{
-        user: {},
+        user: {
+
+        },
         result:{
             message:""   //在页面显示的错误信息
         },
@@ -90,7 +92,7 @@ var userlogin = new Vue({
                 this.result.message="邮箱格式不正确"
             }else{
                 this.show = false;
-                var url = school_user_server+"/user/sendsms/"+this.user.mobile;
+                var url = school_user_server+"/user/sendsms";
                 var _this = this;
                 //定时器开始
                 var TIME_COUNT = 30;
@@ -109,7 +111,9 @@ var userlogin = new Vue({
                 },1000);
                 }  //定时器结束
                 //向服务器请求发送验证码
-                axios.post(url).then(function (response) {
+                var params = new URLSearchParams()
+                params.append('mobile', this.user.mobile);
+                axios.post(url,params).then(function (response) {
 
                 }).catch(function (err) {
                     console.log("网络错误");
@@ -178,7 +182,7 @@ var userRegister = new Vue({
             }else if(!regEmail.test(this.user.mobile)){
                 this.error="邮箱格式不正确"
             }else{
-                var url = school_user_server+"/user/sendsms/"+this.user.mobile;
+                var url = school_user_server+"/user/sendsms";
                 var _this = this;
                 //定时器开始
                 var TIME_COUNT = 30;
@@ -197,7 +201,9 @@ var userRegister = new Vue({
                 },1000);
                 }  //定时器结束
                 //向服务请求发送验证码
-                axios.post(url).then(function (response) {
+                var params = new URLSearchParams()
+                params.append('mobile', this.user.mobile)
+                axios.post(url,params).then(function (response) {
 
                 }).catch(function (err) {
                     console.log("网络错误");

@@ -6,6 +6,7 @@ import entity.PageResult;
 import entity.Result;
 import entity.StatusCode;
 import io.jsonwebtoken.Claims;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -44,10 +45,12 @@ public class UserController {
 	 * @param mobile
 	 * @return
 	 */
-	@RequestMapping(value="/sendsms/{mobile}",method=RequestMethod.POST)
-	public Result sendsms(@PathVariable String mobile ){
+	@RequestMapping(value="/sendsms",method=RequestMethod.POST)
+	public void sendsms(@RequestParam("mobile") String mobile ){
+		System.out.println("controller mobile="+mobile);
 		userService.sendSms(mobile);
-		return new Result(true,StatusCode.OK,"发送成功");
+
+//		return new Result(true,StatusCode.OK,"发送成功");  //这里不注掉的话会抛异常
 	}
 
 	/*
@@ -207,8 +210,12 @@ public class UserController {
 		}
 		System.out.println("正在修改");
 		userService.update(userDB);
-		userDB.setPassword(null);
-		return new Result(true,StatusCode.OK,"修改成功",userDB);
+		//将密码置空返回出去
+		BeanUtils.copyProperties(userDB,user);
+		user.setPassword(null);
+		System.out.println(user==userDB);
+
+		return new Result(true,StatusCode.OK,"修改成功",user);
 	}
 	
 	/**

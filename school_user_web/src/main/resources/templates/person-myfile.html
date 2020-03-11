@@ -123,7 +123,7 @@
           })
    </script>
     </div> 
-    <div class="content" id="personFileAll">
+    <div class="content" id="personFileAll" v-cloak>
 
      <div class="file-edit"> 
       <div class="info">
@@ -138,35 +138,26 @@
         <div class="span4 item"> 
          <h3 class="name"><span style="color: red">*</span>用户名</h3>
          <p v-text="user.nickname" v-show="updateFlag"></p>
-         <p v-show="!updateFlag"><input type="text" v-text="user.nickname" ></p>
+         <p v-show="!updateFlag"><input type="text" v-model="user.nickname" ></p>
          <h3 class="name">出生日期</h3> 
          <p v-text="user.birthday" v-show="updateFlag"></p>
-         <p v-show="!updateFlag"><input type="date" v-text="user.birthday" ></p>
+         <p v-show="!updateFlag"><input type="date" v-model="user.birthday" ></p>
          <h3 class="name"><span style="color: red">*</span>电子邮箱<span style="color: red">(禁止修改)</span></h3>
-         <p v-text="user.mobile" v-show="updateFlag"></p>
-         <h3 class="name">现居城市</h3> 
-         <p v-text="user.nowcity" v-show="updateFlag"></p>
-         <p v-show="!updateFlag"><input type="text" v-text="user.nowcity" ></p>
-         <h3 class="name">性别</h3>
-         <p v-text="user.sex" v-show="updateFlag"></p>
-         <p v-show="!updateFlag"><input type="text" v-text="user.sex" ></p>
+
         </div> 
         <div class="span3 item">
-         <h3 class="name"><span style="color: red">*</span>QQ号</h3>
-         <p v-text="user.myqq" v-show="updateFlag"></p>
-         <p v-show="!updateFlag"><input type="text" v-text="user.myqq" ></p>
-         <h3 class="name"><span style="color: red">*</span>所在学校</h3>
-         <p v-text="user.myschool" v-show="updateFlag"></p>
-         <p v-show="!updateFlag"><input type="text" v-text="user.myschool" ></p>
-         <h3 class="name"><span style="color: red">*</span>所在学院</h3>
-         <p v-text="user.myprofessional" v-show="updateFlag"></p>
-         <p v-show="!updateFlag"><input type="text" v-text="user.myprofessional" ></p>
-         <h3 class="name"><span style="color: red">*</span>所在年级</h3>
-         <p v-text="user.mygrade" v-show="updateFlag"></p>
-         <p v-show="!updateFlag"><input type="text" v-text="user.mygrade" ></p>
+         <h3 class="name">性别</h3>
+         <p v-text="user.sex" v-show="updateFlag"></p>
+         <p v-show="!updateFlag"><input type="text" v-model="user.sex" ></p>
+         <p v-show="!updateFlag"><input type="text" v-model="user.mygrade" ></p>
          <h3 class="name">兴趣</h3>
          <p v-text="user.interest" v-show="updateFlag"></p>
-         <p v-show="!updateFlag"><input type="text" v-text="user.interest" ></p>
+         <p v-show="!updateFlag"><input type="text" v-model="user.interest" ></p>
+         <p v-text="user.mobile"></p>
+         <h3 class="name">现居城市</h3>
+         <p v-text="user.nowcity" v-show="updateFlag"></p>
+         <p v-show="!updateFlag"><input type="text" v-model="user.nowcity" ></p>
+
 
         </div> 
         <div class="span1 edit"> 
@@ -182,9 +173,7 @@
         </div>
 
 
-
-
-       </div>
+        </div>
       </div>
 
      </div>
@@ -250,7 +239,7 @@
                         _this.user.nowcity="暂无";
                     }
                     if (_this.user.sex==null||_this.user.sex==""){
-                        _this.user.sex="暂无";
+                        _this.user.sex="未知";
                     }
                     if (_this.user.interest==null||_this.user.interest==""){
                         _this.user.interest="暂无";
