@@ -20,12 +20,13 @@ public class ApplicationConfig extends WebMvcConfigurationSupport {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtFilter).
                 addPathPatterns("/**").
-                excludePathPatterns("/**/login")  //允许通过 登录
+                 excludePathPatterns("/**/login")  //允许通过 登录
                 .excludePathPatterns("/**/sendsms")   //发送验证码通过
                 .excludePathPatterns("/**/pass/**")   //密码修改验证通过
                 .excludePathPatterns("/**/register/**")//修改密码
                 .excludePathPatterns("/token/**")
-                .excludePathPatterns("/article/findIndexArticle");  //token验证
+                .excludePathPatterns("/article/findIndexArticle")
+                .excludePathPatterns("/article/findDetailArticle/**");  //token验证
 
     }
 

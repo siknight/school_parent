@@ -13,6 +13,7 @@ var articleVue = new Vue({
         findAllColumn:function () {
             var url = school_user_server+"/column";
             var _this = this;
+            var token=window.localStorage.getItem("token_school");  //获取token
             //json请求用默认方式
             axios.get(url,{
                 headers:{

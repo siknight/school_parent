@@ -61,6 +61,19 @@ public class ArticleService {
 		return articleAndUsers;
 	}
 
+	public ArticleAndUser finddetailArticleById(String id){
+		Article article = articleDao.findById(id).get();
+		String userid = article.getUserid();
+		User user = userDao.findById(userid).get();
+		user.setPassword(null);
+
+		ArticleAndUser articleAndUser = new ArticleAndUser();
+		articleAndUser.setUser(user);
+		articleAndUser.setArticle(article);
+
+		return articleAndUser;
+	}
+
 	/**
 	 * 查询全部列表
 	 * @return
@@ -119,6 +132,7 @@ public class ArticleService {
 		article.setThumbup(0); //点赞数
 		article.setVisits(0);//点赞数
 		article.setComment(0);//评论数
+		article.setUrl("boke-detail.html?articleId="+article.getId());
 		article.setCreatetime(new Date());
 		article.setUpdatetime(new Date());
 		System.out.println("正在保存文章");

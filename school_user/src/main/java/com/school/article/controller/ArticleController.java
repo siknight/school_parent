@@ -31,6 +31,12 @@ public class ArticleController {
 	@Autowired
 	private HttpServletRequest request;
 
+	@RequestMapping(value = "/findDetailArticle/{articleId}",method= RequestMethod.GET)
+	public Result finddetailArticlesById(@PathVariable("articleId") String articleId){
+
+		return new Result(true,StatusCode.OK,"查询成功",articleService.finddetailArticleById(articleId));
+	}
+
 	@RequestMapping(value = "/findIndexArticle",method= RequestMethod.GET)
 	public Result findIndexArticles(){
 		System.out.println("findIndexArticles 执行了");
