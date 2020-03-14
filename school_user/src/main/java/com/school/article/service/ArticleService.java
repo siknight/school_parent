@@ -3,6 +3,10 @@ package com.school.article.service;
 
 import com.school.article.dao.ArticleDao;
 import com.school.article.pojo.Article;
+import com.school.article.pojo.ArticleAndUser;
+import com.school.user.dao.UserDao;
+import com.school.user.pojo.User;
+import entity.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,10 +20,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -37,8 +38,28 @@ public class ArticleService {
 	@Autowired
 	private IdWorker idWorker;
 
+	@Autowired
+	private UserDao userDao;
+
 	@Autowired private
 	RedisTemplate redisTemplate;
+
+
+	public List<ArticleAndUser> findIndexArticles(){
+		List<Article> all = articleDao.findAll();
+		ArrayList<ArticleAndUser> articleAndUsers = new ArrayList<>();
+		for (Article article:all){
+			String userid = article.getUserid();
+			User user = userDao.findById(userid).get();
+			user.setPassword(null);
+			user.setBirthday(null);
+			ArticleAndUser articleAndUser = new ArticleAndUser();
+			articleAndUser.setArticle(article);
+			articleAndUser.setUser(user);
+			articleAndUsers.add(articleAndUser);
+		}
+		return articleAndUsers;
+	}
 
 	/**
 	 * 查询全部列表

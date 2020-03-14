@@ -31,6 +31,11 @@ public class ArticleController {
 	@Autowired
 	private HttpServletRequest request;
 
+	@RequestMapping(value = "/findIndexArticle",method= RequestMethod.GET)
+	public Result findIndexArticles(){
+		System.out.println("findIndexArticles 执行了");
+		return new Result(true,StatusCode.OK,"查询成功",articleService.findIndexArticles());
+	}
 
 	/**
 	 * 查询全部数据

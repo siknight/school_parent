@@ -24,7 +24,8 @@ public class ApplicationConfig extends WebMvcConfigurationSupport {
                 .excludePathPatterns("/**/sendsms")   //发送验证码通过
                 .excludePathPatterns("/**/pass/**")   //密码修改验证通过
                 .excludePathPatterns("/**/register/**")//修改密码
-                .excludePathPatterns("/token/**");  //token验证
+                .excludePathPatterns("/token/**")
+                .excludePathPatterns("/article/findIndexArticle");  //token验证
 
     }
 

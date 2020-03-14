@@ -1,5 +1,7 @@
 package com.school.article.pojo;
 
+import com.school.user.pojo.User;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -35,8 +37,9 @@ public class Article implements Serializable{
 	private String url;//URL
 	private String type;//类型
 
-	
-	public String getId() {		
+
+
+    public String getId() {
 		return id;
 	}
 	public void setId(String id) {

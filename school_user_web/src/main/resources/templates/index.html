@@ -123,41 +123,52 @@
          <!--中间大图循环-->
         </div> 
        </div> 
-      </div> 
-      <div class="data-list"> 
-       <ul class="headline fixed" id="headline">
+      </div>
+
+
+
+      <!---->
+      <div class="data-list">
+       <!--循环 id="articleForEachApp"-->
+       <ul class="headline fixed" id="headline"   >
         <!--中间文章循环-->
-        <li class="headline-item"> 
+        <!-- v-for="(ac,index) in articles"-->
+        <li class="headline-item" v-for="articleAndUser in articleAndUserList">
          <div class="fl indexImg"> 
           <img src="" /> 
          </div> 
          <div class="words"> 
           <h3>
-           <a href="boke-detail.html">Drive.ai融资5000万吴恩达加入董事会</a>
+           <!--v-text="ac.title"-->
+           <a href="boke-detail.html"  v-text="articleAndUser.article.title"></a>
            <span><img src="./img/widget-vip.png" class="vip" /></span></h3>
-          <h5 class="author"> 
-           <div class="fl"> 
-            <span class="authorName"> <img src="./img/widget-photo.png" alt="" /> 玻璃通 </span> 
-            <span>6月12日 13：34</span> 
-           </div> 
-           <div class="fr attention"> 
-            <span class="attentionText">关注</span> 
-            <span class="beforeclose"> <i class="fa fa-times delete" aria-hidden="true"></i> <i class="nolike">不感兴趣</i> </span> 
-           </div> 
-           <div class="clearfix"></div> </h5> 
+          <h5 class="author">
+           <div class="fl">
+            <span class="authorName"> <img src="./img/widget-photo.png" alt="" /><span v-text="articleAndUser.user.nickname"></span></span>
+            <span v-text="articleAndUser.user.myprofessional"></span>
+           </div>
+           <div class="fr attention">
+            <span class="attentionText">关注</span>
+            <span class="beforeclose"> <i class="fa fa-times delete" aria-hidden="true"></i> <i class="nolike">不感兴趣</i> </span>
+           </div>
+           <div class="clearfix"></div>
+          </h5>
          </div> <p class="content">滴滴与360都开源了各自的插件化框架，VirtualAPK与RePlugin,作为一个插件化方面的狂热研究者，在周末就迫不及待的下载了Virtualapk框架来进行研究，本篇博客带的……</p>
         </li>
        <!--中间文章循环-->
-
-       </ul> 
-       <ul id="loaded" class="headline"> 
-       </ul> 
+       </ul>
+       <!--循环-->
+       <!--<ul id="loaded" class="headline"> -->
+       <!--</ul> -->
       </div>
 
 
-      <!-- <script src="./data-list.js" type="text/javascript"></script> --> 
+
      </div>
      <!--文章展示部分-->
+
+
+
      <!--问答-->
      <div class="fl right"> 
       <div class="activity">
@@ -273,14 +284,27 @@
       var indexApp = new Vue({
           el:"#indexApp",
           data:{
-              loadArticle:function () {
-                  
-              }
+             articleAndUserList:[],
+             result:{}
+
           },
           methods:{
+              loadArticle:function () {
+                  var url = school_user_server+"/article/findIndexArticle";
+                  var _this = this;
+                  //json请求用默认方式
+                  axios.get(url).then(function (response) {
+                      _this.result = response.data;
+                      console.info(_this.result.message);
+                      _this.articleAndUserList = _this.result.data;
+
+                  }).catch(function (err) {
+                      console.log("网络错误");
+                  });
+              }
           },
           created(){
-              
+              this.loadArticle();
           }
       });
    </script>
