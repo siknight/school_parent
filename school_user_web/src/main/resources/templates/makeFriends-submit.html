@@ -93,50 +93,50 @@
 
         </div>
     <!--两列布局-->
-    <div class="wrapper">
+    <div class="wrapper" id="submitmakefriendApp">
         <div class="release-date">
     <h3><span>发布约会</span></h3>
     <form class="sui-form form-horizontal">
         <div class="control-group">
-            <label for="inputEmail" class="control-label topic">主题：</label>
+            <label  class="control-label topic">主题：</label>
             <div class="controls">
                 <ul>
-                    <li class="active">
+                    <li @click="same('看电影')" class="active">
                         <div class="topic d1">
                             <span>看电影</span>
                         </div>
                     </li>
-                    <li>
+                    <li  @click="same('吃饭')" class="active">
                         <div class="topic d2">
                             <span>吃饭</span>
                         </div>
                     </li>
-                    <li>
+                    <li @click="same('K 歌')" class="active">
                         <div class="topic d3">
                             <span>K 歌</span>
                         </div>
-                    </li>
-                    <li>
+                    </li >
+                    <li @click="same('喝咖啡')" class="active">
                         <div class="topic d4">
                             <span>喝咖啡</span>
                         </div>
                     </li>
-                    <li>
+                    <li @click="same('运动')" class="active">
                         <div class="topic d5">
                             <span>运动</span>
                         </div>
                     </li>
-                    <li>
+                    <li @click="same('旅行')" class="active">
                         <div class="topic d6">
                             <span>旅行</span>
                         </div>
                     </li>
-                    <li>
+                    <li @click="same('逛街')" class="active">
                         <div class="topic d7">
                             <span>逛街</span>
                         </div>
                     </li>
-                    <li>
+                    <li @click="same('其他')" class="active">
                         <div class="topic d8">
                             <span>其他</span>
                         </div>
@@ -145,7 +145,8 @@
             </div>
         </div>
         <div class="btn-date">
-                <button type="submit" class="sui-btn btn-info btn-release ">发布约会</button>
+                <span v-text="msg" style="color:red"></span>&nbsp;&nbsp;
+                <button  class="sui-btn btn-info btn-release" @click.prevent="add()">发布约会</button>
         </div>
     </form>
 </div>
@@ -158,6 +159,51 @@
     })
 </script> -->
     </div>
+
+    <script type="text/javascript">
+        new Vue({
+            el:"#submitmakefriendApp",
+            data:{
+               msg:""
+            },
+            methods:{
+                same:function (msg01) {
+                   this.msg = msg01;
+                },
+                add:function () {
+                    if(this.msg==null||this.msg==""){
+                        // this.result.message="邮箱不能为空";
+                        alert("你还没有选择约会活动");
+                    }else{
+                        //获取ueditor文章content赋值
+                        this.article.content = editor.getContent();
+                        //获取id，因为token里存的有，所以这里省略
+                        // this.article.userid = window.localStorage.getItem("userId_school");
+                        var token=window.localStorage.getItem("token_school");  //获取token
+                        console.info("userid=")
+                        var url = school_user_server+"/article";
+                        var _this = this;
+                        //json请求用默认方式
+                        axios.post(url,_this.article,{
+                            headers:{
+                                //请求时添加token，验证是否登录
+                                'Authorization':"Bearer "+token
+                            }
+                        }).then(function (response) {
+                            _this.result = response.data;
+                            _this.successMsg= _this.result.message;
+                            alert( _this.successMsg);
+                            window.location.href=user_web_url+"/index.html";
+
+                        }).catch(function (err) {
+                            alert("网络错误");
+                        });
+                    }
+                }
+            }
+
+        });
+    </script>
 
     <!--将导航栏判断此页vue代码引进来-->
     <script type="text/javascript" src="./js/Nav_loginManager.js">

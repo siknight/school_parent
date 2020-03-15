@@ -23,7 +23,6 @@ public class FriendController {
     private HttpServletRequest request;
 
 
-
     @RequestMapping(value="/like/{friendid}/{type}",method= RequestMethod.PUT)
     public Result addFriend(@PathVariable String friendid , @PathVariable String type){
         Claims claims=(Claims)request.getAttribute("user_claims");

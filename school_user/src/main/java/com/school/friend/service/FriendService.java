@@ -1,11 +1,11 @@
 package com.school.friend.service;
 
 import com.school.friend.dao.FriendDao;
-
 import com.school.friend.dao.NoFriendDao;
 import com.school.friend.pojo.Friend;
 import com.school.friend.pojo.NoFriend;
 import com.school.user.dao.UserDao;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +40,7 @@ public class FriendService {
      * @param friendid
      */
     public void deleteFriend(String userid,String friendid){
-        friendDao.deleteFriend(userid,friendid);
+        friendDao.deleteFriendByUseridAndFriendid(userid,friendid);
         friendDao.updateLike(friendid,userid,"0");
         addNoFriend(userid,friendid);//向不喜欢表中添加记录
         userClient.incFollowcount(userid,-1);//减少自己的关注数

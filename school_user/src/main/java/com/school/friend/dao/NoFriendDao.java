@@ -1,7 +1,7 @@
 package com.school.friend.dao;
 
-
 import com.school.friend.pojo.NoFriend;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
