@@ -159,13 +159,19 @@
     })
 </script> -->
     </div>
+    <!--验证是否登录-->
+    <script type="text/javascript" src="./js/loginFlag.js">
+
+    </script>
+
 
     <script type="text/javascript">
         new Vue({
             el:"#submitmakefriendApp",
             data:{
                msg:"",
-               Friendactivity:{}
+               Friendactivity:{},
+                result:""
             },
             methods:{
                 same:function (msg01) {
@@ -192,9 +198,9 @@
                         }).then(function (response) {
                             _this.result = response.data;
                             alert("msg="+_this.result.message);
-                            // _this.successMsg= _this.result.message;
-                            // alert( _this.successMsg);
-                            // window.location.href=user_web_url+"/index.html";
+                            if(_this.result.code=="20000"){
+                                window.location.href=user_web_url+"/makeFriends-index.html";
+                            }
 
                         }).catch(function (err) {
                             alert("网络错误");

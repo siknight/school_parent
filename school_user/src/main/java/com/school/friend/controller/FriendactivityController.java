@@ -1,4 +1,5 @@
 package com.school.friend.controller;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +38,13 @@ public class FriendactivityController {
 	//用于验证token
 	@Autowired
 	private HttpServletRequest request;
+
+	@RequestMapping(value = "/all/ufa",method= RequestMethod.GET)
+	public Result findAllUserFriendActivity(){
+
+		return  new Result(true,StatusCode.OK,"查询成功",friendactivityService.findAllUserFriendActivity());
+	}
+
 	/**
 	 * 查询全部数据
 	 * @return
@@ -93,6 +101,9 @@ public class FriendactivityController {
 		}
 		System.out.println("friactivity="+friendactivity.getActivityname());
 		friendactivity.setUserid(claims.getId());
+		friendactivity.setCreatetime(new Date());
+		friendactivity.setUpdatetime(new Date());
+		System.out.println("fa="+friendactivity);
 		friendactivityService.add(friendactivity);
 		return new Result(true,StatusCode.OK,"增加成功");
 	}

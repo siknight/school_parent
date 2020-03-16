@@ -1,9 +1,6 @@
 package com.school.friend.service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -14,6 +11,9 @@ import javax.persistence.criteria.Selection;
 
 import com.school.friend.dao.FriendactivityDao;
 import com.school.friend.pojo.Friendactivity;
+import com.school.friend.pojo.UserFriendActivity;
+import com.school.user.dao.UserDao;
+import com.school.user.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,6 +39,32 @@ public class FriendactivityService {
 	
 	@Autowired
 	private IdWorker idWorker;
+
+	@Autowired
+	private UserDao userDao;
+
+
+
+	/**
+	 * 查询全部列表
+	 * @return
+	 */
+	public List<UserFriendActivity> findAllUserFriendActivity() {
+		List<Friendactivity> acAll = friendactivityDao.findAll();
+		ArrayList<UserFriendActivity> ufList = new ArrayList<>();
+
+		for (Friendactivity ac:acAll){
+			String userid = ac.getUserid();
+			User user = userDao.findById(userid).get();
+			user.setPassword(null);
+			UserFriendActivity userFriendActivity = new UserFriendActivity();
+			userFriendActivity.setUser(user);
+			userFriendActivity.setFriendactivity(ac);
+			ufList.add(userFriendActivity);
+		}
+		return ufList;
+	}
+
 
 	/**
 	 * 查询全部列表
@@ -88,6 +114,7 @@ public class FriendactivityService {
 	 */
 	public void add(Friendactivity friendactivity) {
 		friendactivity.setId( idWorker.nextId()+"" );
+
 		friendactivityDao.save(friendactivity);
 	}
 
