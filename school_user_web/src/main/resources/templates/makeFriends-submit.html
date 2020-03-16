@@ -164,36 +164,37 @@
         new Vue({
             el:"#submitmakefriendApp",
             data:{
-               msg:""
+               msg:"",
+               Friendactivity:{}
             },
             methods:{
                 same:function (msg01) {
                    this.msg = msg01;
+                    this.Friendactivity.activityname = this.msg;
                 },
                 add:function () {
                     if(this.msg==null||this.msg==""){
                         // this.result.message="邮箱不能为空";
                         alert("你还没有选择约会活动");
                     }else{
-                        //获取ueditor文章content赋值
-                        this.article.content = editor.getContent();
-                        //获取id，因为token里存的有，所以这里省略
-                        // this.article.userid = window.localStorage.getItem("userId_school");
+
                         var token=window.localStorage.getItem("token_school");  //获取token
-                        console.info("userid=")
-                        var url = school_user_server+"/article";
+                        var url = school_user_server+"/friendactivity";
+
+                        console.info("acName="+this.Friendactivity.activityname)
                         var _this = this;
                         //json请求用默认方式
-                        axios.post(url,_this.article,{
+                        axios.post(url,_this.Friendactivity,{
                             headers:{
                                 //请求时添加token，验证是否登录
                                 'Authorization':"Bearer "+token
                             }
                         }).then(function (response) {
                             _this.result = response.data;
-                            _this.successMsg= _this.result.message;
-                            alert( _this.successMsg);
-                            window.location.href=user_web_url+"/index.html";
+                            alert("msg="+_this.result.message);
+                            // _this.successMsg= _this.result.message;
+                            // alert( _this.successMsg);
+                            // window.location.href=user_web_url+"/index.html";
 
                         }).catch(function (err) {
                             alert("网络错误");

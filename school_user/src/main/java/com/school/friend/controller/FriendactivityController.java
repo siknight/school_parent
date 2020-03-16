@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.school.friend.pojo.Friendactivity;
 import com.school.friend.service.FriendactivityService;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import entity.PageResult;
 import entity.Result;
 import entity.StatusCode;
+
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 控制器层
  * @author Administrator
@@ -29,8 +33,10 @@ public class FriendactivityController {
 
 	@Autowired
 	private FriendactivityService friendactivityService;
-	
-	
+
+	//用于验证token
+	@Autowired
+	private HttpServletRequest request;
 	/**
 	 * 查询全部数据
 	 * @return
@@ -80,6 +86,13 @@ public class FriendactivityController {
 	 */
 	@RequestMapping(method=RequestMethod.POST)
 	public Result add(@RequestBody Friendactivity friendactivity  ){
+		//判断是否有权限访问
+		Claims claims=(Claims) request.getAttribute("user_claims");
+		if(claims==null){
+			return new Result(true,StatusCode.ACCESSERROR,"无权访问");
+		}
+		System.out.println("friactivity="+friendactivity.getActivityname());
+		friendactivity.setUserid(claims.getId());
 		friendactivityService.add(friendactivity);
 		return new Result(true,StatusCode.OK,"增加成功");
 	}
