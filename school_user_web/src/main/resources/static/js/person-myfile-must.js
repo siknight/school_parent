@@ -6,6 +6,7 @@ var personBaseInfoApp = new Vue({
         professionalFlag:true,// 用于判断学院是文本显示还是输入框显示
         gradeFlag:true, //用于判断年级是文本显示还是输入框显示
         personalityFlag:true,  //简介
+        imgFlag:true,  //是否显示修改头像框  true表示不显示
         user:{
             myqq:"",
             myschool:" ",
@@ -26,7 +27,8 @@ var personBaseInfoApp = new Vue({
             mygrade:"大一",  //年级
             myprofessional:"计算机学院"  //学院
         },
-        result:{}
+        result:{},
+
     },
     methods:{
         qqFlagChange:function () { //qq取反  这里是双击修改时用
@@ -215,7 +217,11 @@ var personBaseInfoApp = new Vue({
                     // console.log("网络错误");
                 });
             }
-        }
+        },
+        updateImage:function () { //修改个人头像
+            alert("你好");
+            this.imageFlag = false;
+        },
 
     },  //methods
     created(){
