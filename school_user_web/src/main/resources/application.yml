@@ -5,3 +5,12 @@ spring:
     static-locations: classpath:/templates/,classpath:/static/
   application:
     name: school-user-web
+  servlet:
+    multipart:
+      file-size-threshold: 0
+      enabled: true
+  http:
+    multipart:
+      max-file-size: 10Mb
+      maxRequestSize: 100Mb
+

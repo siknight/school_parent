@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import util.FileUtil;
 import util.JwtUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,6 +41,29 @@ public class UserController {
 
 	@Autowired
 	private JwtUtil jwtUtil;
+
+	/**
+	 * 修改头像
+	 * @param
+	 * @return
+	 */
+	@RequestMapping(value="/avatar",method=RequestMethod.POST)
+	public Result updateImg(@RequestPart("uploadFile") MultipartFile uploadFile) {
+		//判断是否有权限访问
+		Claims claims=(Claims) request.getAttribute("user_claims");
+		if(claims==null){
+			return new Result(true,StatusCode.ACCESSERROR,"无权访问");
+		}
+		//上传的文件存放在一个绝对路径里
+		String tempFileName = FileUtil.FileUpload(uploadFile,"D:\\imageschool\\userimages\\","user");
+		//claims.getId()是为了获取token里存的用户id
+		String userId = claims.getId(); //获取到userid
+		//数据库存的相对路径和物理路径进行映射
+		userService.updateImg(userId,"/userimage/"+tempFileName);
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("avatar","/userimage/"+tempFileName);
+		return new Result(true,StatusCode.OK,"修改成功",map);
+	}
 
 	/**
 	 * 发送短信

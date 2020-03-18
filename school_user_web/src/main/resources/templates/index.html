@@ -148,12 +148,13 @@
           <h5 class="author">
            <div class="fl">
             <span class="authorName">
-             <img src="./img/widget-photo.png" alt="" />
-             <span v-text="articleAndUser.user.nickname"></span>
+              <img :src="articleAndUser.user.avatar" alt="" />
+               <span v-text="articleAndUser.user.nickname"></span>
+                 &nbsp; &nbsp; &nbsp;
+                 <span style="color: black;font-weight: bold" v-text="articleAndUser.user.myschool"></span>
+                  &nbsp; &nbsp; &nbsp;
+                <span style="color: black;" v-text="articleAndUser.user.myprofessional"></span>
             </span>
-            <span style="color: black;font-weight: bold" v-text="articleAndUser.user.myschool"></span>
-            &nbsp; &nbsp; &nbsp;
-            <span style="color: black;" v-text="articleAndUser.user.myprofessional"></span>
            </div>
            <div class="fr attention">
             <span class="attentionText">关注</span>
@@ -162,7 +163,7 @@
            <div class="clearfix"></div>
           </h5>
           <!--滴滴与360都开源了各自的插件化框架，VirtualAPK与RePlugin,作为一个插件化方面的狂热研究者，在周末就迫不及待的下载了Virtualapk框架来进行研究，本篇博客带的……-->
-         </div> <p class="content" v-html="articleAndUser.article.content"></p>
+         </div> <p class="content" v-text="removeTAG(articleAndUser.article.content)"></p>
         </li>
        <!--中间文章循环-->
        </ul>
@@ -181,106 +182,109 @@
      <!--问答-->
      <div class="fl right"> 
       <div class="activity">
-       <!--活动循环-->
+
        <div class="acti">
         <img src="./img/widget-activity01.png" alt="活动一" />
-       </div> 
-       <!--活动循环-->
+       </div>
+       <div class="acti">
+        <img src="./img/widget-activity01.png" alt="活动一" />
+       </div>
+
       </div> 
       <div class="block-btn"> 
        <p>今天，有什么好东西要和大家分享么?</p> 
        <a class="sui-btn btn-block btn-share" href="boke-submit.html" target="_blank">发布分享</a>
       </div> 
-      <div class="question-list"> 
-       <h3 class="title">热门回答</h3> 
-       <div class="lists"> 
-        <ul>
-         <!--热门问答循环-->
-         <li class="list-item"> <p class="list-title">关于系统问答你都应该都应该都应该注意些什么吗？</p> <p class="authorInfo"> <span class="authorName"><img src="./img/widget-photo.png" alt="" />玻璃筒</span> <span>6月22日 12:01</span> </p> </li> 
-         <li class="list-item"> <p class="list-title">关于系统问答你都应该注意吗？</p> <p class="authorInfo"> <span class="authorName"><img src="./img/widget-photo.png" alt="" />玻璃筒</span> <span>6月22日 12:01</span> </p> </li>
-         <!--热门问答循环-->
-          </ul>
-        <a class="sui-btn btn-block btn-bordered btn-more">查看更多</a> 
-       </div> 
-      </div>
-      <!--问答-->
-      <!--遇见她-->
-      <div class="card-list"> 
-       <div class="head"> 
-        <h3 class="title">遇见TA</h3> 
-       </div> 
-       <div class="list"> 
-        <ul> 
-           <!--匹配度循环-->
-         <li class="card-item"> 
-          <div class="attention"> 
-           <span>关注匹配度：<i class="degree">78%</i></span> 
-           <span class="fr"><i class="fa fa-heart-o" aria-hidden="true"></i><i class="fa fa-times close" aria-hidden="true"></i></span> 
-          </div> 
-          <div class="img"> 
-           <img src="./img/widget-t019e2d84e53580b099.png" alt="" /> 
-          </div> 
-          <div class="info"> 
-           <div class="fl photo">
-            <img src="./img/widget-photo.png" alt="" />
-           </div> 
-           <div class="fl intro"> 
-            <p>【馨儿】发布了雕刻时光约会邀请</p> 
-            <p class="name">玻璃通 <span class="date">6月22日 12:01</span></p> 
-           </div> 
-           <div class="clearfix"></div> 
-          </div>
-         </li>
-         <!--匹配度循环-->
-        </ul> 
-        <a class="sui-btn btn-block btn-bordered btn-more">查看更多</a> 
-       </div> 
-      </div>
-      <!--遇见她-->
-      <!--活动日历-->
-      <div class="activity-list"> 
-       <h3 class="title">活动日历</h3> 
-       <div class="list"> 
-        <ul> 
-        <!--活动循环-->
-         <li class="list-item"> <p class="list-time"> 2017/06/30 北京</p> 
-          <div class="list-content clearfix"> 
-           <div class="fl img"> 
-            <img src="./img/widget-simple.png" alt="" /> 
-           </div> 
-           <div> 
-            <p>在线峰会 | 前端开发重难点技术剖析与创新实践</p> 
-           </div> 
-          </div>
-         </li>
-         <!--活动循环-->
-        </ul> 
-        <a class="sui-btn btn-block btn-bordered btn-more">查看更多</a> 
-       </div> 
-      </div>
-      <!--活动日历-->
-      <!--广告-->
-      <div class="ad-carousel"> 
-       <div class="carousel"> 
-        <div id="myCarousel2" data-ride="carousel" data-interval="4000" class="sui-carousel slide">
-         <!--广告循环-->
-         <ol class="carousel-indicators"> 
-          <li data-target="#myCarousel" data-slide-to="0" class="active"></li> 
-          <li data-target="#myCarousel" data-slide-to="1"></li>
-         </ol> 
-         <div class="carousel-inner"> 
-          <div class="active item"> 
-           <img src="./img/widget-ad01.png" /> 
-          </div> 
-          <div class="item"> 
-           <img src="./img/widget-ad01.png" /> 
-          </div>
-         </div> 
-         <span class="adname">广告</span> 
-        </div>
-        <!--广告循环-->
-       </div> 
-      </div>
+      <!--<div class="question-list"> -->
+       <!--<h3 class="title">热门回答</h3> -->
+       <!--<div class="lists"> -->
+        <!--<ul>-->
+         <!--&lt;!&ndash;热门问答循环&ndash;&gt;-->
+         <!--<li class="list-item"> <p class="list-title">关于系统问答你都应该都应该都应该注意些什么吗？</p> <p class="authorInfo"> <span class="authorName"><img src="./img/widget-photo.png" alt="" />玻璃筒</span> <span>6月22日 12:01</span> </p> </li> -->
+         <!--<li class="list-item"> <p class="list-title">关于系统问答你都应该注意吗？</p> <p class="authorInfo"> <span class="authorName"><img src="./img/widget-photo.png" alt="" />玻璃筒</span> <span>6月22日 12:01</span> </p> </li>-->
+         <!--&lt;!&ndash;热门问答循环&ndash;&gt;-->
+          <!--</ul>-->
+        <!--<a class="sui-btn btn-block btn-bordered btn-more">查看更多</a> -->
+       <!--</div> -->
+      <!--</div>-->
+      <!--&lt;!&ndash;问答&ndash;&gt;-->
+      <!--&lt;!&ndash;遇见她&ndash;&gt;-->
+      <!--<div class="card-list"> -->
+       <!--<div class="head"> -->
+        <!--<h3 class="title">遇见TA</h3> -->
+       <!--</div> -->
+       <!--<div class="list"> -->
+        <!--<ul> -->
+           <!--&lt;!&ndash;匹配度循环&ndash;&gt;-->
+         <!--<li class="card-item"> -->
+          <!--<div class="attention"> -->
+           <!--<span>关注匹配度：<i class="degree">78%</i></span> -->
+           <!--<span class="fr"><i class="fa fa-heart-o" aria-hidden="true"></i><i class="fa fa-times close" aria-hidden="true"></i></span> -->
+          <!--</div> -->
+          <!--<div class="img"> -->
+           <!--<img src="./img/widget-t019e2d84e53580b099.png" alt="" /> -->
+          <!--</div> -->
+          <!--<div class="info"> -->
+           <!--<div class="fl photo">-->
+            <!--<img src="./img/widget-photo.png" alt="" />-->
+           <!--</div> -->
+           <!--<div class="fl intro"> -->
+            <!--<p>【馨儿】发布了雕刻时光约会邀请</p> -->
+            <!--<p class="name">玻璃通 <span class="date">6月22日 12:01</span></p> -->
+           <!--</div> -->
+           <!--<div class="clearfix"></div> -->
+          <!--</div>-->
+         <!--</li>-->
+         <!--&lt;!&ndash;匹配度循环&ndash;&gt;-->
+        <!--</ul> -->
+        <!--<a class="sui-btn btn-block btn-bordered btn-more">查看更多</a> -->
+       <!--</div> -->
+      <!--</div>-->
+      <!--&lt;!&ndash;遇见她&ndash;&gt;-->
+      <!--&lt;!&ndash;活动日历&ndash;&gt;-->
+      <!--<div class="activity-list"> -->
+       <!--<h3 class="title">活动日历</h3> -->
+       <!--<div class="list"> -->
+        <!--<ul> -->
+        <!--&lt;!&ndash;活动循环&ndash;&gt;-->
+         <!--<li class="list-item"> <p class="list-time"> 2017/06/30 北京</p> -->
+          <!--<div class="list-content clearfix"> -->
+           <!--<div class="fl img"> -->
+            <!--<img src="./img/widget-simple.png" alt="" /> -->
+           <!--</div> -->
+           <!--<div> -->
+            <!--<p>在线峰会 | 前端开发重难点技术剖析与创新实践</p> -->
+           <!--</div> -->
+          <!--</div>-->
+         <!--</li>-->
+         <!--&lt;!&ndash;活动循环&ndash;&gt;-->
+        <!--</ul> -->
+        <!--<a class="sui-btn btn-block btn-bordered btn-more">查看更多</a> -->
+       <!--</div> -->
+      <!--</div>-->
+      <!--&lt;!&ndash;活动日历&ndash;&gt;-->
+      <!--&lt;!&ndash;广告&ndash;&gt;-->
+      <!--<div class="ad-carousel"> -->
+       <!--<div class="carousel"> -->
+        <!--<div id="myCarousel2" data-ride="carousel" data-interval="4000" class="sui-carousel slide">-->
+         <!--&lt;!&ndash;广告循环&ndash;&gt;-->
+         <!--<ol class="carousel-indicators"> -->
+          <!--<li data-target="#myCarousel" data-slide-to="0" class="active"></li> -->
+          <!--<li data-target="#myCarousel" data-slide-to="1"></li>-->
+         <!--</ol> -->
+         <!--<div class="carousel-inner"> -->
+          <!--<div class="active item"> -->
+           <!--<img src="./img/widget-ad01.png" /> -->
+          <!--</div> -->
+          <!--<div class="item"> -->
+           <!--<img src="./img/widget-ad01.png" /> -->
+          <!--</div>-->
+         <!--</div> -->
+         <!--<span class="adname">广告</span> -->
+        <!--</div>-->
+        <!--&lt;!&ndash;广告循环&ndash;&gt;-->
+       <!--</div> -->
+      <!--</div>-->
       <!--广告-->
       <!-- <link rel="import" href="../../modules/ui-modules/footer/footer.html?__inline"> --> 
      </div> 
@@ -310,7 +314,22 @@
                   }).catch(function (err) {
                       console.log("网络错误");
                   });
+              },
+              removeTAG:function (str) {  //移除HTML标签代码
+                  str = str.replace(/<\/?[^>]*>/g,''); //去除HTML tag
+                  str = str.replace(/[ | ]*\n/g,'\n'); //去除行尾空白
+                  str = str.replace(/\n[\s| | ]*\r/g,'\n'); //去除多余空行
+                  str=str.replace(/ /ig,'');//去掉
+                  // 转意符换成普通字符
+                  var arrEntities={'lt':'<','gt':'>','nbsp':' ','amp':'&','quot':'"'};
+                  str=str.replace(/&(lt|gt|nbsp|amp|quot);/ig,function(all,t){return arrEntities[t];});
+                  //将大于10的用...代替
+                  if(str.length>80){
+                      str=str.substring(0,80)+"...";
+                  }
+                  return str;
               }
+
           },
           created(){
               this.loadArticle();

@@ -22,6 +22,7 @@ public class Friend implements Serializable {
 
     private String islike;
 
+
     public String getUserid() {
         return userid;
     }

@@ -50,6 +50,16 @@ public class UserService {
 	BCryptPasswordEncoder encoder;
 
 	/**
+	 * 修改头像
+	 * @param userid  用户id
+	 * @param avatar  用户头像
+	 */
+	@Transactional
+	public void updateImg(String userid, String avatar) {
+		userDao.updateImg(userid,avatar);
+	}
+
+	/**
 	 * 查询全部列表
 	 * @return
 	 */
@@ -144,7 +154,7 @@ public class UserService {
 		user.setRegdate(new Date());//注册日期
 		user.setUpdatedate(new Date());//更新日期
 		user.setLastdate(new Date());//最后登陆日期
-
+		user.setAvatar("./img/widget-dating1.png");  //默认值
 		//密码加密
 		String newpassword = encoder.encode(user.getPassword());//加密后的密码
 		user.setPassword(newpassword);

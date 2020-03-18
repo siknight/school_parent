@@ -7,6 +7,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 public interface FriendDao extends JpaRepository<Friend,String> {
+
+
+
     /**
      * 根据用户ID与被关注用户ID查询记录个数
      * @param userid

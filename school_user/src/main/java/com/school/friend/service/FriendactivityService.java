@@ -9,6 +9,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
 
+import com.school.friend.dao.FriendDao;
 import com.school.friend.dao.FriendactivityDao;
 import com.school.friend.pojo.Friendactivity;
 import com.school.friend.pojo.UserFriendActivity;
@@ -43,6 +44,8 @@ public class FriendactivityService {
 	@Autowired
 	private UserDao userDao;
 
+	@Autowired
+	private FriendDao friendDao;
 
 
 	/**
@@ -54,12 +57,13 @@ public class FriendactivityService {
 		ArrayList<UserFriendActivity> ufList = new ArrayList<>();
 
 		for (Friendactivity ac:acAll){
-			String userid = ac.getUserid();
+			String userid = ac.getUserid();  //获取每一个发布者的活动id，我还要获取自己的id，但是如果没有登录的情况下怎么处理
 			User user = userDao.findById(userid).get();
 			user.setPassword(null);
 			UserFriendActivity userFriendActivity = new UserFriendActivity();
 			userFriendActivity.setUser(user);
 			userFriendActivity.setFriendactivity(ac);
+
 			ufList.add(userFriendActivity);
 		}
 		return ufList;
