@@ -23,7 +23,7 @@
   <script src="./js/vuejs-2.5.16.js"></script>
   <script src="./js/axios-0.18.0.js"></script>
   <script src="./js/schoolUrl.js"></script>
-
+  <script src="./js/moment.js"></script>
   <style>
    [v-cloak]{
     display: none;
@@ -48,7 +48,7 @@
           <img src="./img/asset-logo-black.png"  alt="社交" />
       </a>
       <ul class="sui-nav"> 
-       <li class="active"><a href="./index.html">头条</a></li>
+       <li class="active"><a href="./index.html">首页</a></li>
        <li><a href="./qa-logined.html">问答</a></li> 
        <li><a href="./activity-index.html">活动</a></li> 
        <li><a href="./makeFriends-index.html">交友</a></li> 
@@ -95,7 +95,7 @@
     <div class="left-nav">
      <div class="float-nav" id="float-nav">
       <ul class="sui-nav nav-tabs nav-xlarge tab-navbar tab-vertical">
-       <li class="active"><a>热门</a></li>
+       <li class="active"><a>知识主题</a></li>
        <li><a href="#">牛人专区</a></li>
       </ul>
      </div>
@@ -107,16 +107,16 @@
      <div class="fl middle">
       <div class="carousel"> 
        <div id="myCarousel" data-ride="carousel" data-interval="4000" class="sui-carousel slide"> 
-        <ol class="carousel-indicators"> 
-         <li data-target="#myCarousel" data-slide-to="0" ></li>
-         <li data-target="#myCarousel" data-slide-to="1" class="active"></li>
-         <li data-target="#myCarousel" data-slide-to="2"></li> 
-        </ol> 
+        <!--<ol class="carousel-indicators"> -->
+         <!--<li data-target="#myCarousel" data-slide-to="0" ></li>-->
+         <!--<li data-target="#myCarousel" data-slide-to="1" class="active"></li>-->
+         <!--<li data-target="#myCarousel" data-slide-to="2"></li> -->
+        <!--</ol> -->
         <div class="carousel-inner">
          <!--中间大图循环-->
-         <div class="item">
-          <img src="./img/widget-banner01.png" /> 
-         </div> 
+         <!--<div class="item">-->
+          <!--<img src="./img/widget-banner01.png" /> -->
+         <!--</div> -->
          <div class="active item">
           <img src="./img/widget-banner02.png" /> 
          </div>
@@ -143,6 +143,7 @@
            <a :href="articleAndUser.article.url"  v-text="articleAndUser.article.title">
 
            </a>
+
            <!--<span><img src="./img/widget-vip.png" class="vip" /></span>-->
           </h3>
           <h5 class="author">
@@ -150,6 +151,10 @@
             <span class="authorName">
               <img :src="articleAndUser.user.avatar" alt="" />
                <span v-text="articleAndUser.user.nickname"></span>
+               &nbsp;&nbsp;&nbsp;
+             <!--时间-->
+
+                   <span v-text="articleAndUser.time" style="font-weight: lighter;alpha(opacity=50);"></span>
                  &nbsp; &nbsp; &nbsp;
                  <span style="color: black;font-weight: bold" v-text="articleAndUser.user.myschool"></span>
                   &nbsp; &nbsp; &nbsp;
@@ -192,8 +197,8 @@
 
       </div> 
       <div class="block-btn"> 
-       <p>今天，有什么好东西要和大家分享么?</p> 
-       <a class="sui-btn btn-block btn-share" href="boke-submit.html" target="_blank">发布分享</a>
+       <p>今天，有什么知识要和大家分享么?</p>
+       <a class="sui-btn btn-block btn-share" href="boke-submit.html" target="_blank">发布知识分享</a>
       </div> 
       <!--<div class="question-list"> -->
        <!--<h3 class="title">热门回答</h3> -->
@@ -328,6 +333,10 @@
                       str=str.substring(0,80)+"...";
                   }
                   return str;
+              },
+              formatData(time){
+
+                  return moment(time).format('YYYY-MM-DD');
               }
 
           },

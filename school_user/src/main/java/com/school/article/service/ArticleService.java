@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import util.DateFormatUtil;
 import util.IdWorker;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -44,7 +45,10 @@ public class ArticleService {
 	@Autowired private
 	RedisTemplate redisTemplate;
 
-
+	/**
+	 * 首页文章遍历
+	 * @return
+	 */
 	public List<ArticleAndUser> findIndexArticles(){
 		List<Article> all = articleDao.findAll();
 		ArrayList<ArticleAndUser> articleAndUsers = new ArrayList<>();
@@ -57,6 +61,7 @@ public class ArticleService {
 			articleAndUser.setArticle(article);
 			articleAndUser.setUser(user);
 			articleAndUsers.add(articleAndUser);
+			articleAndUser.setTime(DateFormatUtil.DateToString(article.getCreatetime()));
 		}
 		return articleAndUsers;
 	}

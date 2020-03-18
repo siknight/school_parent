@@ -19,6 +19,16 @@ public class ArticleAndUser implements Serializable{
 
 	private User user;
 
+	private String time;
+
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
+	}
+
 	public Article getArticle() {
 		return article;
 	}
