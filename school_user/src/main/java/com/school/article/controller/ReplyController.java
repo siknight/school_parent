@@ -6,10 +6,13 @@ import com.school.article.service.ReplyService;
 import entity.PageResult;
 import entity.Result;
 import entity.StatusCode;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -25,7 +28,14 @@ public class ReplyController {
 	@Autowired
 	private ReplyService replyService;
 
+	@Autowired
+	private HttpServletRequest request;
 
+	/**
+	 * 通过文章id查询所有评论
+	 * @param articleid
+	 * @return
+	 */
 	@RequestMapping(value="/article/{articleid}",method= RequestMethod.GET)
 	public Result findAllByArticleid(@PathVariable String articleid){
 		System.out.println("articleid="+articleid);
@@ -81,6 +91,17 @@ public class ReplyController {
 	 */
 	@RequestMapping(method=RequestMethod.POST)
 	public Result add(@RequestBody ArticleReply reply  ){
+		//判断是否有权限访问
+		Claims claims=(Claims) request.getAttribute("user_claims");
+		if(claims==null){
+			return new Result(true,StatusCode.ACCESSERROR,"无权访问");
+		}
+		//claims.getId()是为了获取token里存的用户id
+		String userId = claims.getId(); //获取到userid
+		System.out.println("userid add="+userId);
+		reply.setUserid(userId);
+		reply.setCreatetime(new Date());
+		reply.setUpdatetime(new Date());
 		replyService.add(reply);
 		return new Result(true,StatusCode.OK,"增加成功");
 	}

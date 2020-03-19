@@ -114,12 +114,14 @@
     </div>
     <!-- remark area -->
     <div class="answer-intro">
-        <h4 class="answer-num">200条评论</h4>
+        <h4 class="answer-num">热评</h4>
         <div class="comment-box">
             <form class="comment-form sui-form form-inline">
-                <img src="./img/widget-photo.jpg" alt="">
+                <!--<img src="./img/widget-photo.jpg" alt="">-->
                 <div class="input-prepend input-append input-box">
-                    <input id="appendedPrependedInput" type="text" class="span2 input-fat real-box" placeholder="写下你的评论"><span class="add-on">提交</span>
+                    <!--v-model="this.articleReply.content"-->
+                    <input v-model="replynow"  id="appendedPrependedInput" type="text" class="span2 input-fat real-box" placeholder="写下你的评论">
+                    <span class="add-on" @click="addReply()">提交</span>
                 </div>
             </form>
         </div>
@@ -190,7 +192,9 @@
             el:"#articleDetailApp",
             data:{
                 articleAndUser:{},
-                articleReplyUsers:[]
+                articleReplyUsers:[],
+                articleReply:{},
+                replynow:""
             },
             methods:{
                 loadArticle:function () {
@@ -198,7 +202,6 @@
                     var cs = url.split('?')[1];    //获取?之后的参数字符串
                     var params = cs.split('=');
                     var value = params[1];  //文章id
-
 
                     //-------
                     var url = school_user_server+"/article/findDetailArticle/"+value;
@@ -209,7 +212,6 @@
                         _this.result = response.data;
                         console.info(_this.result.message);
                         _this.articleAndUser = _this.result.data;
-
                     }).catch(function (err) {
                         console.log("网络错误");
                     });
@@ -229,11 +231,42 @@
                     axios.get(url).then(function (response) {
                         _this.result = response.data;
                         console.info(_this.result.message);
-                        _this.articleReplys = _this.result.data;
+                        _this.articleReplyUsers = _this.result.data;
                     }).catch(function (err) {
                         console.log("网络错误");
                     });
 
+                },
+                addReply:function () {  //添加评论
+                    var url = window.location.href ;
+                    var cs = url.split('?')[1];    //获取?之后的参数字符串
+                    var params = cs.split('=');
+                    var value = params[1];  //文章id
+                  // 获取用户id
+                    var url = school_user_server+"/reply";
+                    var _this = this;
+                    var token=window.localStorage.getItem("token_school");  //获取token
+                    if (token==null||token==""){
+                        window.location.href=user_web_url+"/tologin_register.html";
+                    }else{
+                        //文章id
+                        _this.articleReply.articleid=value;
+                        _this.articleReply.content= _this.replynow;
+                        // _this.replynow=""
+                        //要存入文章id，用户id，评论内容
+                        axios.post(url,_this.articleReply,{
+                            headers:{
+                                //请求时添加token，验证是否登录
+                                'Authorization':"Bearer "+token
+                            }
+                        }).then(function (response) {
+                            _this.result = response.data;
+                            _this.loadReply();
+
+                        }).catch(function (err) {
+                            alert("网络错误");
+                        });
+                    }
                 }
             },  //methods
             created(){
@@ -260,41 +293,4 @@
 
 
 
-<script>
-// $(function(){
-//   $(".hover").hover(function(){
-//     $(".hoverinfo").stop().animate({
-//        opacity: "show"
-//     },"slow");
-//     $(this).find(".fa-plus").css("color","#e64620");
-//   },function(){
-//     $(".hoverinfo").stop().animate({
-//        opacity: "hide"
-//     },"slow");
-//     $(this).find(".fa-plus").css("color","#000");
-//   })
-// })
-
-
-    // $(function () {
-    //     $(".callback").click(function () {
-    //         $(this).parents(".text").siblings(".edit-box").toggle();
-    //     });
-    // })
-
-
-
-    // var onOff = true;
-    // $(".btn-attention").click(function () {
-    //     if ($(this).onOff) {
-    //         $(this).text("关注");
-    //         $(this).css({"color":"#e64620","cursor":"not-allowed","background":"#f5f5f5","border-color": "#f5f5f5f5"})
-    //         $(this).onOff = false;
-    //     } else {
-    //         $(this).text("已关注");
-    //         $(this).css("color", "#999");
-    //         $(this).onOff = true;
-    //     }
-    // })
-</script>
 </body>
