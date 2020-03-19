@@ -15,6 +15,7 @@
         <module>school_user_web</module>
         <!--后台-->
         <module>school_user</module>
+        <module>school_admin_web</module>
     </modules>
 
 

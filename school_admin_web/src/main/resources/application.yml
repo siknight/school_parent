@@ -1,0 +1,16 @@
+server:
+  port: 8082
+spring:
+  resources:
+    static-locations: classpath:/templates/,classpath:/static/
+  application:
+    name: school-admin-web
+  servlet:
+    multipart:
+      file-size-threshold: 0
+      enabled: true
+  http:
+    multipart:
+      max-file-size: 10Mb
+      maxRequestSize: 100Mb
+
