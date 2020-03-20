@@ -5,9 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 //@EnableEurekaClient
-public class UserWebApplication {
+public class AdminWebApplication {
     public static void main(String[] args) {
-        SpringApplication.run(UserWebApplication.class,args);
+        SpringApplication.run(AdminWebApplication.class,args);
     }
 
 
