@@ -5,11 +5,14 @@ import com.school.user.service.AdminService;
 import entity.PageResult;
 import entity.Result;
 import entity.StatusCode;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import util.JwtUtil;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +31,10 @@ public class AdminController {
 
 	@Autowired
 	private JwtUtil jwtUtil;
+
+
+	@Autowired
+	private HttpServletRequest request;
 
 	/**
 	 * 登录
@@ -103,6 +110,11 @@ public class AdminController {
 	 */
 	@RequestMapping(method=RequestMethod.POST)
 	public Result add(@RequestBody Admin admin  ){
+		Claims claims=(Claims) request.getAttribute("admin_claims");
+		if(claims==null){
+			return new Result(true,StatusCode.ACCESSERROR,"无权访问");
+		}
+		admin.setCreatetime(new Date());
 		adminService.add(admin);
 		return new Result(true,StatusCode.OK,"增加成功");
 	}

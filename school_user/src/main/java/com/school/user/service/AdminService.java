@@ -15,6 +15,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -83,10 +84,15 @@ public class AdminService {
 	 * @param admin
 	 */
 	public void add(Admin admin) {
+		Admin admin2 = adminDao.findByLoginname(admin.getLoginname());
+		if(admin2!=null){
+			throw new RuntimeException("该用户已存在");
+		}
 		admin.setId( idWorker.nextId()+"" );
 		//加密处理
 		String newpassword = encoder.encode(admin.getPassword());
 		admin.setPassword(newpassword);
+
 		//加密处理
 		adminDao.save(admin);
 	}

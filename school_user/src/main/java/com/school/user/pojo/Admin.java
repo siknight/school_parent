@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 实体类
@@ -23,8 +24,27 @@ public class Admin implements Serializable{
 	private String password;//密码
 	private String state;//状态
 
-	
-	public String getId() {		
+	private String rolename;
+
+	private Date createtime;
+
+	public String getRolename() {
+		return rolename;
+	}
+
+	public void setRolename(String rolename) {
+		this.rolename = rolename;
+	}
+
+	public Date getCreatetime() {
+		return createtime;
+	}
+
+	public void setCreatetime(Date createtime) {
+		this.createtime = createtime;
+	}
+
+	public String getId() {
 		return id;
 	}
 	public void setId(String id) {

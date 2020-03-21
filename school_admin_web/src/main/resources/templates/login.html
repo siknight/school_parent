@@ -88,7 +88,7 @@
                         if(_this.result.code==20000){
                             //开始时应将所有存的都删掉，以后再加
                             //表示登录成功
-                            window.localStorage.setItem("token_school",_this.result.data.token);
+                            window.localStorage.setItem("admin_token_school",_this.result.data.token);
                             window.location.href=user_web_url+"/index.html";
                         }
                     }).catch(function (err) {

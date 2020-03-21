@@ -30,7 +30,6 @@ public class ApplicationConfig extends WebMvcConfigurationSupport {
                 .excludePathPatterns("/friendactivity/all/ufa")
                 .excludePathPatterns("/reply/article/**")
                 .excludePathPatterns("/admin/login");  //token验证
-
     }
 
     @Override
