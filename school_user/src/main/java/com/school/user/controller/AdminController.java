@@ -9,6 +9,7 @@ import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+import util.DateFormatUtil;
 import util.JwtUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -67,6 +68,10 @@ public class AdminController {
 	 */
 	@RequestMapping(method= RequestMethod.GET)
 	public Result findAll(){
+		Claims claims=(Claims) request.getAttribute("admin_claims");
+		if(claims==null){
+			return new Result(true,StatusCode.ACCESSERROR,"无权访问");
+		}
 		return new Result(true,StatusCode.OK,"查询成功",adminService.findAll());
 	}
 	
@@ -77,6 +82,10 @@ public class AdminController {
 	 */
 	@RequestMapping(value="/{id}",method= RequestMethod.GET)
 	public Result findById(@PathVariable String id){
+		Claims claims=(Claims) request.getAttribute("admin_claims");
+		if(claims==null){
+			return new Result(true,StatusCode.ACCESSERROR,"无权访问");
+		}
 		return new Result(true,StatusCode.OK,"查询成功",adminService.findById(id));
 	}
 
@@ -114,7 +123,7 @@ public class AdminController {
 		if(claims==null){
 			return new Result(true,StatusCode.ACCESSERROR,"无权访问");
 		}
-		admin.setCreatetime(new Date());
+		admin.setCreatetime(DateFormatUtil.DateToString(new Date()));
 		adminService.add(admin);
 		return new Result(true,StatusCode.OK,"增加成功");
 	}
@@ -136,6 +145,10 @@ public class AdminController {
 	 */
 	@RequestMapping(value="/{id}",method= RequestMethod.DELETE)
 	public Result delete(@PathVariable String id ){
+		Claims claims=(Claims) request.getAttribute("admin_claims");
+		if(claims==null){
+			return new Result(true,StatusCode.ACCESSERROR,"无权访问");
+		}
 		adminService.deleteById(id);
 		return new Result(true,StatusCode.OK,"删除成功");
 	}

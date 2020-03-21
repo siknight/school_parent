@@ -26,7 +26,8 @@ public class Admin implements Serializable{
 
 	private String rolename;
 
-	private Date createtime;
+	private String  createtime;
+
 
 	public String getRolename() {
 		return rolename;
@@ -36,11 +37,11 @@ public class Admin implements Serializable{
 		this.rolename = rolename;
 	}
 
-	public Date getCreatetime() {
+	public String getCreatetime() {
 		return createtime;
 	}
 
-	public void setCreatetime(Date createtime) {
+	public void setCreatetime(String createtime) {
 		this.createtime = createtime;
 	}
 

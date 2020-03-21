@@ -36,6 +36,7 @@
 <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 管理员管理 <span class="c-gray en">&gt;</span> 管理员列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 <div class="page-container" id="adminApp" v-cloak>
 	<div class="text-c">
+
 		<input type="text" class="input-text" style="width:250px" placeholder="输入管理员名称" id="" name="">
 		<button type="submit" class="btn btn-success" name=""><i class="Hui-iconfont">&#xe665;</i> 搜用户</button>
 	</div>
@@ -45,7 +46,7 @@
 		     <i class="Hui-iconfont">&#xe600;</i> 添加管理员
 			</a>
 			&nbsp;&nbsp;
-			<span  v-show="addFlag"  v-cloak>
+      <span  v-show="addFlag"  v-cloak>
 				用户名:<input type="text" v-model="admin.loginname">
 			    密码:<input type="password" v-model="admin.password">
 				角色:
@@ -56,7 +57,20 @@
 				<a href="javascript:;" @click="addAdmin()"  class="btn btn-primary radius">
 		    		  确定
 				</a>
-			</span>
+		</span>
+
+			  <span  v-show="updateFlag"  v-cloak>
+				用户名:<input type="text" v-model="admin2.loginname">
+			    密码:<input type="password" v-model="admin2.password">
+				角色:
+			   <select v-model="admin2.rolename">
+                    <option :value ="activitis[0]">超级管理员</option>
+				    <option :value ="activitis[1]">活动管理员</option>
+                </select>
+				<a href="javascript:;" @click="updateAdmin(admin2.id)"  class="btn btn-primary radius">
+		    		  确定
+				</a>
+		</span>
 
 	</span> <span class="r">共有数据：<strong>54</strong> 条</span> </div>
 
@@ -64,23 +78,31 @@
 	<table class="table table-border table-bordered table-bg">
 		<thead>
 			<tr>
-				<th scope="col" colspan="9">员工列表</th>
+				<th scope="col" colspan="9">管理员列表</th>
 			</tr>
 			<tr class="text-c">
 				<th width="40">ID</th>
 				<th width="150">用户名</th>
 				<th>角色</th>
-				<th width="130">加入时间</th>
-				<th width="100">操作</th>
+				<th width="160">加入时间</th>
+				<th width="120">操作</th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr class="text-c">
-				<td>1</td>
-				<td>admin</td>
-				<td>超级管理员</td>
-				<td>2014-6-11 11:11:42</td>
-				<td class="td-manage"><a style="text-decoration:none" onClick="admin_stop(this,'10001')" href="javascript:;" title="停用"><i class="Hui-iconfont">&#xe631;</i></a> <a title="编辑" href="javascript:;" onclick="admin_edit('管理员编辑','admin-add.html','1','800','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_del(this,'1')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+			<tr class="text-c" v-for="(am,index) in admins">
+				<td>{{index+1}}</td>
+				<td v-text="am.loginname"></td>
+				<td v-text="am.rolename"></td>
+				<td v-text="am.createtime"></td>
+				<td class="td-manage">
+					<a title="编辑" href="javascript:;"
+					   @click="admin_edit(am.id)"
+					   class="ml-5" style="text-decoration:none">
+						<i class="Hui-iconfont">&#xe6df;</i></a>
+					<a  title="删除" href="javascript:;"
+						@click="admin_delete(am.id)"
+						class="ml-5" style="text-decoration:none">
+					<i class="Hui-iconfont">&#xe6e2;</i></a></td>
 			</tr>
 
 		</tbody>
@@ -102,8 +124,10 @@
         el:"#adminApp",
         data:{
             admin: {},  //用户
+            admin2: {},  //用户 ，修改时用
 			admins:[],
 			addFlag:false,//默认不显示，
+            updateFlag:false,//默认不显示，
 			activitis:[
 			    "超级管理员",
 				"活动管理员"
@@ -112,9 +136,10 @@
         },
 		methods:{
             changeAdminFlag:function () {
-				this.addFlag = !this.addFlag; //
+                this.updateFlag =false;
+                    this.addFlag = !this.addFlag; //
             },
-            addAdmin:function(){
+            addAdmin:function(){  //添加
                 if(this.admin.loginname==""||this.admin.loginname==null){
                     alert("用户名不能为空")
 				}else if (this.admin.password==""||this.admin.password==null) {
@@ -123,6 +148,10 @@
                     var url = school_user_server+"/admin";
                     var _this = this;
                     var token=window.localStorage.getItem("admin_token_school");  //获取token
+                    if (token==""||token==null){
+                        window.location.href=user_web_url+"/login.html";
+                    }
+
                     axios.post(url, _this.admin,{
                         headers:{
                             //请求时添加token，验证是否登录
@@ -133,6 +162,7 @@
                         alert( _this.result.message);
                         if ( _this.result.code=="20000"){
                             _this.addFlag = false;
+                            _this.loadInit();
 						}
 
                     }).catch(function (err) {
@@ -141,8 +171,95 @@
 				}
 
 			},
+            admin_edit:function(id){  //修改
+                this.addFlag =false;
+                this.updateFlag = !this.updateFlag;
+                var url = school_user_server+"/admin/"+id;
+                var _this = this;
+                var token=window.localStorage.getItem("admin_token_school");  //获取token
+                if (token==""||token==null){
+                    window.location.href=user_web_url+"/login.html";
+                }
+                axios.get(url,{   //先查找
+                    headers:{
+                        //请求时添加token，验证是否登录
+                        'Authorization':"Bearer "+token
+                    }
+                }).then(function (response) {
+                         _this.result = response.data;
+                        _this.admin2=  _this.result.data;;
+
+                }).catch(function (err) {
+                    // console.log("网络错误");
+                });
+			},
+            updateAdmin:function(id){  //修改管理员
+                var url = school_user_server+"/admin/"+id;
+                var _this = this;
+                var token=window.localStorage.getItem("admin_token_school");  //获取token
+                if (token==""||token==null){
+                    window.location.href=user_web_url+"/login.html";
+                }
+                axios.put(url,_this.admin2,{   //修改
+                    headers:{
+                        //请求时添加token，验证是否登录
+                        'Authorization':"Bearer "+token
+                    }
+                }).then(function (response) {
+                    _this.result =response.data;
+                    alert( _this.result.message);
+                    if ( _this.result.code=="20000"){
+                        _this.loadInit();
+                    }
+                }).catch(function (err) {
+                    // console.log("网络错误");
+                });
+			},
+            admin_delete:function(id){//删除
+                var url = school_user_server+"/admin/"+id;
+                var _this = this;
+                var token=window.localStorage.getItem("admin_token_school");  //获取token
+                if (token==""||token==null){
+                    window.location.href=user_web_url+"/login.html";
+                }
+
+                axios.delete(url,{
+                    headers:{
+                        //请求时添加token，验证是否登录
+                        'Authorization':"Bearer "+token
+                    }
+                }).then(function (response) {
+                    _this.result =response.data;
+                    alert( _this.result.message);
+                    if ( _this.result.code=="20000"){
+                        _this.loadInit();
+                    }
+
+                }).catch(function (err) {
+                    // console.log("网络错误");
+                });
+			},
             loadInit:function () {
-				this.admin.rolename = this.activitis[0]
+				this.admin.rolename = this.activitis[0]; //默认add选第一个；
+                var url = school_user_server+"/admin";
+                var _this = this;
+                var token=window.localStorage.getItem("admin_token_school");  //获取token
+                if (token==""||token==null){
+                    window.location.href=user_web_url+"/login.html";
+				}
+                //json请求用默认方式
+                axios.get(url,{
+                    headers:{
+                        //请求时添加token，验证是否登录
+                        'Authorization':"Bearer "+token
+                    }
+                }).then(function (response) {
+                    _this.result = response.data;
+                    //遍历数组
+                    _this.admins = _this.result.data;
+                }).catch(function (err) {
+                    console.log("网络错误");
+                });
             }
 		},
         created(){
