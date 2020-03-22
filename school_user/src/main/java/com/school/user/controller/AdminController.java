@@ -74,6 +74,8 @@ public class AdminController {
 		}
 		return new Result(true,StatusCode.OK,"查询成功",adminService.findAll());
 	}
+
+
 	
 	/**
 	 * 根据ID查询

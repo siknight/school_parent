@@ -19,7 +19,7 @@ public class JwtFilter extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         System.out.println("经过了拦截器");
         String authHeader = request.getHeader("Authorization");  //如果没有token，他就没有claims
-        System.out.println("authheader:"+authHeader);
+
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             final String token = authHeader.substring(7); // The part after "Bearer "
             System.out.println("token="+token);
