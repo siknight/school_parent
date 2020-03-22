@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+ <head> 
+  <meta charset="utf-8" /> 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
+  <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ --> 
+  <meta name="description" content="" /> 
+  <meta name="author" content="" /> 
+  <link rel="icon" href="./img/asset-favicon.ico" /> 
+  <title>校园社交-活动</title>
+  <!-- 页面 css js --> 
+  <!-- <script type="text/javascript" src="../../plugins/sui/sui.min.js"></script> --> 
+  <link rel="stylesheet" type="text/css" href="./plugins/normalize-css/normalize.css" /> 
+  <link rel="stylesheet" type="text/css" href="./plugins/yui/cssgrids-min.css" /> 
+  <link rel="stylesheet" type="text/css" href="./plugins/sui/sui.min.css" /> 
+  <link rel="stylesheet" type="text/css" href="./plugins/sui/sui-append.min.css" /> 
+  <link rel="stylesheet" type="text/css" href="./plugins/font-awesome/css/font-awesome.min.css" /> 
+  <link rel="stylesheet" type="text/css" href="./css/widget-base.css" /> 
+  <link rel="stylesheet" type="text/css" href="./css/widget-head-foot.css" /> 
+  <link rel="stylesheet" type="text/css" href="./css/page-sj-activity-index.css" />
+
+  <script src="./js/jquery-3.4.1.js"></script>
+  <script src="./js/vuejs-2.5.16.js"></script>
+  <script src="./js/axios-0.18.0.js"></script>
+  <script src="./js/schoolUrl.js"></script>
+  <script src="./js/moment.js"></script>
+  <style>
+   [v-cloak]{
+    display: none;
+   }
+  </style>
+ </head> 
+ <body> 
+  <!--引用组件--> 
+  <div class="activity-head"> 
+   <div class="wrapper">
+    <!--头部导航-->
+    <header id="index_header" v-cloak>
+     <div class="sui-navbar" >
+      <div class="navbar-inner">
+       <!--<a href="index-logined.html" class="sui-brand">-->
+       <a href="#" class="sui-brand">
+        <!--<div >开心校园</div>-->
+        <!--图标-->
+        <!--./img/asset-favicon.ico
+        ./img/asset-logo-black.png
+        -->
+        <img src="./img/asset-logo-black.png"  alt="社交" />
+       </a>
+       <ul class="sui-nav">
+        <li ><a href="./index.html">首页</a></li>
+        <li><a href="./qa-logined.html">问答</a></li>
+        <li class="active"><a href="./activity-index.html">活动</a></li>
+        <li><a href="./makeFriends-index.html">交友</a></li>
+        <!--<li><a href="./spit-index.html">吐槽</a></li> -->
+        <!--<li><a href="./recruit-index.html">招聘</a></li>-->
+       </ul>
+       <form class="sui-form -pull-right">
+        <input type="text" placeholder="输入关键词..." />
+        <span class="btn-search fa fa-search"></span>
+        <!--搜索-->
+
+        <!--这部分为用户管理部分 没有登录状况-->
+        <div class="sui-nav pull-right info" v-show="show">
+         <li><a href="tologin_register.html" target="_blank">注册</a></li>
+         <li><a href="tologin_register.html" target="_blank" class="sui-btn btn-login">登录</a></li>
+        </div>
+        <!--这部分为用户管理部分 没有登录状况-->
+        <!--这部分为用户管理部分 登录后状况-->
+        <div class="sui-nav pull-right info" v-show="!show">
+         <li><a href="./other-notice.html" target="_blank" class="notice">通知</a></li>
+         <!--中间加号-->
+         <li class="hover">
+          <span class="fa fa-plus "></span>
+          <ul class="hoverinfo">
+           <li><i class="fa fa-share-alt" ></i> <a href="boke-submit.html">去分享</a></li>
+           <li><i class="fa fa-question-circle" aria-hidden="true"></i> <a href="./qa-submit.html" target="_blank">提问题</a></li>
+           <li><i class="fa fa-comments" aria-hidden="true"></i><a href="./spit-submit.html" target="_blank">去吐槽</a></li>
+           <li><i class="fa fa-heartbeat" aria-hidden="true"></i> <a href="./makeFriends-submit.html" target="_blank">发约会</a></li>
+          </ul> </li>
+         <!--中间加号-->
+         <li><a href="./person-myfile.html" target="_blank" class="homego"><img src="./img/widget-photo.png" alt="用户头像" /></a></li>
+        </div>
+       </form>
+       <!--这部分为用户管理部分 登录后状况-->
+      </div>
+     </div>
+    </header>
+    <!--头部导航-->
+
+
+   </div> 
+  </div> 
+  <!--中间布局--> 
+  <div class="wrapper activities" id="acindexApp">
+   <div class="activity-card-list"> 
+    <div class="top-title"> 
+     <h4 class="latest">校园活动</h4>
+     <div class="clearfix"></div> 
+    </div> 
+    <div class="activity-list"> 
+     <ul class="activity"> 
+      <li class="activity-item" v-for="gathering in Gatherings" >
+
+       <div class="activity-inner"> 
+        <a href=""></a>
+        <div class="img">
+         <a href="./activity-detail.html" ><img src="./img/widget-activity1.png" alt="" /></a>
+        </div> 
+        <div class="text"> 
+         <p class="title" v-text="gathering.name"></p>
+         <div class="fl goin"> 
+          <p>时间：<span v-text="gathering.starttime"></span></p>
+          <p>学院：<span v-text="gathering.address"></span></p>
+         </div> 
+         <div class="fr btn">
+          <a href="./activity-detail.html" ><span class="sui-btn btn-bao">点击查看</span> </a>
+         </div> 
+         <div class="clearfix"></div> 
+        </div> 
+       </div>
+
+      </li>
+
+     </ul> 
+    </div> 
+   </div> 
+  </div>
+
+
+
+  <!--将导航栏判断此页vue代码引进来-->
+  <script type="text/javascript" src="./js/Nav_loginManager.js">
+
+
+  </script>
+
+  <script type="text/javascript">
+      new Vue({
+          el:"#acindexApp",
+          data:{
+              Gatherings:[], //活动
+              result:{},
+          },
+          methods:{
+              loadGatherings:function () { //查询所有活动
+                  var url = school_user_server+"/gathering/allGathing";
+                  console.info("url="+url);
+                  var _this = this;
+                  //json请求用默认方式
+                  axios.get(url).then(function (response) {
+                      _this.result = response.data;
+                      _this.Gatherings = _this.result.data;
+                  }).catch(function (err) {
+                      console.log("网络错误");
+                  });
+              },
+          },
+          created(){
+              this.loadGatherings();
+          }
+      });
+
+  </script>
+
+
+  <!--尾部-->
+  <div id="footer">
+
+  </div>
+  <script>
+      $('#footer').load('footer.html');
+  </script>
+  <!--尾部-->
+
+ </body>
+</html>

@@ -48,7 +48,6 @@ public class TokenController {
 
     }
 
-
     /**
      * 登录校验
      * 根据token查询
