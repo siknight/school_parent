@@ -88,45 +88,35 @@
    </div> 
   </div> 
   <!--中间布局--> 
-  <div class="wrapper activities"> 
-   <h1>APMCon2017中国应用性能管理大会</h1> 
+  <div class="wrapper activities" id="activityDetailApp">
+   <h1 v-text="gathering.name">APMCon2017中国应用性能管理大会</h1>
    <div class="img-text"> 
     <div class="left-img"> 
      <img src="./img/widget-acti.png" alt="" /> 
     </div> 
     <div class="right-txt"> 
-     <p>开始时间： 2017-07-07 08:00 周五</p> 
-     <p>结束时间： 2017-07-10 20:00 周一</p> 
-     <p>举办地点： 深圳市华侨城洲际酒店</p> 
-     <p>主办方：infoQ</p> 
-     <p>报名截止： <span class="big">85</span>天 <span class="big">15</span>时 <span class="big">16</span>分 <span class="big">10</span>秒</p> 
-     <div class="join"> 
-      <button class="sui-btn btn-danger">立即报名</button> 
-      <span class="will">报名即将开始</span> 
-     </div> 
+     <p >开始时间：<span v-text="gathering.starttime"></span> </p>
+     <p v-text="gathering.endtime">结束时间： <span v-text="gathering.endtime"></span></p>
+     <p>举办地点： <span v-text="gathering.address"></span></p>
+     <p>主办方：<span v-text="gathering.sponsor"></span></p>
+     <!--<p>报名截止： <span class="big">85</span>天 <span class="big">15</span>时 <span class="big">16</span>分 <span class="big">10</span>秒</p> -->
+     <!--<div class="join"> -->
+      <!--<button class="sui-btn btn-danger">立即报名</button> -->
+      <!--<span class="will">报名即将开始</span> -->
+     <!--</div> -->
     </div> 
    </div> 
    <div class="simple-text"> 
     <div class="left-content"> 
      <div class="content-item"> 
       <div class="tit">
-       <span>大会介绍</span>
+       <span>活动介绍</span>
       </div> 
       <div class="text"> 
-       <h4>实践第一、案例为主</h4> 
-       <p>ArchSummit 全球架构师峰会是 InfoQ 中国团队推出的面向高端技术管理者、架构师的技术大会，参会者中超过 50% 拥有 8 年以上的工作经验。ArchSummit 秉承“实践第一、案例为主”的原则，展示新技术在行业应用中的最新实践，技术在企业转型中的加速作用，帮助企业技术管理者、CTO、架构师做好技术选型、技术团队组建与管理，并确立技术对于产品和业务的关键作用。</p> 
+       <!--<h4>实践第一、案例为主</h4> -->
+       <p v-text="gathering.detail"></p>
       </div> 
-     </div> 
-     <!--<div class="content-item"> -->
-      <!--<div class="tit">-->
-       <!--<span>议题简介</span>-->
-      <!--</div> -->
-      <!--<div class="text"> -->
-       <!--<h4>7月7日，星期五</h4> -->
-       <!--<p>#区块链以及金融新技术</p> -->
-       <!--<p>随着各国放宽金融法规，在 FinTech 创新上，尤其区块链领域正受到前所未有的支持，目前区块链技术有哪些最佳实践？如何替企业降低成本？金融新技术还有哪些玩法？我们将邀请研究 FinTech 的技术专家，一起看金融技术在这阶段的深度实践。</p> -->
-      <!--</div>-->
-     <!--</div> -->
+     </div>
     </div> 
     <div class="right-intro"> 
      <div class="content-item"> 
@@ -141,6 +131,38 @@
     </div> 
    </div> 
   </div>
+
+  <script type="text/javascript">
+     new Vue({
+         el:"#activityDetailApp",
+         data:{
+             gathering:{},
+         },
+         methods:{
+             loadActivity:function () {
+                 var url = window.location.href ;
+                 var cs = url.split('?')[1];    //获取?之后的参数字符串
+                 var params = cs.split('=');
+                 var value = params[1];  //文章id
+                 //-------
+                 var url = school_user_server+"/gathering/"+value;
+
+                 var _this = this;
+                 //json请求用默认方式
+                 axios.get(url).then(function (response) {
+                     _this.result = response.data;
+                     console.info(_this.result.message);
+                     _this.gathering = _this.result.data;
+                 }).catch(function (err) {
+                     console.log("网络错误");
+                 });
+             }
+         },  //methods
+         created(){
+             this.loadActivity();
+         }
+     });
+  </script>
 
   <!--将导航栏判断此页vue代码引进来-->
   <script type="text/javascript" src="./js/Nav_loginManager.js">
