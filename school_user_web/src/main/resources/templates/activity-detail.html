@@ -96,14 +96,20 @@
     </div> 
     <div class="right-txt"> 
      <p >开始时间：<span v-text="gathering.starttime"></span> </p>
-     <p v-text="gathering.endtime">结束时间： <span v-text="gathering.endtime"></span></p>
+     <p >结束时间： <span v-text="gathering.endtime"></span></p>
      <p>举办地点： <span v-text="gathering.address"></span></p>
      <p>主办方：<span v-text="gathering.sponsor"></span></p>
+     <p>联系电话: <span>13132112359</span></p>
+     <p>微信号: <span>13132112359</span></p>
      <!--<p>报名截止： <span class="big">85</span>天 <span class="big">15</span>时 <span class="big">16</span>分 <span class="big">10</span>秒</p> -->
-     <!--<div class="join"> -->
-      <!--<button class="sui-btn btn-danger">立即报名</button> -->
-      <!--<span class="will">报名即将开始</span> -->
-     <!--</div> -->
+     <div class="join">
+     <!--<button class="sui-btn btn-danger" style="padding-left: 0px"> </button>-->
+      <!--<br/><br/>-->
+      <!--<button class="sui-btn btn-danger" style="padding-left: 0px"></button>-->
+      <!--<span class="big"></span>-->
+      <!--<br/>-->
+      <!--<span class="big"> </span>-->
+     </div>
     </div> 
    </div> 
    <div class="simple-text"> 
@@ -124,7 +130,7 @@
        <span>活动组织者</span>
       </div> 
       <div class="text"> 
-       <p>主办方： infoQ</p> 
+       <p>主办方：<span v-text="gathering.sponsor"></span></p>
       </div> 
      </div> 
 
