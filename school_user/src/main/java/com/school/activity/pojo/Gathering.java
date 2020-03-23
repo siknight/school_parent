@@ -28,8 +28,26 @@ public class Gathering implements Serializable{
 	private java.util.Date enrolltime;//报名截止
 	private String state;//是否可见
 	private String city;//城市
-	
-	public String getId() {		
+	private String phone;//联系手机
+	private String weixin;//微信号
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getWeixin() {
+		return weixin;
+	}
+
+	public void setWeixin(String weixin) {
+		this.weixin = weixin;
+	}
+
+	public String getId() {
 		return id;
 	}
 	public void setId(String id) {
