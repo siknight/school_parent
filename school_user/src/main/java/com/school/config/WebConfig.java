@@ -8,6 +8,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/userimage/**").addResourceLocations("file:D:\\imageschool\\userimages\\");
+        registry.addResourceHandler("/activityimage/**").addResourceLocations("file:D:\\imageschool\\adminimages\\");
         System.out.println("路径映射成功");
     }
 }

@@ -37,20 +37,20 @@
 <div class="page-container" id="activityApp" v-cloak>
 	<div class="text-c">
 		<div v-show="activityFlag">
-			<p>活动名: <input type="text" class="input-text" style="width:250px" placeholder="输入活动名称" name=""></p>
-			<p>活动图： <input type="file" class="input-text" style="width:250px" placeholder="上传活动图" name=""></p>
-			<p>活动时间: <input type="datetime-local" class="input-text" style="width:250px" placeholder="输入活动时间" name=""></p>
-			<p>活动地点: <input type="text" class="input-text" style="width:250px" placeholder="输入活动地点" name=""></p>
-			<p>联系电话: <input type="text" class="input-text" style="width:250px" placeholder="输入联系电话" name=""></p>
-			<p>举办方: <input type="text" class="input-text" style="width:250px" placeholder="输入举办方名称" name=""></p>
-			<p>联系微信: <input type="text" class="input-text" style="width:250px" placeholder="输入微信" name=""></p>
+			<p>活动名: <input type="text" v-model="name" class="input-text" style="width:250px" placeholder="输入活动名称" name=""></p>
+			<p>活动图： <input type="file" id="saveImage" class="input-text" style="width:250px" placeholder="上传活动图" name=""></p>
+			<p>活动时间: <input type="text" v-model="starttime" class="input-text" style="width:250px" placeholder="输入活动时间" name=""></p>
+			<p>活动地点: <input type="text" v-model="address" class="input-text" style="width:250px" placeholder="输入活动地点" name=""></p>
+			<p>联系电话: <input type="text" v-model="phone" class="input-text" style="width:250px" placeholder="输入联系电话" name=""></p>
+			<p>举办方: <input type="text" v-model="sponsor" class="input-text" style="width:250px" placeholder="输入举办方名称" name=""></p>
+			<p>联系微信: <input type="text" v-model="weixin" class="input-text" style="width:250px" placeholder="输入微信" name=""></p>
 			<div>活动介绍:
-				<textarea class="input-text" style="width:250px;height: 300px" placeholder="输入活动介绍">
+				<textarea class="input-text" v-model="detail" style="width:250px;height: 300px" placeholder="输入活动介绍">
 
 				</textarea>
 				<!--<input  class="input-text" style="width:250px" placeholder="输入活动介绍" name="">-->
 			</div>
-			<button type="submit" class="btn btn-success"  name="">
+			<button type="submit" @click="addGatherings()" class="btn btn-success"  name="">
 				<i class="Hui-iconfont"></i> 提交
 			</button>
 
@@ -126,10 +126,21 @@
         data:{
             Gatherings:[], //活动
             result:{},
-			activityFlag:false
+			activityFlag:false,
+			name:"",
+			detail:"",
+			sponsor:"",
+			starttime:"",
+			address:"",
+			phone:"",
+			weixin:""
         },
         methods:{
             loadGatherings:function () { //查询所有活动
+                var token=window.localStorage.getItem("admin_token_school");  //获取token
+                if (token==""||token==null){
+                    window.location.href=user_web_url+"/login.html";
+                }
                 var url = school_user_server+"/gathering/allGathing";
                 console.info("url="+url);
                 var _this = this;
@@ -143,6 +154,46 @@
             },
 			changeActivityFlag:function () {
                 this.activityFlag = !this.activityFlag
+            },
+			addGatherings:function () {
+                var token=window.localStorage.getItem("admin_token_school");  //获取token
+                if (token==""||token==null){
+                    window.location.href=user_web_url+"/login.html";
+                }
+                var x = document.getElementById('saveImage').files[0];
+                console.log(x);
+                var _this = this;
+                var params = new FormData() ; //创建一个form对象,必须是form对象否则后端接受不到数据
+                params.append('uploadFile',x,x.name);  //append 向form表单添加数据
+                params.append('name',_this.name);
+                params.append('detail',_this.detail);
+                params.append('sponsor',_this.sponsor);
+                params.append('starttime',_this.starttime);
+                params.append('address',_this.address);
+                params.append('phone',_this.phone);
+                params.append('weixin',_this.weixin);
+                var url = school_user_server+"/gathering/addac/admin"; //修改头像路径
+                var token=window.localStorage.getItem("admin_token_school");  //获取token
+                axios.post(url,params,{
+                    //form-data形式提交
+                    headers:{
+                        'Content-Type':'multipart/form-data',
+                        'Authorization':"Bearer "+token
+                    }
+                }).then(function (response) {
+                    _this.result = response.data;
+
+                    alert("添加成功");
+                    _this.loadGatherings();
+                    _this.activityFlag=false;
+                    // if (_this.result.code.equals("20000")||_this.result.code=="2000") {
+                    //    alert("添加成功")
+                    //     _this.loadGatherings();
+                    // }
+
+                }).catch(function (err) {
+                    // console.log("网络错误");
+                });
             }
         },
         created(){
