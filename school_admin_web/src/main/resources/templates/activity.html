@@ -36,7 +36,7 @@
 <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 管理员管理 <span class="c-gray en">&gt;</span> 管理员列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 <div class="page-container" id="activityApp" v-cloak>
 	<div class="text-c">
-		<div v-show="activityFlag">
+		<div v-show="activityFlag" v-cloak>
 			<p>活动名: <input type="text" v-model="name" class="input-text" style="width:250px" placeholder="输入活动名称" name=""></p>
 			<p>活动图： <input type="file" id="saveImage" class="input-text" style="width:250px" placeholder="上传活动图" name=""></p>
 			<p>活动时间: <input type="text" v-model="starttime" class="input-text" style="width:250px" placeholder="输入活动时间" name=""></p>
@@ -51,6 +51,26 @@
 				<!--<input  class="input-text" style="width:250px" placeholder="输入活动介绍" name="">-->
 			</div>
 			<button type="submit" @click="addGatherings()" class="btn btn-success"  name="">
+				<i class="Hui-iconfont"></i> 提交
+			</button>
+
+		</div>
+
+		<div v-show="updateFlag" v-cloak>
+			<p>活动名: <input type="text" v-model="name2" class="input-text" style="width:250px" placeholder="输入活动名称" name=""></p>
+			<p>活动图： <input type="file" id="saveImage2" class="input-text" style="width:250px" placeholder="上传活动图" name=""></p>
+			<p>活动时间: <input type="text" v-model="starttime2" class="input-text" style="width:250px" placeholder="输入活动时间" name=""></p>
+			<p>活动地点: <input type="text" v-model="address2" class="input-text" style="width:250px" placeholder="输入活动地点" name=""></p>
+			<p>联系电话: <input type="text" v-model="phone2" class="input-text" style="width:250px" placeholder="输入联系电话" name=""></p>
+			<p>举办方: <input type="text" v-model="sponsor2" class="input-text" style="width:250px" placeholder="输入举办方名称" name=""></p>
+			<p>联系微信: <input type="text" v-model="weixin2" class="input-text" style="width:250px" placeholder="输入微信" name=""></p>
+			<div>活动介绍:
+				<textarea class="input-text" v-model="detail2" style="width:250px;height: 300px" placeholder="输入活动介绍">
+
+				</textarea>
+				<!--<input  class="input-text" style="width:250px" placeholder="输入活动介绍" name="">-->
+			</div>
+			<button type="submit" @click="updateGatherings()" class="btn btn-success"  name="">
 				<i class="Hui-iconfont"></i> 提交
 			</button>
 
@@ -80,7 +100,7 @@
 				<th width="150">联系电话</th>
 				<th width="150">微信号</th>
 				<th>活动介绍</th>
-				<th width="100">是否已启用</th>
+				<!--<th width="100">是否已启用</th>-->
 				<th width="100">操作</th>
 			</tr>
 		</thead>
@@ -88,20 +108,19 @@
 			<tr class="text-c" v-for="(gathering,index) in Gatherings">
 				<td v-cloak>{{index+1}}</td>
 				<td v-text="gathering.name">活动测试</td>
-				<td v-text="gathering.image">图片</td>
+				<td style="height: 10px;width: 10px"><img :src="gathering.image"></td>
 				<td v-text="gathering.starttime">星期六</td>
 				<td v-text="gathering.address">大软</td>
 				<td v-text="gathering.sponsor">音乐社团</td>
 				<td v-text="gathering.phone">13132112359</td>
 				<td v-text="gathering.weixin">微信号</td>
 				<td v-text="gathering.sponsor">detail</td>
-				<td class="td-status"><span class="label label-success radius">已启用</span></td>
+				<!--<td class="td-status"><span class="label label-success radius">已启用</span></td>-->
 				<td class="td-manage">
-					<a style="text-decoration:none" onClick="admin_stop(this,'10001')" href="javascript:;" title="停用">
-						<i class="Hui-iconfont">&#xe631;</i></a>
-					<a title="编辑" href="javascript:;" onclick="admin_edit('管理员编辑','admin-add.html','1','800','500')" class="ml-5" style="text-decoration:none">
+
+					<a title="编辑" href="javascript:;" @click="updateById(gathering.id)" class="ml-5" style="text-decoration:none">
 						<i class="Hui-iconfont">&#xe6df;</i></a>
-					<a title="删除" href="javascript:;" onclick="admin_del(this,'1')" class="ml-5" style="text-decoration:none">
+					<a title="删除" href="javascript:;" @click="deleteById(gathering.id)" class="ml-5" style="text-decoration:none">
 					  <i class="Hui-iconfont">&#xe6e2;</i></a>
 				</td>
 			</tr>
@@ -133,7 +152,16 @@
 			starttime:"",
 			address:"",
 			phone:"",
-			weixin:""
+			weixin:"",
+            updateFlag:false,
+            name2:"",
+            detail2:"",
+            sponsor2:"",
+            starttime2:"",
+            address2:"",
+            phone2:"",
+            weixin2:"",
+			acid:""
         },
         methods:{
             loadGatherings:function () { //查询所有活动
@@ -153,49 +181,169 @@
                 });
             },
 			changeActivityFlag:function () {
-                this.activityFlag = !this.activityFlag
+                this.activityFlag = !this.activityFlag;
+                this.updateFlag = false;
             },
 			addGatherings:function () {
+                this.updateFlag = false;
                 var token=window.localStorage.getItem("admin_token_school");  //获取token
                 if (token==""||token==null){
                     window.location.href=user_web_url+"/login.html";
                 }
                 var x = document.getElementById('saveImage').files[0];
                 console.log(x);
+
+                if(this.name==""||this.name==null){
+                    alert("活动名不能为空")
+                }else if (this.detail==""||this.detail==null) {
+                    alert("描述不能为空")
+                }else if (this.sponsor==""||this.sponsor==null) {
+                    alert("主办方不能为空")
+                }else if (this.address==""||this.address==null) {
+                    alert("地址不能为空")
+                }else if (this.phone==""||this.phone==null) {
+                    alert("电话不能为空")
+                }else if (this.weixin==""||this.weixin==null) {
+                    alert("微信不能为空")
+                }else if(x==null||x==""){
+                    alert("文件不能为空")
+				}else{
+                    var _this = this;
+                    var params = new FormData() ; //创建一个form对象,必须是form对象否则后端接受不到数据
+                    params.append('uploadFile',x,x.name);  //append 向form表单添加数据
+                    params.append('name',_this.name);
+                    params.append('detail',_this.detail);
+                    params.append('sponsor',_this.sponsor);
+                    params.append('starttime',_this.starttime);
+                    params.append('address',_this.address);
+                    params.append('phone',_this.phone);
+                    params.append('weixin',_this.weixin);
+                    var url = school_user_server+"/gathering/addac/admin"; //修改头像路径
+                    var token=window.localStorage.getItem("admin_token_school");  //获取token
+                    axios.post(url,params,{
+                        //form-data形式提交
+                        headers:{
+                            'Content-Type':'multipart/form-data',
+                            'Authorization':"Bearer "+token
+                        }
+                    }).then(function (response) {
+                        _this.result = response.data;
+                        alert("添加成功");
+                        _this.loadGatherings();
+                        _this.activityFlag=false;
+                    }).catch(function (err) {
+                        // console.log("网络错误");
+                    });
+				}
+
+            },
+            deleteById:function (id) {
+
+                var url = school_user_server+"/gathering/"+id;
                 var _this = this;
-                var params = new FormData() ; //创建一个form对象,必须是form对象否则后端接受不到数据
-                params.append('uploadFile',x,x.name);  //append 向form表单添加数据
-                params.append('name',_this.name);
-                params.append('detail',_this.detail);
-                params.append('sponsor',_this.sponsor);
-                params.append('starttime',_this.starttime);
-                params.append('address',_this.address);
-                params.append('phone',_this.phone);
-                params.append('weixin',_this.weixin);
-                var url = school_user_server+"/gathering/addac/admin"; //修改头像路径
                 var token=window.localStorage.getItem("admin_token_school");  //获取token
-                axios.post(url,params,{
-                    //form-data形式提交
+                if (token==""||token==null){
+                    window.location.href=user_web_url+"/login.html";
+                }
+                axios.delete(url,{
                     headers:{
-                        'Content-Type':'multipart/form-data',
+                        //请求时添加token，验证是否登录
+                        'Authorization':"Bearer "+token
+                    }
+                }).then(function (response) {
+                    _this.result =response.data;
+                    alert( _this.result.message);
+                    if ( _this.result.code=="20000"){
+                        _this.loadGatherings();
+                    }
+                }).catch(function (err) {
+                    // console.log("网络错误");
+                });
+            },
+            updateById:function (id) {
+				this.activityFlag = false;
+                this.updateFlag = !this.updateFlag;
+                var url = school_user_server+"/gathering/"+id;
+                var _this = this;
+                var token=window.localStorage.getItem("admin_token_school");  //获取token
+                if (token==""||token==null){
+                    window.location.href=user_web_url+"/login.html";
+                }
+                axios.get(url,{   //先查找
+                    headers:{
+                        //请求时添加token，验证是否登录
                         'Authorization':"Bearer "+token
                     }
                 }).then(function (response) {
                     _this.result = response.data;
-
-                    alert("添加成功");
-                    _this.loadGatherings();
-                    _this.activityFlag=false;
-                    // if (_this.result.code.equals("20000")||_this.result.code=="2000") {
-                    //    alert("添加成功")
-                    //     _this.loadGatherings();
-                    // }
-
+                    _this.name2 = _this.result.data.name,
+                    _this.detail2= _this.result.data.detail,
+					_this.sponsor2= _this.result.data.sponsor,
+					_this.starttime2= _this.result.data.starttime,
+                    _this.address2= _this.result.data.address,
+					_this.phone2= _this.result.data.phone,
+					_this.weixin2= _this.result.data.weixin
+                    _this.acid = id;
                 }).catch(function (err) {
                     // console.log("网络错误");
                 });
+            },
+            updateGatherings:function () {
+                this.activityFlag = false;
+                var token=window.localStorage.getItem("admin_token_school");  //获取token
+                if (token==""||token==null){
+                    window.location.href=user_web_url+"/login.html";
+                }
+                var x = document.getElementById('saveImage2').files[0];
+                console.log(x);
+
+                if(this.name2==""||this.name2==null){
+                    alert("活动名不能为空")
+                }else if (this.detail2==""||this.detail2==null) {
+                    alert("描述不能为空")
+                }else if (this.sponsor2==""||this.sponsor2==null) {
+                    alert("主办方不能为空")
+                }else if (this.address2==""||this.address2==null) {
+                    alert("地址不能为空")
+                }else if (this.phone2==""||this.phone2==null) {
+                    alert("电话不能为空")
+                }else if (this.weixin2==""||this.weixin2==null) {
+                    alert("微信不能为空")
+                }else if(x==null||x==""){
+                    alert("文件不能为空")
+                }else{
+                    var _this = this;
+                    var params = new FormData() ; //创建一个form对象,必须是form对象否则后端接受不到数据
+                    params.append('uploadFile',x,x.name);  //append 向form表单添加数据修改
+                    params.append('id', _this.acid);
+                    params.append('name',_this.name2);
+                    params.append('detail',_this.detail2);
+                    params.append('sponsor',_this.sponsor2);
+                    params.append('starttime',_this.starttime2);
+                    params.append('address',_this.address2);
+                    params.append('phone',_this.phone2);
+                    params.append('weixin',_this.weixin2);
+                    var url = school_user_server+"/gathering/updateac/admin"; //修改头像路径
+                    var token=window.localStorage.getItem("admin_token_school");  //获取token
+                    axios.post(url,params,{
+                        //form-data形式提交
+                        headers:{
+                            'Content-Type':'multipart/form-data',
+                            'Authorization':"Bearer "+token
+                        }
+                    }).then(function (response) {
+                        _this.result = response.data;
+                        _this.loadGatherings();
+                        alert("修改成功");
+
+                        _this.updateFlag=false;
+                    }).catch(function (err) {
+                        // console.log("网络错误");
+                    });
+                }
             }
         },
+        
         created(){
             this.loadGatherings();
         }

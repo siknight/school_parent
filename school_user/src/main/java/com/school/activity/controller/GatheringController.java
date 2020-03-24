@@ -23,6 +23,7 @@ import java.util.Map;
 @RestController
 @CrossOrigin
 @RequestMapping("/gathering")
+@SuppressWarnings("all")
 public class GatheringController {
 
 	@Autowired
@@ -123,6 +124,42 @@ public class GatheringController {
 		return new Result(true,StatusCode.OK,"增加成功");
 	}
 
+
+
+	/**
+	 * 修改活动
+	 * @param
+	 */
+	@RequestMapping(value="/updateac/admin",method=RequestMethod.POST)
+	public Result updateActivity(
+			                  @RequestParam("id") String id,
+			                  @RequestParam("name") String name,
+							  @RequestParam("detail") String detail,
+							  @RequestParam("sponsor") String sponsor,
+							  @RequestParam("starttime") String starttime,
+							  @RequestParam("address") String address,
+							  @RequestParam("phone") String phone,
+							  @RequestParam("weixin") String weixin,
+							  @RequestPart("uploadFile") MultipartFile uploadFile ){
+
+		//上传的文件存放在一个绝对路径里
+		String tempFileName = FileUtil.FileUpload(uploadFile,"D:\\imageschool\\adminimages\\","admin");
+
+		// 保存
+		Gathering gathering = new Gathering();
+		gathering.setImage("/activityimage/"+tempFileName);
+		gathering.setName(name);
+		gathering.setAddress(address);
+		gathering.setDetail(detail);
+		gathering.setPhone(phone);
+		gathering.setStarttime(starttime);
+		gathering.setSponsor(sponsor);
+		gathering.setWeixin(weixin);
+		gathering.setId(id);
+		gatheringService.update(gathering);
+		System.out.println("活动修改成功");
+		return new Result(true,StatusCode.OK,"修改成功");
+	}
 	/**
 	 * 增加
 	 * @param gathering
