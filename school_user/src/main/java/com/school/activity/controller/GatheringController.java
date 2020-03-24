@@ -119,6 +119,7 @@ public class GatheringController {
 		gathering.setStarttime(starttime);
 		gathering.setSponsor(sponsor);
 		gathering.setWeixin(weixin);
+
 		gatheringService.add(gathering);
 		System.out.println("活动增加成功");
 		return new Result(true,StatusCode.OK,"增加成功");

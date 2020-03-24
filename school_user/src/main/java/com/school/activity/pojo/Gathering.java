@@ -31,6 +31,15 @@ public class Gathering implements Serializable{
 	private String city;//城市
 	private String phone;//联系手机
 	private String weixin;//微信号
+	private String href; //连接
+
+	public String getHref() {
+		return href;
+	}
+
+	public void setHref(String href) {
+		this.href = href;
+	}
 
 	public String getPhone() {
 		return phone;

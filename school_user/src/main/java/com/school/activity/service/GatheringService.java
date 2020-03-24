@@ -82,7 +82,9 @@ public class GatheringService {
 	 * @param gathering
 	 */
 	public void add(Gathering gathering) {
-		gathering.setId( idWorker.nextId()+"" );
+		long id = idWorker.nextId();
+		gathering.setId( id+"" );
+		gathering.setHref("activity-detail.html?activityid="+id);
 		gatheringDao.save(gathering);
 	}
 

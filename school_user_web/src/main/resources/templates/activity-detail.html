@@ -92,15 +92,15 @@
    <h1 v-text="gathering.name">APMCon2017中国应用性能管理大会</h1>
    <div class="img-text"> 
     <div class="left-img"> 
-     <img src="./img/widget-acti.png" alt="" /> 
+     <img :src="gathering.image" alt="" />
     </div> 
     <div class="right-txt"> 
      <p >开始时间：<span v-text="gathering.starttime"></span> </p>
-     <p >结束时间： <span v-text="gathering.endtime"></span></p>
+     <!--<p >结束时间： <span v-text="gathering.endtime"></span></p>-->
      <p>举办地点： <span v-text="gathering.address"></span></p>
      <p>主办方：<span v-text="gathering.sponsor"></span></p>
-     <p>联系电话: <span>13132112359</span></p>
-     <p>微信号: <span>13132112359</span></p>
+     <p>联系电话: <span v-text="gathering.phone"></span></p>
+     <p>微信号: <span v-text="gathering.weixin"></span></p>
      <!--<p>报名截止： <span class="big">85</span>天 <span class="big">15</span>时 <span class="big">16</span>分 <span class="big">10</span>秒</p> -->
      <div class="join">
      <!--<button class="sui-btn btn-danger" style="padding-left: 0px"> </button>-->
@@ -150,6 +150,7 @@
                  var cs = url.split('?')[1];    //获取?之后的参数字符串
                  var params = cs.split('=');
                  var value = params[1];  //文章id
+                 console.info("param value="+value)
                  //-------
                  var url = school_user_server+"/gathering/"+value;
 
