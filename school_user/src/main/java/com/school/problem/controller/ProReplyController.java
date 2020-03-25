@@ -2,6 +2,8 @@ package com.school.problem.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.school.problem.pojo.ProblemReply;
+import com.school.problem.service.ProReplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -11,8 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.onlineorder.problem.pojo.Reply;
-import com.onlineorder.problem.service.ReplyService;
+
 
 import entity.PageResult;
 import entity.Result;
@@ -24,11 +25,11 @@ import entity.StatusCode;
  */
 @RestController
 @CrossOrigin
-@RequestMapping("/reply")
+@RequestMapping("/proreply")
 public class ProReplyController {
 
 	@Autowired
-	private ReplyService replyService;
+	private ProReplyService replyService;
 	
 	
 	/**
@@ -60,8 +61,8 @@ public class ProReplyController {
 	 */
 	@RequestMapping(value="/search/{page}/{size}",method=RequestMethod.POST)
 	public Result findSearch(@RequestBody Map searchMap , @PathVariable int page, @PathVariable int size){
-		Page<Reply> pageList = replyService.findSearch(searchMap, page, size);
-		return  new Result(true,StatusCode.OK,"查询成功",  new PageResult<Reply>(pageList.getTotalElements(), pageList.getContent()) );
+		Page<ProblemReply> pageList = replyService.findSearch(searchMap, page, size);
+		return  new Result(true,StatusCode.OK,"查询成功",  new PageResult<ProblemReply>(pageList.getTotalElements(), pageList.getContent()) );
 	}
 
 	/**
@@ -79,7 +80,7 @@ public class ProReplyController {
 	 * @param reply
 	 */
 	@RequestMapping(method=RequestMethod.POST)
-	public Result add(@RequestBody Reply reply  ){
+	public Result add(@RequestBody ProblemReply reply  ){
 		replyService.add(reply);
 		return new Result(true,StatusCode.OK,"增加成功");
 	}
@@ -89,7 +90,7 @@ public class ProReplyController {
 	 * @param reply
 	 */
 	@RequestMapping(value="/{id}",method= RequestMethod.PUT)
-	public Result update(@RequestBody Reply reply, @PathVariable String id ){
+	public Result update(@RequestBody ProblemReply reply, @PathVariable String id ){
 		reply.setId(id);
 		replyService.update(reply);		
 		return new Result(true,StatusCode.OK,"修改成功");
