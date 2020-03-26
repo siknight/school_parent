@@ -109,8 +109,11 @@ public class ProblemService {
 	 * @param problem
 	 */
 	public void add(Problem problem) {
-		problem.setId( idWorker.nextId()+"" );
+		 long idwork = idWorker.nextId();
+		problem.setId( idwork+"" );
 		problem.setCreatetime(DateFormatUtil.DateToString(new Date()));
+		problem.setThumbup(0);
+		problem.setUrl("qa-detail.html?qaid="+idwork);
 		problemDao.save(problem);
 	}
 

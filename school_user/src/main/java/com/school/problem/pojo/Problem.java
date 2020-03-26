@@ -25,14 +25,24 @@ public class Problem implements Serializable{
 	private String userid;//用户ID
 	private String nickname;//昵称
 	private Long visits;//浏览量
-	private Long thumbup;//点赞数
+	private int thumbup;//点赞数
 	private Long reply;//回复数
 	private String solve;//是否解决
 	private String replyname;//回复人昵称
 	private java.util.Date replytime;//回复日期
 
-	
-	public String getId() {		
+	private  String url;
+
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getId() {
 		return id;
 	}
 	public void setId(String id) {
@@ -89,14 +99,15 @@ public class Problem implements Serializable{
 		this.visits = visits;
 	}
 
-	public Long getThumbup() {		
+	public int getThumbup() {
 		return thumbup;
 	}
-	public void setThumbup(Long thumbup) {
+
+	public void setThumbup(int thumbup) {
 		this.thumbup = thumbup;
 	}
 
-	public Long getReply() {		
+	public Long getReply() {
 		return reply;
 	}
 	public void setReply(Long reply) {
