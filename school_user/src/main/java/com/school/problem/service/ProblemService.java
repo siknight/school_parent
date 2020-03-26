@@ -1,9 +1,6 @@
 package com.school.problem.service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -14,6 +11,9 @@ import javax.persistence.criteria.Selection;
 
 import com.school.problem.dao.ProblemDao;
 import com.school.problem.pojo.Problem;
+import com.school.problem.pojo.ProblemUser;
+import com.school.user.dao.UserDao;
+import com.school.user.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import util.DateFormatUtil;
 import util.IdWorker;
 
 
@@ -39,12 +40,34 @@ public class ProblemService {
 	@Autowired
 	private IdWorker idWorker;
 
+	@Autowired
+	private UserDao userDao;
+
 	/**
 	 * 查询全部列表
 	 * @return
 	 */
 	public List<Problem> findAll() {
 		return problemDao.findAll();
+	}
+
+	/**
+	 * 查询全部列表
+	 * @return
+	 */
+	public List<ProblemUser> findAllProblemAndUser() {
+
+		List<Problem> allProblems = problemDao.findAll();
+		ArrayList<ProblemUser> problemUsers = new ArrayList<>();
+		for (Problem problem : allProblems){
+			String userid = problem.getUserid();
+			User user = userDao.findById(userid).get();
+			ProblemUser problemUser = new ProblemUser();
+			problemUser.setUser(user);
+			problemUser.setProblem(problem);
+			problemUsers.add(problemUser);
+		}
+		return problemUsers;
 	}
 
 	
@@ -87,8 +110,10 @@ public class ProblemService {
 	 */
 	public void add(Problem problem) {
 		problem.setId( idWorker.nextId()+"" );
+		problem.setCreatetime(DateFormatUtil.DateToString(new Date()));
 		problemDao.save(problem);
 	}
+
 
 	/**
 	 * 修改

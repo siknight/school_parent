@@ -20,7 +20,7 @@ public class Problem implements Serializable{
 	
 	private String title;//标题
 	private String content;//内容
-	private java.util.Date createtime;//创建日期
+	private String createtime;//创建日期
 	private java.util.Date updatetime;//修改日期
 	private String userid;//用户ID
 	private String nickname;//昵称
@@ -53,14 +53,15 @@ public class Problem implements Serializable{
 		this.content = content;
 	}
 
-	public java.util.Date getCreatetime() {		
+	public String getCreatetime() {
 		return createtime;
 	}
-	public void setCreatetime(java.util.Date createtime) {
+
+	public void setCreatetime(String createtime) {
 		this.createtime = createtime;
 	}
 
-	public java.util.Date getUpdatetime() {		
+	public java.util.Date getUpdatetime() {
 		return updatetime;
 	}
 	public void setUpdatetime(java.util.Date updatetime) {

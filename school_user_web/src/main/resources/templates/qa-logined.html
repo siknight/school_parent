@@ -110,22 +110,24 @@
          <div id="new" class="tab-pane active"> 
           <ul class="detail-list"> 
 
-           <li class="qa-item"> 
+           <li class="qa-item" v-for="problemuser in problemusers">
+
             <div class="fl record"> 
              <div class="number"> 
               <div class="border useful"> 
-               <p class="usenum">12</p> 
+               <p class="usenum"><span v-text="problemuser.problem.thumbup"></span></p>
                <p>有用</p> 
               </div>
              </div> 
             </div> 
             <div class="fl info"> 
              <div class="question"> 
-              <p class="author"><span class="name">大白兔</span><span>2019年6月19</span></p>
-              <p class="title"><a href="./qa-detail.html" target="_blank">请问谁有java书吗，借给我一本</a></p>
+              <p class="author"><span class="name" v-text="problemuser.user.nickname"></span ><span v-text="problemuser.problem.createtime">2019年6月19</span></p>
+              <p class="title"><a href="./qa-detail.html" target="_blank"  v-text="problemuser.problem.title"></a></p>
              </div>
             </div> 
-            <div class="clearfix"></div> </li> 
+            <div class="clearfix"></div>
+           </li>
           </ul> 
          </div>
         </div> 
@@ -141,11 +143,11 @@
     </div> 
     <div class="hot-tags" >
      <div class="head" style="text-align: center;margin: 0px auto" v-show="changeQaFlag">
-      <textarea style="width:98%;height: 200px;">
+      <textarea style="width:98%;height: 200px;" v-model="problem.title">
 
       </textarea>
       <br/> <br/>
-      <button>提交</button>
+      <button @click="savaQa()">提交</button>
       <!--<h3 class="title">热门标签</h3>-->
      </div>
     </div>
@@ -157,17 +159,53 @@
        new Vue({
            el:"#qaApp",
            data:{
-               changeQaFlag:false
+               changeQaFlag:false,
+               result:{},
+               problemusers:[],
+               problem:{}
            },
            methods:{
                changeQa:function() {
                    this.changeQaFlag = ! this.changeQaFlag;
                },
-               savaQa:function(){
+               savaQa:function() {
+                   if (this.problem.title == null || this.problem.title == "") {
+                       // this.result.message="邮箱不能为空";
+                       alert("内容不能为空");
+                   } else {
+                       //获取id，因为token里存的有，所以这里省略
+                       var token = window.localStorage.getItem("token_school");  //获取token
+                       console.info("userid=")
+                       var url = school_user_server + "/problem";
+                       var _this = this;
+                       //json请求用默认方式
+                       axios.post(url, _this.problem, {
+                           headers: {
+                               //请求时添加token，验证是否登录
+                               'Authorization': "Bearer " + token
+                           }
+                       }).then(function (response) {
+                           _this.result = response.data;
+                           _this.successMsg = _this.result.message;
+                           alert(_this.successMsg);
+                          _this.loadInit();
 
+                       }).catch(function (err) {
+                           alert("网络错误");
+                       });
+                   }
                },
                loadInit:function () {
-
+                   var url = school_user_server+"/problem/prouser/all";
+                   console.info("url="+url);
+                   var _this = this;
+                   //json请求用默认方式
+                   axios.get(url).then(function (response) {
+                       _this.result = response.data;
+                       _this.problemusers = _this.result.data;
+                   }).catch(function (err) {
+                       console.log("网络错误");
+                   });
                }
            },
            created(){

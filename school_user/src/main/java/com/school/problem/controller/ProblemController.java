@@ -3,7 +3,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.school.problem.pojo.Problem;
+import com.school.problem.pojo.ProblemUser;
 import com.school.problem.service.ProblemService;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,6 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import entity.PageResult;
 import entity.Result;
 import entity.StatusCode;
+
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 控制器层
  * @author Administrator
@@ -29,6 +34,20 @@ public class ProblemController {
 
 	@Autowired
 	private ProblemService problemService;
+
+	//用于验证token
+	@Autowired
+	private HttpServletRequest request;
+
+	/**
+	 * 查询全部数据
+	 * @return
+	 */
+	@RequestMapping(value = "/prouser/all",method= RequestMethod.GET)
+	public Result findAllProblemAndUser() {
+
+		return new Result(true,StatusCode.OK,"查询成功",problemService.findAllProblemAndUser());
+	}
 	
 	
 	/**
@@ -80,6 +99,13 @@ public class ProblemController {
 	 */
 	@RequestMapping(method=RequestMethod.POST)
 	public Result add(@RequestBody Problem problem  ){
+		//判断是否有权限访问
+		Claims claims=(Claims) request.getAttribute("user_claims");
+		if(claims==null){
+			return new Result(true,StatusCode.ACCESSERROR,"无权访问");
+		}
+		System.out.println("problem title="+problem.getNickname());
+		problem.setUserid(claims.getId());
 		problemService.add(problem);
 		return new Result(true,StatusCode.OK,"增加成功");
 	}
