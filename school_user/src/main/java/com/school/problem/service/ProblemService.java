@@ -9,6 +9,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
 
+import com.school.article.pojo.Article;
 import com.school.article.service.ReplyService;
 import com.school.problem.dao.ProblemDao;
 import com.school.problem.pojo.Problem;
@@ -44,6 +45,14 @@ public class ProblemService {
 
 	@Autowired
 	private UserDao userDao;
+
+	/**
+	 * 查询全部列表通过用户id
+	 * @return
+	 */
+	public List<Problem> findAllByUserid(String userid) {
+		return problemDao.findByUserid(userid);
+	}
 
 	@Autowired
 	private ReplyService replyService;

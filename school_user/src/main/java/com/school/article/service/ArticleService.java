@@ -4,6 +4,7 @@ package com.school.article.service;
 import com.school.article.dao.ArticleDao;
 import com.school.article.pojo.Article;
 import com.school.article.pojo.ArticleAndUser;
+import com.school.friend.pojo.Friendactivity;
 import com.school.user.dao.UserDao;
 import com.school.user.pojo.User;
 import entity.Result;
@@ -44,6 +45,15 @@ public class ArticleService {
 
 	@Autowired private
 	RedisTemplate redisTemplate;
+
+
+	/**
+	 * 查询全部列表通过用户id
+	 * @return
+	 */
+	public List<Article> findAllByUserid(String userid) {
+		return articleDao.findByUserid(userid);
+	}
 
 	/**
 	 * 首页文章遍历

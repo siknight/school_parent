@@ -39,6 +39,17 @@ public class ProblemController {
 	@Autowired
 	private HttpServletRequest request;
 
+	@RequestMapping(value = "/all/userid",method= RequestMethod.GET)
+	public Result findFriendActivityByUserid(){
+		//判断是否有权限访问
+		Claims claims=(Claims) request.getAttribute("user_claims");
+		if(claims==null){
+			return new Result(true,StatusCode.ACCESSERROR,"无权访问");
+		}
+		System.out.println("acall="+claims.getId());
+		return  new Result(true,StatusCode.OK,"查询成功",problemService.findAllByUserid(claims.getId()));
+	}
+
 	/**
 	 * 查询全部数据
 	 * @return
