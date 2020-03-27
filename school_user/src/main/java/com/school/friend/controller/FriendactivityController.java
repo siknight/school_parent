@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import entity.PageResult;
 import entity.Result;
 import entity.StatusCode;
+import util.DateFormatUtil;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -38,6 +39,17 @@ public class FriendactivityController {
 	//用于验证token
 	@Autowired
 	private HttpServletRequest request;
+
+	@RequestMapping(value = "/all/userid",method= RequestMethod.GET)
+	public Result findFriendActivityByUserid(){
+		//判断是否有权限访问
+		Claims claims=(Claims) request.getAttribute("user_claims");
+		if(claims==null){
+			return new Result(true,StatusCode.ACCESSERROR,"无权访问");
+		}
+		System.out.println("acall="+claims.getId());
+		return  new Result(true,StatusCode.OK,"查询成功",friendactivityService.findAllByUserid(claims.getId()));
+	}
 
 	@RequestMapping(value = "/all/ufa",method= RequestMethod.GET)
 	public Result findAllUserFriendActivity(){
@@ -101,7 +113,7 @@ public class FriendactivityController {
 		}
 		System.out.println("friactivity="+friendactivity.getActivityname());
 		friendactivity.setUserid(claims.getId());
-		friendactivity.setCreatetime(new Date());
+		friendactivity.setCreatetime(DateFormatUtil.DateToString(new Date()));
 		friendactivity.setUpdatetime(new Date());
 		System.out.println("fa="+friendactivity);
 		friendactivityService.add(friendactivity);
@@ -125,6 +137,11 @@ public class FriendactivityController {
 	 */
 	@RequestMapping(value="/{id}",method= RequestMethod.DELETE)
 	public Result delete(@PathVariable String id ){
+		//判断是否有权限访问
+		Claims claims=(Claims) request.getAttribute("user_claims");
+		if(claims==null){
+			return new Result(true,StatusCode.ACCESSERROR,"无权访问");
+		}
 		friendactivityService.deleteById(id);
 		return new Result(true,StatusCode.OK,"删除成功");
 	}

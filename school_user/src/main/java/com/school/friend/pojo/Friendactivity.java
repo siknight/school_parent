@@ -21,15 +21,15 @@ public class Friendactivity implements Serializable{
 	private String activityname;//
 	private String userid;//
 
-	private java.util.Date createtime;//发表日期
+	private String createtime;//发表日期
 	private java.util.Date updatetime;//修改日期,我这个应该用不到
 
 
-	public Date getCreatetime() {
+	public String getCreatetime() {
 		return createtime;
 	}
 
-	public void setCreatetime(Date createtime) {
+	public void setCreatetime(String createtime) {
 		this.createtime = createtime;
 	}
 

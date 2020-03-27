@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 /**
  * 数据访问接口
  * @author Administrator
@@ -29,6 +31,13 @@ public interface ArticleDao extends JpaRepository<Article,String>,JpaSpecificati
     @Modifying
     @Query("update Article a set thumbup=thumbup+1 where id=?1")
     public int updateThumbup(String id);
+
+    /**
+     * 通过用户查找所有文章
+     * @param userid
+     * @return
+     */
+    public List<Article> findByUserid(String userid);
 
 
 }

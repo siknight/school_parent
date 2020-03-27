@@ -3,6 +3,8 @@ import com.school.article.dao.ReplyDao;
 import com.school.article.pojo.ArticleReply;
 import com.school.article.pojo.ArticleReplyUser;
 import com.school.article.service.ReplyService;
+import com.school.friend.pojo.Friendactivity;
+import com.school.friend.service.FriendactivityService;
 import com.school.user.dao.UserDao;
 import com.school.user.pojo.User;
 import org.junit.Test;
@@ -29,15 +31,18 @@ public class Test01 {
 
     @Autowired
     ReplyService service;
+    @Autowired
+    FriendactivityService friendactivityService;
+    @Test
+    public void test07(){
+        List<Friendactivity> allByUserid = friendactivityService.findAllByUserid("1234380501851181056");
+        System.out.println(allByUserid);
+    }
 
     @Test
     public void test06(){
         List<ArticleReplyUser> allReplyByArticleid = service.findAllReplyByArticleid("1240211588263317504");
         System.out.println(allReplyByArticleid);
-//        String userid="1234380501851181056";
-//        User user = userDao.findUserById(userid);
-//        User user = userDao.findById("1234380501851181056").get();
-//        System.out.println(user);
     }
 
     @Test

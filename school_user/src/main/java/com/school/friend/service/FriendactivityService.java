@@ -47,6 +47,13 @@ public class FriendactivityService {
 	@Autowired
 	private FriendDao friendDao;
 
+	/**
+	 * 查询全部列表通过用户id
+	 * @return
+	 */
+	public List<Friendactivity> findAllByUserid(String userid) {
+		return friendactivityDao.findByUserid(userid);
+	}
 
 	/**
 	 * 查询全部列表
