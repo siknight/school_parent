@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.school.problem.pojo.ProblemReply;
 import com.school.problem.service.ProReplyService;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,6 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import entity.PageResult;
 import entity.Result;
 import entity.StatusCode;
+
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 控制器层
  * @author Administrator
@@ -30,8 +34,23 @@ public class ProReplyController {
 
 	@Autowired
 	private ProReplyService replyService;
-	
-	
+
+	@Autowired
+	private HttpServletRequest request;
+
+
+	/**
+	 * 通过文章id查询所有评论
+	 * @param problemid
+	 * @return
+	 */
+	@RequestMapping(value="/problem/{problemid}",method= RequestMethod.GET)
+	public Result findAllByArticleid(@PathVariable String problemid){
+		System.out.println("articleid="+problemid);
+		return new Result(true,StatusCode.OK,"查询成功",replyService.findAllReplyByProblemid(problemid));
+	}
+
+
 	/**
 	 * 查询全部数据
 	 * @return
@@ -81,6 +100,13 @@ public class ProReplyController {
 	 */
 	@RequestMapping(method=RequestMethod.POST)
 	public Result add(@RequestBody ProblemReply reply  ){
+		//判断是否有权限访问
+		Claims claims=(Claims) request.getAttribute("user_claims");
+		if(claims==null){
+			return new Result(true,StatusCode.ACCESSERROR,"无权访问");
+		}
+		//claims.getId()是为了获取token里存的用户id
+		reply.setUserid(claims.getId());
 		replyService.add(reply);
 		return new Result(true,StatusCode.OK,"增加成功");
 	}

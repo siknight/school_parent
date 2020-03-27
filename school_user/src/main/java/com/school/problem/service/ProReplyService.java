@@ -10,8 +10,13 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 
+import com.school.article.pojo.ArticleReply;
+import com.school.article.pojo.ArticleReplyUser;
 import com.school.problem.dao.ProReplyDao;
+import com.school.problem.pojo.ProReplyUser;
 import com.school.problem.pojo.ProblemReply;
+import com.school.user.dao.UserDao;
+import com.school.user.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +34,7 @@ import util.IdWorker;
  *
  */
 @Service
+@SuppressWarnings("all")
 public class ProReplyService {
 
 	@Autowired
@@ -36,6 +42,25 @@ public class ProReplyService {
 	
 	@Autowired
 	private IdWorker idWorker;
+
+	@Autowired
+	private UserDao userDao;
+
+	public List<ProReplyUser> findAllReplyByProblemid(String problemid) {
+		List<ProblemReply> allByArticleid = replyDao.findByProblemid(problemid); //通过问题id获取到评论id
+		ArrayList<ProReplyUser> allProReplyUsers = new ArrayList<>();
+		for (ProblemReply problemReply : allByArticleid) {
+			String userid = problemReply.getUserid();  //通过评论id，获取到用户id
+			System.out.println("userid=" + userid);
+			User user = userDao.findUserById(userid);
+			user.setPassword(null);
+			ProReplyUser proReplyUser = new ProReplyUser();
+			proReplyUser.setUser(user);
+			proReplyUser.setProblemReply(problemReply);
+			allProReplyUsers.add(proReplyUser);
+		}
+		return  allProReplyUsers;
+	}
 
 	/**
 	 * 查询全部列表

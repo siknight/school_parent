@@ -162,7 +162,8 @@
                changeQaFlag:false,
                result:{},
                problemusers:[],
-               problem:{}
+               problem:{},
+
            },
            methods:{
                changeQa:function() {
@@ -189,7 +190,7 @@
                            _this.successMsg = _this.result.message;
                            alert(_this.successMsg);
                           _this.loadInit();
-
+                          _this.changeQaFlag = false;
                        }).catch(function (err) {
                            alert("网络错误");
                        });

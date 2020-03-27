@@ -16,8 +16,6 @@ public class ArticleReply implements Serializable{
 
 	@Id
 	private String id;//编号
-
-
 	private String articleid;//问题ID
 	private String content;//回答内容
 	private java.util.Date createtime;//创建日期

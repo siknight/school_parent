@@ -53,8 +53,6 @@
        <li class="active"><a href="./qa-logined.html">问答</a></li>
        <li ><a href="./activity-index.html">活动</a></li>
        <li><a href="./makeFriends-index.html">交友</a></li>
-       <!--<li><a href="./spit-index.html">吐槽</a></li> -->
-       <!--<li><a href="./recruit-index.html">招聘</a></li>-->
       </ul>
       <form class="sui-form -pull-right">
        <input type="text" placeholder="输入关键词..." />
@@ -90,44 +88,44 @@
    <!--头部导航-->
    <!--引用组件--> 
    <!--两列布局--> 
-   <div class="wrapper tc-detail"> 
+   <div class="wrapper tc-detail" id="problemDetailApp">
     <div class="fl left-list"> 
      <div class="tc-detail"> 
       <!-- 标题区 --> 
       <div class="detail-tit"> 
        <div class="detail-author"> 
-        <a href="javascript:;">luckness</a> 发布 
+        <a href="javascript:;" v-text="problemuser.user.nickname"></a> 发布
        </div> 
        <div class="detail-content"> 
-        <p>今天入职腾讯，产品岗，普通非985211大学，上家是不到五十人创业小公司！16年毕业！找内推腾讯给的面试机会，五轮面试！可能是我把运气攒一起了！</p> 
-        <img src="./img/widget-tc-detail.png" alt="" /> 
+        <p v-text="problemuser.problem.title"></p>
+        <!--<img src="./img/widget-tc-detail.png" alt="" /> -->
        </div> 
        <div class="detail-tool"> 
         <ul> 
-         <li><span class="star"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i> 53</span></li> 
-         <li><a href="#" data-toggle="modal" data-target="#shareModal"><i class="fa fa-share-alt" aria-hidden="true"></i> 44</a></li> 
-         <li><a data-toggle="modal" data-target="#remarkModal"><i class="fa fa-commenting" aria-hidden="true"></i> 666</a></li> 
+         <li><span class="star"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i> <span v-text="problemuser.problem.thumbup"></span></span></li>
+         <!--<li><a href="#" data-toggle="modal" data-target="#shareModal"><i class="fa fa-share-alt" aria-hidden="true"></i> 44</a></li> -->
+         <!--<li><a data-toggle="modal" data-target="#remarkModal"><i class="fa fa-commenting" aria-hidden="true"></i> 666</a></li> -->
         </ul> 
        </div> 
       </div> 
-      <!-- 评论区 --> 
+      <!-- 回复区 -->
       <div class="comment-area"> 
        <div class="comment-tit"> 
-        <span>评论</span> 
+        <span>回复</span>
        </div> 
        <ul class="comment-list"> 
-        <li> 
-         <div class="item-photo"> 
-          <img src="./img/widget-widget-photo.png" alt="" /> 
+        <li  v-for="proreplyuser in proreplyusers">
+         <div  class="fl img">
+          <img :src="proreplyuser.user.avatar" alt="" style="height: 20px;"/>
          </div> 
          <div class="item-content"> 
-          <p class="author"><a href="javascript:;">luckness</a> 发布</p> 
-          <p class="content">运气+实力吧？不能谦虚哦，沙发！</p> 
+          <p class="author"><a href="javascript:;" v-text="proreplyuser.user.nickname">l</a> 发布</p>
+          <p class="content" v-text="proreplyuser.problemReply.content">运气+实力吧？不能谦虚哦，沙发！</p>
          </div> 
          <div class="item-thumb"> 
-          <div>
-           <i class="fa fa-thumbs-o-up" aria-hidden="true"></i> 52
-          </div> 
+          <!--<div>-->
+           <!--<i class="fa fa-thumbs-o-up" aria-hidden="true"></i> 52-->
+          <!--</div> -->
          </div> </li> 
 
        </ul> 
@@ -137,12 +135,115 @@
     <div class="fl right-tag"> 
      <div class="block-btn"> 
       <p>赠人玫瑰，手留余香，来帮同学解决问题吧！</p>
-      <!--<a class="sui-btn btn-block btn-share" href="./spit-submit.html" target="_blank">发吐槽</a> -->
-     </div> 
+      <a class="sui-btn btn-block btn-share" @click.stop="qareply()" target="_blank">发回复</a>
+     </div>
+     <br/>
+     <div class="hot-tags" >
+      <div class="head" style="text-align: center;margin: 0px auto" v-show="changeQaFlag">
+      <textarea style="width:98%;height: 200px;" v-model="reply.content">
+
+      </textarea>
+       <br/> <br/>
+       <button @click="savaReply()">提交</button>
+       <!--<h3 class="title">热门标签</h3>-->
+      </div>
+     </div>
     </div> 
     <div class="clearfix"></div> 
    </div> 
   </div>
+
+  <script type="text/javascript">
+      new Vue({
+          el:"#problemDetailApp",
+          data:{
+              problemuser:{},
+              proreplyusers:[],
+              changeQaFlag:false,
+              reply:{}
+          },
+          methods:{
+              loadQa:function () {
+                  var url = window.location.href ;
+                  var cs = url.split('?')[1];    //获取?之后的参数字符串
+                  var params = cs.split('=');
+                  var value = params[1];  //文章id
+                  console.info("param value="+value)
+                  //-------
+                  var url = school_user_server+"/problem/"+value;
+
+                  var _this = this;
+                  //json请求用默认方式
+                  axios.get(url).then(function (response) {
+                      _this.result = response.data;
+                      console.info(_this.result.message);
+                      _this.problemuser = _this.result.data;
+                  }).catch(function (err) {
+                      console.log("网络错误");
+                  });
+              },
+              loadReply:function () {
+                  var url = window.location.href ;
+                  var cs = url.split('?')[1];    //获取?之后的参数字符串
+                  var params = cs.split('=');
+                  var value = params[1];  //文章id
+                  //-------
+                  var url = school_user_server+"/proreply/problem/"+value;
+
+                  var _this = this;
+                  //json请求用默认方式
+                  axios.get(url).then(function (response) {
+                      _this.result = response.data;
+                      console.info(_this.result.message);
+                      _this.proreplyusers = _this.result.data;
+                  }).catch(function (err) {
+                      console.log("网络错误");
+                  });
+
+              },
+              qareply:function () {
+                  this.changeQaFlag = ! this.changeQaFlag;
+              },
+              savaReply:function () {
+                  var url = window.location.href ;
+                  var cs = url.split('?')[1];    //获取?之后的参数字符串
+                  var params = cs.split('=');
+                  var value = params[1];  //文章id
+                  // 获取用户id
+                  var url = school_user_server+"/proreply";
+                  var _this = this;
+                  var token=window.localStorage.getItem("token_school");  //获取token
+                  if (token==null||token==""){
+                      window.location.href=user_web_url+"/tologin_register.html";
+                  }else{
+                      //文章id
+                      _this.reply.problemid=value;
+                      // _this.reply.content= _this.replynow;
+                      // _this.replynow=""
+                      //要存入文章id，用户id，评论内容
+                      axios.post(url,_this.reply,{
+                          headers:{
+                              //请求时添加token，验证是否登录
+                              'Authorization':"Bearer "+token
+                          }
+                      }).then(function (response) {
+                          _this.result = response.data;
+                          _this.changeQaFlag = false;
+                          _this.loadReply();
+
+                      }).catch(function (err) {
+                          alert("网络错误");
+                      });
+                  }
+              }
+          },  //methods
+          created(){
+              this.loadQa();
+              this.loadReply();
+          }
+      });
+  </script>
+
   <!--将导航栏判断此页vue代码引进来-->
   <script type="text/javascript" src="./js/Nav_loginManager.js">
 

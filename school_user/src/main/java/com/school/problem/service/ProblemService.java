@@ -9,8 +9,10 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
 
+import com.school.article.service.ReplyService;
 import com.school.problem.dao.ProblemDao;
 import com.school.problem.pojo.Problem;
+import com.school.problem.pojo.ProblemReply;
 import com.school.problem.pojo.ProblemUser;
 import com.school.user.dao.UserDao;
 import com.school.user.pojo.User;
@@ -42,6 +44,19 @@ public class ProblemService {
 
 	@Autowired
 	private UserDao userDao;
+
+	@Autowired
+	private ReplyService replyService;
+
+	public ProblemUser findByProblemId(String id){
+		Problem problem = problemDao.findById(id).get();
+		String userid = problem.getUserid();
+		User user = userDao.findUserById(userid);
+		ProblemUser problemUser = new ProblemUser();
+		problemUser.setProblem(problem);
+		problemUser.setUser(user);
+		return  problemUser;
+	}
 
 	/**
 	 * 查询全部列表

@@ -66,7 +66,7 @@ public class ProblemController {
 	 */
 	@RequestMapping(value="/{id}",method= RequestMethod.GET)
 	public Result findById(@PathVariable String id){
-		return new Result(true,StatusCode.OK,"查询成功",problemService.findById(id));
+		return new Result(true,StatusCode.OK,"查询成功",problemService.findByProblemId(id));
 	}
 
 

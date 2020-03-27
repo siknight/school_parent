@@ -7,7 +7,7 @@
   <meta name="description" content="" /> 
   <meta name="author" content="" /> 
   <link rel="icon" href="./img/asset-favicon.ico" /> 
-  <title>社交-我的主页</title> 
+  <title>社交-我的提问</title> 
   <!-- 页面 css js --> 
   <!-- <script type="text/javascript" src="../../plugins/sui/sui.min.js"></script> --> 
   <link rel="stylesheet" type="text/css" href="./plugins/normalize-css/normalize.css" /> 
@@ -17,7 +17,8 @@
   <link rel="stylesheet" type="text/css" href="./plugins/font-awesome/css/font-awesome.min.css" /> 
   <link rel="stylesheet" type="text/css" href="./css/widget-base.css" /> 
   <link rel="stylesheet" type="text/css" href="./css/widget-head-foot.css" /> 
-  <link rel="stylesheet" type="text/css" href="./css/page-sj-person-account.css" />
+  <link rel="stylesheet" type="text/css" href="./css/page-sj-person-myquestion.css" />
+
   <!--引入-->
   <script src="./js/jquery-3.4.1.js"></script>
   <script src="./js/vuejs-2.5.16.js"></script>
@@ -82,6 +83,7 @@
    </header>
    <!--头部导航-->
   </div>
+
   <!--第二段必须的个人信息公共部分-->
   <div id="myfileMust" >
 
@@ -89,48 +91,37 @@
   <script>
       $('#myfileMust').load('person-myfile-must.html');
   </script>
-
-  <!--第二段必须的个人信息公共部分-->
   <!--两列布局--> 
   <div class="wrapper  myhome"> 
    <div class="left-list"> 
-    <div class="myhome-list"> 
+    <div class="myhome-list">
      <ul class="home-list">
-      <li><a href="./person-myfriendactivity.html">我的交友</a></li>
+      <li  class="active"><a href="./person-myfriendactivity.html">我的交友</a></li>
       <li><a href="./person-myquestion.html">我的提问</a></li>
-      <li><a href="./person-myshare.html">我的分享</a></li>
-     </ul> 
+      <li ><a href="./person-myshare.html">我的分享</a></li>
+     </ul>
      <ul class="home-list bottom">
-      <li><a href="./person-myfocus.html">我的关注</a></li> 
+      <li><a href="./person-myfocus.html">我的关注</a></li>
       <li><a href="./person-mycollect.html">我的收藏</a></li>
-      <li  class="active"><a href="person-myfile.html">个人信息</a></li>
-     </ul> 
+      <li ><a href="person-myfile.html">个人信息</a></li>
+     </ul>
     </div> 
+    <!-- <script>
+    $(function(){
+        $(".home-list li").click(function(){
+            $(this).addClass("active");
+            $(this).siblings().removeClass("active");
+        })
+    })
+</script> --> 
    </div> 
    <div class="right-content"> 
-    <div class="home-content"> 
-    
-     <div class="activities account-type" id="personFileAll">
-      <h4 class="tit"><span>个人信息</span></h4>
-        <div class="account-main">
-   
-	      <div class="account-person"> 
-	       <h3>个人信息</h3>
-	       <ul class="account-info"> 
-	        <li> <span class="gray index">名字</span> <span class="info"><span v-text="user.nickname"></span></span>
-	         </li>
-	        <li> <span class="gray index">Email </span> <span class="info"><span v-text="user.mobile"></span></span>
-	          </li>
-	        <!--<li> <span class="gray index">手机号码 </span> <span class="info">136****9875</span> -->
-	        <!--</li>-->
-	        <li> <span class="gray index">密码 </span> <span class="info"><a href="./tologin_register.html">点击修改密码</a></span>
-	          </li>
-	       </ul> 
-	      </div> 
-
-	     </div>
-     
-     </div> 
+    <div class="questions"> 
+     <h4><span>我的提问</span></h4> 
+     <ul class="question-list"> 
+      <li> <span class="fl good"><span class="num">12</span> 有用</span> <span class="title"><a href="#">有关PHP初级进阶的问题</a></span> <span class="fr date">4月6日</span> <span class="clearfix"></span> </li> 
+      <li> <span class="fl good"><span class="num">12</span> 有用</span> <span class="title"><a href="#">有关JAVA初级进阶的问题</a></span> <span class="fr date">4月6日</span> <span class="clearfix"></span> </li> 
+     </ul>
     </div> 
    </div> 
    <div class="clearfix"></div> 
@@ -140,26 +131,10 @@
       var personFileAll = new Vue({
           el:"#personFileAll",
           data:{
-              user:{
-              }
+
           },
           methods:{
               findUserById:function () {
-                  var url = school_user_server+"/user/findById";
-                  var _this = this;
-                  var token=window.localStorage.getItem("token_school");  //获取token
-                  axios.get(url,{
-                      headers:{
-                          //请求时添加token，验证是否登录
-                          'Authorization':"Bearer "+token
-                      }
-                  }).then(function (response) {
-                      _this.result = response.data;
-                      _this.user = _this.result.data;
-
-                  }).catch(function (err) {
-                      // console.log("网络错误");
-                  });
               }
           },  //methods
           created(){
@@ -185,7 +160,5 @@
       $('#footer').load('footer.html');
   </script>
   <!--尾部-->
-  <script>
-</script> 
  </body>
 </html>
