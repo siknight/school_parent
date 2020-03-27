@@ -96,7 +96,7 @@
    <div class="left-list"> 
     <div class="myhome-list">
      <ul class="home-list">
-      <li><a href="./person-myfriendactivity.html">我的交友</a></li>
+      <li><a href="./person-myfriendactivity.html">我的交友活动</a></li>
       <li class="active"><a href="./person-myquestion.html">我的提问</a></li>
       <li  ><a href="./person-myshare.html">我的分享</a></li>
      </ul>
@@ -121,7 +121,7 @@
      <ul class="question-list">
       <li v-for="problem in problems">
        <span class="title">
-        <a :href="problem.url" v-text="problem.title"></a>
+        <a :href="problem.url" v-text="problem.title" style="color: #5d9c0a;font-size: large"></a>
         &nbsp; &nbsp; &nbsp;
         <span  v-text="problem.createtime"></span>
        </span>

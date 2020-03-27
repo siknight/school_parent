@@ -96,7 +96,7 @@
    <div class="left-list"> 
     <div class="myhome-list">
      <ul class="home-list">
-      <li><a href="./person-myfriendactivity.html">我的交友</a></li>
+      <li><a href="./person-myfriendactivity.html">我的交友活动</a></li>
       <li><a href="./person-myquestion.html">我的提问</a></li>
       <li  class="active"><a href="./person-myshare.html">我的分享</a></li>
      </ul>
@@ -114,13 +114,21 @@
         })
     })
 </script> --> 
-   </div> 
-   <div class="right-content"> 
-    <div class="questions"> 
-     <h4><span>我的提问</span></h4> 
-     <ul class="question-list"> 
-      <li> <span class="fl good"><span class="num">12</span> 有用</span> <span class="title"><a href="#">有关PHP初级进阶的问题</a></span> <span class="fr date">4月6日</span> <span class="clearfix"></span> </li> 
-      <li> <span class="fl good"><span class="num">12</span> 有用</span> <span class="title"><a href="#">有关JAVA初级进阶的问题</a></span> <span class="fr date">4月6日</span> <span class="clearfix"></span> </li> 
+   </div>
+   <div class="right-content" id="myarticle">
+    <div class="questions">
+     <h4><span>我的知识分享</span></h4>
+     <ul class="question-list">
+      <li v-for="article in articles">
+       <span class="title">
+        <a :href="article.url" v-text="article.title" style="color: #5d9c0a;font-size: large"></a>
+        &nbsp; &nbsp; &nbsp;
+        <span  v-text="article.createtime"></span>
+       </span>
+
+       <span class="fr date"><button @click="deletebyid(article.id)">删除</button></span>
+       <span class="clearfix"></span>
+      </li>
      </ul>
     </div> 
    </div> 
@@ -128,7 +136,53 @@
   </div>
 
   <script type="text/javascript">
-
+      new Vue({
+          el:"#myarticle",
+          data:{
+              articles:[],
+              result:{}
+          },
+          methods:{
+              findarticleById:function () {
+                  var url = school_user_server+"/article/all/userid";
+                  var _this = this;
+                  var token=window.localStorage.getItem("token_school");  //获取token
+                  axios.get(url,{
+                      headers:{
+                          //请求时添加token，验证是否登录
+                          'Authorization':"Bearer "+token
+                      }
+                  }).then(function (response) {
+                      _this.result = response.data;
+                      _this.articles = _this.result.data;
+                  }).catch(function (err) {
+                      // console.log("网络错误");
+                  });
+              },
+              deletebyid:function (id) {
+                  var url = school_user_server+"/article/"+id;
+                  var _this = this;
+                  var token=window.localStorage.getItem("token_school");  //获取token
+                  axios.delete(url,{
+                      headers:{
+                          //请求时添加token，验证是否登录
+                          'Authorization':"Bearer "+token
+                      }
+                  }).then(function (response) {
+                      _this.result =response.data;
+                      alert( _this.result.message);
+                      if ( _this.result.code=="20000"){
+                          _this.findarticleById();
+                      }
+                  }).catch(function (err) {
+                      // console.log("网络错误");
+                  });
+              }
+          },  //methods
+          created(){
+              this.findarticleById();
+          }
+      });
   </script>
   <!--判断是否登录代码判断登录通用代码，没登录会跳到登录页-->
   <script type="text/javascript" src="./js/loginFlag.js" >
