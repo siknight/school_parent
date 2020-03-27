@@ -40,6 +40,16 @@ public class User implements Serializable{
 	private String myprofessional; //所在学院
 	private String nowcity; //所在城市
 
+	private  String qqurl;
+
+	public String getQqurl() {
+		return qqurl;
+	}
+
+	public void setQqurl(String qqurl) {
+		this.qqurl = qqurl;
+	}
+
 	public String getMyqq() {
 		return myqq;
 	}

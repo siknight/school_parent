@@ -223,6 +223,8 @@ public class UserController {
 		//判断类型
 		if ("qq".equals(updateType)){
 			userDB.setMyqq(user.getMyqq());
+			String qqurl="tencent://message/?uin="+user.getMyqq()+"&Menu=yes&Service=300&sigT=42a1e5347953b64c5ff3980f8a6e644d4b31456cb0b6ac6b27663a3c4dd0f4aa14a543b1716f9d45";
+			userDB.setQqurl(qqurl);
 		}else if("school".equals(updateType)){ //修改学校
 			userDB.setMyschool(user.getMyschool());
 		}else if("professional".equals(updateType)){  //修改学院

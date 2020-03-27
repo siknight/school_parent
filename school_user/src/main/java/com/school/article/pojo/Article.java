@@ -37,9 +37,18 @@ public class Article implements Serializable{
 	private String url;//URL
 	private String type;//类型
 
+	private  String time;
 
 
-    public String getId() {
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
+	}
+
+	public String getId() {
 		return id;
 	}
 	public void setId(String id) {

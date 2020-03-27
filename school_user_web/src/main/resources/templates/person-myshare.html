@@ -98,7 +98,7 @@
      <ul class="home-list">
       <li><a href="./person-myfriendactivity.html">我的交友活动</a></li>
       <li><a href="./person-myquestion.html">我的提问</a></li>
-      <li  class="active"><a href="./person-myshare.html">我的分享</a></li>
+      <li  class="active"><a href="./person-myshare.html">我的文章</a></li>
      </ul>
      <ul class="home-list bottom">
       <li><a href="./person-myfocus.html">我的关注</a></li>
@@ -123,7 +123,7 @@
        <span class="title">
         <a :href="article.url" v-text="article.title" style="color: #5d9c0a;font-size: large"></a>
         &nbsp; &nbsp; &nbsp;
-        <span  v-text="article.createtime"></span>
+        <span  v-text="article.time"></span>
        </span>
 
        <span class="fr date"><button @click="deletebyid(article.id)">删除</button></span>

@@ -149,6 +149,7 @@ public class ArticleService {
 		article.setComment(0);//评论数
 		article.setUrl("boke-detail.html?articleId="+article.getId());
 		article.setCreatetime(new Date());
+		article.setTime(DateFormatUtil.DateToString(new Date()));
 		article.setUpdatetime(new Date());
 		System.out.println("正在保存文章");
 		articleDao.save(article);
