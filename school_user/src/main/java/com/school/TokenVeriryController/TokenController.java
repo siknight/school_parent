@@ -35,11 +35,11 @@ public class TokenController {
         String authHeader = request.getHeader("Authorization");  //如果没有token，他就没有claims
         System.out.println("authheader:"+authHeader);
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            System.out.println("admin 验证");
+            System.out.println("user 验证");
             final String token = authHeader.substring(7);
             Claims claims = jwtUtil.parseJWT(token);
             if("user".equals(claims.get("roles"))){//如果是用户
-                System.out.println("jwtfilter admin 验证");
+                System.out.println("jwtfilter user 验证");
                 return new Result(true,StatusCode.OK,"验证成功");
             }
         }
@@ -64,7 +64,7 @@ public class TokenController {
             final String token = authHeader.substring(7);
             Claims claims = jwtUtil.parseJWT(token);
             if("admin".equals(claims.get("roles"))){//如果是用户
-                System.out.println("jwtfilter user 验证");
+                System.out.println("jwtfilter admin 验证");
                 Admin admin = adminService.findById(claims.getId());
                 admin.setPassword(null);
                 return new Result(true,StatusCode.OK,"验证成功" ,admin);

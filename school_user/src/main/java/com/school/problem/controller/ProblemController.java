@@ -66,22 +66,26 @@ public class ProblemController {
 
 	/**
 	 * 吐槽点赞
-	 * @param id
+	 * @param proid
 	 * @return
 	 */
-	@RequestMapping(value = "/thumbup/{id}", method = RequestMethod.PUT)
-	public Result updateThumbup(@PathVariable String id){
+	@RequestMapping(value = "/thumbup", method = RequestMethod.POST)
+	public Result updateThumbup( String proid){
+		System.out.println("updateThumbup...");
 		//判断是否有权限访问
 		Claims claims=(Claims) request.getAttribute("user_claims");
+		System.out.println("claims="+claims);
 		if(claims==null){
 			return new Result(true,StatusCode.ACCESSERROR,"无权访问");
 		}
+		System.out.println("updateThumbup2...");
 		String userid = claims.getId();
-		if(redisTemplate.opsForValue().get("thumbup_pro"+userid+"_"+ id)!=null){
+		if(redisTemplate.opsForValue().get("thumbup_pro"+userid+"_"+ proid)!=null){
 			return new Result(false,StatusCode.REPERROR,"你已经点过赞了");
 		}
-		problemService.addThump(id);
-		redisTemplate.opsForValue().set( "thumbup_pro"+userid+"_"+ id,"1");
+		System.out.println("updateThumbup3...");
+		problemService.addThump(proid);
+		redisTemplate.opsForValue().set( "thumbup_pro"+userid+"_"+ proid,"1");
 		return  new Result(true,StatusCode.OK,"点赞成功");
 	}
 	

@@ -25,6 +25,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
 import util.DateFormatUtil;
 import util.IdWorker;
 
@@ -148,8 +149,9 @@ public class ProblemService {
 	 * 增加点赞
 	 * @param problemid
 	 */
+	@Transactional
 	public void addThump(String problemid) {
-
+		System.out.println("addThump service");
 		problemDao.updateThumbup(problemid);
 	}
 

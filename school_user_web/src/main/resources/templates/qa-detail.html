@@ -103,8 +103,12 @@
        <div class="detail-tool"> 
         <ul> 
          <li>
-          <span class="star"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
-          <span v-text="problemuser.problem.thumbup" @click="changeThumbup(problemuser.problem.id)"></span></span></li>
+          <span  @click="changeThumbup(problemuser.problem.id)">
+            <span class="star"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+          <span v-text="problemuser.problem.thumbup" ></span></span>
+          </span>
+
+         </li>
         </ul> 
        </div> 
       </div> 
@@ -161,7 +165,8 @@
               problemuser:{},
               proreplyusers:[],
               changeQaFlag:false,
-              reply:{}
+              reply:{},
+              result:{}
           },
           methods:{
               loadQa:function () {
@@ -237,21 +242,34 @@
                       });
                   }
               },
-              changeThumbup:function (id) {
-                  var params = new URLSearchParams()
-                  params.append('mobile', this.user.mobile)
-                  axios.post(url,params,{
-                      headers:{
-                          //请求时添加token，验证是否登录
-                          'Authorization':"Bearer "+token
-                      }
-                  }).then(function (response) {
-                      _this.result = response.data;
-                      // alert( _this.result.message);
-                      _this.loadQa();
-                  }).catch(function (err) {
-                      alert("网络错误");
-                  });
+              changeThumbup:function (id) {  //点赞
+                  var token=window.localStorage.getItem("token_school");  //获取token
+                  console.info("token="+token)
+                  if (token==null||token==""){
+                      window.location.href=user_web_url+"/tologin_register.html";
+                  }else {
+                      var url = school_user_server+"/problem/thumbup";
+                      var params = new URLSearchParams()
+                      params.append('proid', id)
+                      var _this = this;
+                      axios.post(url,params,{
+                          headers:{
+                              //请求时添加token，验证是否登录
+                              'Authorization':"Bearer "+token
+                          }
+                      }).then(function (response) {
+                          _this.result = response.data;
+                           if ( _this.result.code =="20005"){
+                               alert( _this.result.message )
+                           }else if ( _this.result.code =="20000"){
+                               _this.loadQa();
+                           }
+
+                      }).catch(function (err) {
+                          // _this.loadQa();
+                      });
+                  }
+
               }
           },  //methods
           created(){
