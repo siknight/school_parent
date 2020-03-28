@@ -29,7 +29,7 @@ public interface ArticleDao extends JpaRepository<Article,String>,JpaSpecificati
      * @return
      */
     @Modifying
-    @Query("update Article a set thumbup=thumbup+1 where id=?1")
+    @Query("update Article  set thumbup=thumbup+1 where id=?1")
     public int updateThumbup(String id);
 
     /**

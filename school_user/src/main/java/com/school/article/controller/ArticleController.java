@@ -9,6 +9,7 @@ import entity.StatusCode;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import util.JwtUtil;
 
@@ -30,6 +31,9 @@ public class ArticleController {
 	//用于验证token
 	@Autowired
 	private HttpServletRequest request;
+
+	@Autowired
+	private RedisTemplate redisTemplate;
 
 
 
@@ -116,7 +120,30 @@ public class ArticleController {
 		articleService.add(article);
 		return new Result(true,StatusCode.OK,"增加成功");
 	}
-	
+
+
+	/**
+	 * 吐槽点赞
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "/thumbup/{id}", method = RequestMethod.PUT)
+	public Result updateThumbup(@PathVariable String id){
+		//判断是否有权限访问
+		Claims claims=(Claims) request.getAttribute("user_claims");
+		if(claims==null){
+			return new Result(true,StatusCode.ACCESSERROR,"无权访问");
+		}
+		String userid = claims.getId();
+		if(redisTemplate.opsForValue().get("thumbup_article"+userid+"_"+ id)!=null){
+			return new Result(false,StatusCode.REPERROR,"你已经点过赞了");
+		}
+		articleService.addThumbup(id);
+		redisTemplate.opsForValue().set( "thumbup_article"+userid+"_"+ id,"1");
+		return  new Result(true,StatusCode.OK,"点赞成功");
+	}
+
+
 	/**
 	 * 修改
 	 * @param article
@@ -148,15 +175,6 @@ public class ArticleController {
 		articleService.examine(id);
 		return new Result(true, StatusCode.OK, "审核成功！");
 	}
-	/**
-	 * 文章点赞
-	 * @param id
-	 * @return
-	 */
-	@RequestMapping(value="/thumbup/{id}",method=RequestMethod.PUT)
-	public Result updateThumbup(@PathVariable String id){
-		articleService.updateThumbup(id);
-		return new Result(true, StatusCode.OK,"点赞成功");
-	}
+
 	
 }

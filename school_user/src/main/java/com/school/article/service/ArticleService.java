@@ -156,6 +156,13 @@ public class ArticleService {
 	}
 
 	/**
+	 * 添加点赞
+	 * @param articleid
+	 */
+	public void addThumbup(String articleid) {
+		articleDao.updateThumbup(articleid);
+	}
+	/**
 	 * 修改
 	 * @param article
 	 */

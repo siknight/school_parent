@@ -4,6 +4,8 @@ import com.school.article.pojo.Article;
 import com.school.problem.pojo.Problem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -20,5 +22,15 @@ public interface ProblemDao extends JpaRepository<Problem,String>,JpaSpecificati
      * @return
      */
     public List<Problem> findByUserid(String userid);
+
+
+    /**
+     * 问题点赞
+     * @param id
+     * @return
+     */
+    @Modifying
+    @Query("update Problem  set thumbup=thumbup+1 where id=?1")
+    public int updateThumbup(String id);
 
 }

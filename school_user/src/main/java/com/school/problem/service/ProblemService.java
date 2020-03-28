@@ -22,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import util.DateFormatUtil;
@@ -45,6 +46,8 @@ public class ProblemService {
 
 	@Autowired
 	private UserDao userDao;
+
+
 
 	/**
 	 * 查询全部列表通过用户id
@@ -141,6 +144,14 @@ public class ProblemService {
 		problemDao.save(problem);
 	}
 
+	/**
+	 * 增加点赞
+	 * @param problemid
+	 */
+	public void addThump(String problemid) {
+
+		problemDao.updateThumbup(problemid);
+	}
 
 	/**
 	 * 修改

@@ -102,9 +102,9 @@
        </div> 
        <div class="detail-tool"> 
         <ul> 
-         <li><span class="star"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i> <span v-text="problemuser.problem.thumbup"></span></span></li>
-         <!--<li><a href="#" data-toggle="modal" data-target="#shareModal"><i class="fa fa-share-alt" aria-hidden="true"></i> 44</a></li> -->
-         <!--<li><a data-toggle="modal" data-target="#remarkModal"><i class="fa fa-commenting" aria-hidden="true"></i> 666</a></li> -->
+         <li>
+          <span class="star"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+          <span v-text="problemuser.problem.thumbup" @click="changeThumbup(problemuser.problem.id)"></span></span></li>
         </ul> 
        </div> 
       </div> 
@@ -119,14 +119,15 @@
           <img :src="proreplyuser.user.avatar" alt="" style="height: 20px;"/>
          </div> 
          <div class="item-content"> 
-          <p class="author"><a href="javascript:;" v-text="proreplyuser.user.nickname">l</a> 发布</p>
-          <p class="content" v-text="proreplyuser.problemReply.content">运气+实力吧？不能谦虚哦，沙发！</p>
+          <p class="author"><a href="javascript:;" v-text="proreplyuser.user.nickname"></a> 发布</p>
+          <p class="content" v-text="proreplyuser.problemReply.content"></p>
          </div> 
          <div class="item-thumb"> 
           <!--<div>-->
            <!--<i class="fa fa-thumbs-o-up" aria-hidden="true"></i> 52-->
-          <!--</div> -->
-         </div> </li> 
+          <!--</div>-->
+         </div>
+        </li>
 
        </ul> 
       </div> 
@@ -235,6 +236,22 @@
                           alert("网络错误");
                       });
                   }
+              },
+              changeThumbup:function (id) {
+                  var params = new URLSearchParams()
+                  params.append('mobile', this.user.mobile)
+                  axios.post(url,params,{
+                      headers:{
+                          //请求时添加token，验证是否登录
+                          'Authorization':"Bearer "+token
+                      }
+                  }).then(function (response) {
+                      _this.result = response.data;
+                      // alert( _this.result.message);
+                      _this.loadQa();
+                  }).catch(function (err) {
+                      alert("网络错误");
+                  });
               }
           },  //methods
           created(){

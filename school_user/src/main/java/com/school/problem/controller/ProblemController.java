@@ -8,6 +8,7 @@ import com.school.problem.service.ProblemService;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,6 +40,9 @@ public class ProblemController {
 	@Autowired
 	private HttpServletRequest request;
 
+	@Autowired
+	private RedisTemplate redisTemplate;
+
 	@RequestMapping(value = "/all/userid",method= RequestMethod.GET)
 	public Result findFriendActivityByUserid(){
 		//判断是否有权限访问
@@ -58,6 +62,27 @@ public class ProblemController {
 	public Result findAllProblemAndUser() {
 
 		return new Result(true,StatusCode.OK,"查询成功",problemService.findAllProblemAndUser());
+	}
+
+	/**
+	 * 吐槽点赞
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "/thumbup/{id}", method = RequestMethod.PUT)
+	public Result updateThumbup(@PathVariable String id){
+		//判断是否有权限访问
+		Claims claims=(Claims) request.getAttribute("user_claims");
+		if(claims==null){
+			return new Result(true,StatusCode.ACCESSERROR,"无权访问");
+		}
+		String userid = claims.getId();
+		if(redisTemplate.opsForValue().get("thumbup_pro"+userid+"_"+ id)!=null){
+			return new Result(false,StatusCode.REPERROR,"你已经点过赞了");
+		}
+		problemService.addThump(id);
+		redisTemplate.opsForValue().set( "thumbup_pro"+userid+"_"+ id,"1");
+		return  new Result(true,StatusCode.OK,"点赞成功");
 	}
 	
 	
