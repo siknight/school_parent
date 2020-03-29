@@ -103,8 +103,16 @@
        <div class="detail-tool"> 
         <ul> 
          <li>
+           <span  @click="addFav(problemuser.problem.id)">
+                 <span class="star">
+                    <i  aria-hidden="true">收藏</i>
+                 <span  v-text="favCount"></span></span>
+               </span>
+          &nbsp; &nbsp;
           <span  @click="changeThumbup(problemuser.problem.id)">
-            <span class="star"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+            <span class="star">
+             点赞
+             <!--<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>-->
           <span v-text="problemuser.problem.thumbup" ></span></span>
           </span>
 
@@ -166,7 +174,10 @@
               proreplyusers:[],
               changeQaFlag:false,
               reply:{},
-              result:{}
+              result:{},
+              favresult:{},
+              favCount:""
+
           },
           methods:{
               loadQa:function () {
@@ -270,11 +281,58 @@
                       });
                   }
 
+              },
+              addFav:function (id) {
+                  var token=window.localStorage.getItem("token_school");  //获取token
+                  console.info("token="+token)
+                  if (token==null||token==""){
+                      window.location.href=user_web_url+"/tologin_register.html";
+                  }else {
+                      var url = school_user_server+"/favProblem/fav";
+                      var params = new URLSearchParams()
+                      params.append('favid', id)
+                      var _this = this;
+                      axios.post(url,params,{
+                          headers:{
+                              //请求时添加token，验证是否登录
+                              'Authorization':"Bearer "+token
+                          }
+                      }).then(function (response) {
+                          _this.result = response.data;
+                          if ( _this.result.code =="20005"){
+                              alert( _this.result.message )
+                          }else if ( _this.result.code =="20000"){
+                              _this.loadFav();
+                          }
+
+                      }).catch(function (err) {
+                      });
+                  }
+              },
+              loadFav:function () {   //加载收藏
+                  var url = window.location.href ;
+                  var cs = url.split('?')[1];    //获取?之后的参数字符串
+                  var params = cs.split('=');
+                  var value = params[1];  //文章id
+                  //-------
+                  var url = school_user_server+"/favProblem/favcount/"+value;
+
+                  var _this = this;
+                  //json请求用默认方式
+                  axios.get(url).then(function (response) {
+                      _this.favresult = response.data;
+                      console.info(_this.favresult.message);
+                      _this.favCount = _this.favresult.data;
+                  }).catch(function (err) {
+                      console.log("网络错误");
+                  });
               }
           },  //methods
           created(){
               this.loadQa();
+              this.loadFav();
               this.loadReply();
+
           }
       });
   </script>

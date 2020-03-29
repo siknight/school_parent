@@ -49,7 +49,25 @@ public class FavArticleController {
 	public Result findAll(){
 		return new Result(true,StatusCode.OK,"查询成功",favService.findAll());
 	}
-	
+
+
+	/**
+	 * 查询全部收藏数据
+	 * @return
+	 */
+	@RequestMapping(value = "/findfav",method= RequestMethod.GET)
+	public Result findAllfavArticlesByUserid(){
+		//判断是否有权限访问
+		Claims claims=(Claims) request.getAttribute("user_claims");
+		System.out.println("claims11="+claims);
+		if(claims==null){
+			return new Result(true,StatusCode.ACCESSERROR,"无权访问");
+		}
+		System.out.println("fav article="+favService.findAllfavArticlesByUserid(claims.getId()));
+		return new Result(true,StatusCode.OK,"查询成功",
+				favService.findAllfavArticlesByUserid(claims.getId()));
+	}
+
 	/**
 	 * 根据ID查询
 	 * @param id ID
@@ -85,7 +103,7 @@ public class FavArticleController {
     }
 	
 	/**
-	 * 增加
+	 * 收藏
 	 * @param
 	 */
 	@RequestMapping(value = "/fav",method=RequestMethod.POST)

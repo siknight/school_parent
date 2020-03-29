@@ -1,7 +1,9 @@
 package com.school.article.service;
 
 
+import com.school.article.dao.ArticleDao;
 import com.school.article.dao.FavArticleDao;
+import com.school.article.pojo.Article;
 import com.school.article.pojo.FavArticle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +19,7 @@ import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * 服务层
@@ -32,6 +35,8 @@ public class FavArticleService {
 	
 	@Autowired
 	private IdWorker idWorker;
+	@Autowired
+	private ArticleDao articleDao;
 
 
 	public int findByUseridAndArticleid(String userid,String articleid){
@@ -40,6 +45,22 @@ public class FavArticleService {
 
 	public int countByArticleid(String articleid){
 		return  favDao.countByArticleid(articleid);
+	}
+
+	/**
+	 * 查找收藏的文章
+	 * @param userid
+	 * @return
+	 */
+	public List<Article> findAllfavArticlesByUserid(String userid){
+		List<FavArticle> favArticles = favDao.findByUserid(userid);
+		List<Article> articles = new ArrayList<>();
+		for (FavArticle favArticle:favArticles){
+			String articleid = favArticle.getArticleid();
+			Article article = articleDao.findById(articleid).get();
+			articles.add(article);
+		}
+		return  articles;
 	}
 
 	/**

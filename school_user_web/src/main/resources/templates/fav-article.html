@@ -97,11 +97,11 @@
     <div class="myhome-list">
      <ul class="home-list">
       <li><a href="./person-myfriendactivity.html">我的交友活动</a></li>
-      <li class="active"><a href="./person-myquestion.html">我的提问</a></li>
+      <li><a href="./person-myquestion.html">我的提问</a></li>
       <li  ><a href="./person-myshare.html">我的文章</a></li>
      </ul>
      <ul class="home-list bottom">
-      <li><a href="./fav-article.html">收藏的文章</a></li>
+      <li class="active"><a href="./fav-article.html">收藏的文章</a></li>
       <li><a href="./fav-question.html">收藏的问答</a></li>
       <li><a href="./person-myfocus.html">我的关注</a></li>
       <li ><a href="person-myfile.html">个人信息</a></li>
@@ -116,36 +116,36 @@
     })
 </script> --> 
    </div>
-   <div class="right-content" id="myquestion">
+   <div class="right-content" id="myarticle">
     <div class="questions">
-     <h4><span>我的问题</span></h4>
+     <h4><span>收藏的文章</span></h4>
      <ul class="question-list">
-      <li v-for="problem in problems">
+      <li v-for="article in articles">
        <span class="title">
-        <a :href="problem.url" v-text="problem.title" style="color: #5d9c0a;font-size: large"></a>
+        <a :href="article.url" v-text="article.title" style="color: #5d9c0a;font-size: large"></a>
         &nbsp; &nbsp; &nbsp;
-        <span  v-text="problem.createtime"></span>
+        <span  v-text="article.time"></span>
        </span>
 
-       <span class="fr date"><button @click="deletebyid(problem.id)">删除</button></span>
+       <span class="fr date"><button @click="deletebyid(article.id)">删除</button></span>
        <span class="clearfix"></span>
       </li>
      </ul>
-    </div>
-   </div>
+    </div> 
+   </div> 
    <div class="clearfix"></div> 
   </div>
 
   <script type="text/javascript">
       new Vue({
-          el:"#myquestion",
+          el:"#myarticle",
           data:{
-              problems:[],
+              articles:[],
               result:{}
           },
           methods:{
-              findquestionById:function () {
-                  var url = school_user_server+"/problem/all/userid";
+              findarticleById:function () {
+                  var url = school_user_server+"/favArticle/findfav";
                   var _this = this;
                   var token=window.localStorage.getItem("token_school");  //获取token
                   axios.get(url,{
@@ -155,13 +155,13 @@
                       }
                   }).then(function (response) {
                       _this.result = response.data;
-                      _this.problems = _this.result.data;
+                      _this.articles = _this.result.data;
                   }).catch(function (err) {
                       // console.log("网络错误");
                   });
               },
               deletebyid:function (id) {
-                  var url = school_user_server+"/problem/"+id;
+                  var url = school_user_server+"/article/"+id;
                   var _this = this;
                   var token=window.localStorage.getItem("token_school");  //获取token
                   axios.delete(url,{
@@ -173,7 +173,7 @@
                       _this.result =response.data;
                       alert( _this.result.message);
                       if ( _this.result.code=="20000"){
-                          _this.findquestionById();
+                          _this.findarticleById();
                       }
                   }).catch(function (err) {
                       // console.log("网络错误");
@@ -181,7 +181,7 @@
               }
           },  //methods
           created(){
-              this.findquestionById();
+              this.findarticleById();
           }
       });
   </script>

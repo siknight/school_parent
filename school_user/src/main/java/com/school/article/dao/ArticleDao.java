@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 数据访问接口
@@ -38,6 +39,10 @@ public interface ArticleDao extends JpaRepository<Article,String>,JpaSpecificati
      * @return
      */
     public List<Article> findByUserid(String userid);
+
+    public Optional<Article> findById(String articleid);
+
+
 
 
 }
