@@ -111,6 +111,27 @@
         <div class="content" v-html="articleAndUser.article.content">
 
          </div>
+        <div class="detail-tool" style="float: right">
+            <ul>
+                <li style="list-style: none">
+                      <span  @click="addFav(articleAndUser.article.id)">
+                        <span class="star">
+                            <i  aria-hidden="true">收藏</i>
+                      <span  v-text="favCount"></span></span>
+                      </span>
+                    &nbsp; &nbsp;
+                    <span  @click="changeThumbup(articleAndUser.article.id)">
+                        <span class="star">
+                            <!--<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>-->
+                            <i  aria-hidden="true">点赞</i>
+                        <span  v-text="articleAndUser.article.thumbup"></span></span>
+                      </span>
+                </li>
+                <li style="list-style: none">
+
+                </li>
+            </ul>
+        </div>
     </div>
     <!-- remark area -->
     <div class="answer-intro">
@@ -166,24 +187,12 @@
                     <li class="list-item">
                         <p class="list-title">如果你还是象棋新手，学会这些套路，你就可以去破残局赚钱了！</p>
                     </li>
-                    <li class="list-item">
-                        <p class="list-title">如果你还是象棋新手，学会这些套路，你就可以去破残局赚钱了！</p>
-                    </li>
+
 
                 </ul>
             </div>
 
-            <div class="similar-problem">
-                <h3 class="title">热门吐槽</h3>
-                <ul class="problem-list">
-                    <li class="list-item">
-                        <p class="list-title">如果你还是象棋新手，学会这些套路，你就可以去破残局赚钱了！</p>
-                    </li>
-                    <li class="list-item">
-                        <p class="list-title">如果你还是象棋新手，学会这些套路，你就可以去破残局赚钱了！</p>
-                    </li>
-                </ul>
-            </div>
+
         </div>
         <div class="clearfix"></div>
     </div>
@@ -194,7 +203,10 @@
                 articleAndUser:{},
                 articleReplyUsers:[],
                 articleReply:{},
-                replynow:""
+                replynow:"",
+                result:{},
+                favresult:{},
+                favCount:""
             },
             methods:{
                 loadArticle:function () {
@@ -267,11 +279,85 @@
                             alert("网络错误");
                         });
                     }
+                },
+                changeThumbup:function (id) {  //点赞
+                    var token=window.localStorage.getItem("token_school");  //获取token
+                    console.info("token="+token)
+                    if (token==null||token==""){
+                        window.location.href=user_web_url+"/tologin_register.html";
+                    }else {
+                        var url = school_user_server+"/article/thumbup";
+                        var params = new URLSearchParams()
+                        params.append('id', id)
+                        var _this = this;
+                        axios.post(url,params,{
+                            headers:{
+                                //请求时添加token，验证是否登录
+                                'Authorization':"Bearer "+token
+                            }
+                        }).then(function (response) {
+                            _this.result = response.data;
+                            if ( _this.result.code =="20005"){
+                                alert( _this.result.message )
+                            }else if ( _this.result.code =="20000"){
+                                _this.loadArticle();
+                            }
+
+                        }).catch(function (err) {
+                        });
+                    }
+
+                },
+                loadFav:function () {   //加载收藏
+                    var url = window.location.href ;
+                    var cs = url.split('?')[1];    //获取?之后的参数字符串
+                    var params = cs.split('=');
+                    var value = params[1];  //文章id
+                    //-------
+                    var url = school_user_server+"/favArticle/favcount/"+value;
+
+                    var _this = this;
+                    //json请求用默认方式
+                    axios.get(url).then(function (response) {
+                        _this.favresult = response.data;
+                        console.info(_this.favresult.message);
+                        _this.favCount = _this.favresult.data;
+                    }).catch(function (err) {
+                        console.log("网络错误");
+                    });
+                },
+                addFav:function (id) {
+                    var token=window.localStorage.getItem("token_school");  //获取token
+                    console.info("token="+token)
+                    if (token==null||token==""){
+                        window.location.href=user_web_url+"/tologin_register.html";
+                    }else {
+                        var url = school_user_server+"/favArticle/fav";
+                        var params = new URLSearchParams()
+                        params.append('favid', id)
+                        var _this = this;
+                        axios.post(url,params,{
+                            headers:{
+                                //请求时添加token，验证是否登录
+                                'Authorization':"Bearer "+token
+                            }
+                        }).then(function (response) {
+                            _this.result = response.data;
+                            if ( _this.result.code =="20005"){
+                                alert( _this.result.message )
+                            }else if ( _this.result.code =="20000"){
+                                _this.loadFav();
+                            }
+
+                        }).catch(function (err) {
+                        });
+                    }
                 }
             },  //methods
             created(){
                 this.loadArticle();
                 this.loadReply();
+                this.loadFav();
             }
         });
     </script>

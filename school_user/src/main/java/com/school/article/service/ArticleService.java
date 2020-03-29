@@ -159,7 +159,9 @@ public class ArticleService {
 	 * 添加点赞
 	 * @param articleid
 	 */
+	@Transactional
 	public void addThumbup(String articleid) {
+		System.out.println("addThump article service");
 		articleDao.updateThumbup(articleid);
 	}
 	/**

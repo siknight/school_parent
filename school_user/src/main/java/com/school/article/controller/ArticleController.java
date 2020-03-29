@@ -127,19 +127,24 @@ public class ArticleController {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value = "/thumbup/{id}", method = RequestMethod.PUT)
-	public Result updateThumbup(@PathVariable String id){
+	@RequestMapping(value = "/thumbup", method = RequestMethod.POST)
+	public Result updateThumbup( String id){
+		System.out.println("updateThumbup...1");
 		//判断是否有权限访问
 		Claims claims=(Claims) request.getAttribute("user_claims");
+
+		System.out.println("claims11="+claims);
 		if(claims==null){
 			return new Result(true,StatusCode.ACCESSERROR,"无权访问");
 		}
 		String userid = claims.getId();
+		System.out.println("updateThumbup...2");
 		if(redisTemplate.opsForValue().get("thumbup_article"+userid+"_"+ id)!=null){
 			return new Result(false,StatusCode.REPERROR,"你已经点过赞了");
 		}
 		articleService.addThumbup(id);
 		redisTemplate.opsForValue().set( "thumbup_article"+userid+"_"+ id,"1");
+		System.out.println("updateThumbup...3");
 		return  new Result(true,StatusCode.OK,"点赞成功");
 	}
 
