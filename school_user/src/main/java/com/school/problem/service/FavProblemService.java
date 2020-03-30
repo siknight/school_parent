@@ -18,6 +18,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +43,14 @@ public class FavProblemService {
 
 
 	/**
+	 * 取消收藏
+	 */
+	@Transactional
+	public void deleteByProidAndUserid(String proid ,String userid){
+		favDao.deleteByProblemidAndUserid(proid,userid);
+	}
+
+	/**
 	 * 查找收藏的问题
 	 * @param userid
 	 * @return
@@ -57,9 +66,11 @@ public class FavProblemService {
 			System.out.println("problemid="+problemid);
 			//通过该文章id查找
 //			Problem article = prob.findById(articleid).get();
-			Problem problem = problemDao.findById(problemid).get();
-			System.out.println("problem="+problem);
-			problems.add(problem);
+			Problem problem = problemDao.findByIdAndUserid(problemid,userid);
+			if (problem!=null){
+				problems.add(problem);
+			}
+
 		}
 		return  problems;
 	}

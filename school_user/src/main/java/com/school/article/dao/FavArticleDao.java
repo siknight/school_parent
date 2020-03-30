@@ -19,6 +19,6 @@ public interface FavArticleDao extends JpaRepository<FavArticle,String>,JpaSpeci
 
     public List<FavArticle> findByUserid(String userid);
 
+    public  void deleteByArticleidAndUserid(String articleid,String userid);
 
-    public void deleteAllByArticleid(String articleid);
 }

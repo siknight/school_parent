@@ -118,7 +118,7 @@
    </div>
    <div class="right-content" id="myquestion">
     <div class="questions">
-     <h4><span>我的问题</span></h4>
+     <h4><span>收藏的问题</span></h4>
      <ul class="question-list">
       <li v-for="problem in problems">
        <span class="title">
@@ -127,7 +127,7 @@
         <span  v-text="problem.createtime"></span>
        </span>
 
-       <span class="fr date"><button @click="deletebyid(problem.id)">删除</button></span>
+       <span class="fr date"><button @click="deletebyproblemid(problem.id)">取消收藏</button></span>
        <span class="clearfix"></span>
       </li>
      </ul>
@@ -160,10 +160,12 @@
                       // console.log("网络错误");
                   });
               },
-              deletebyid:function (id) {
-                  var url = school_user_server+"/favProblem/"+id;
+              deletebyproblemid:function (id) {
+                  var url = school_user_server+"/favProblem/cancelall/"+id;
                   var _this = this;
                   var token=window.localStorage.getItem("token_school");  //获取token
+                  // var params = new URLSearchParams()
+                  // params.append('proid', id)
                   axios.delete(url,{
                       headers:{
                           //请求时添加token，验证是否登录
@@ -175,6 +177,8 @@
                       if ( _this.result.code=="20000"){
                           _this.findquestionById();
                       }
+
+
                   }).catch(function (err) {
                       // console.log("网络错误");
                   });

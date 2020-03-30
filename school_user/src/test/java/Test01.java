@@ -43,8 +43,9 @@ public class Test01 {
 
     @Test
     public void test08(){
-        List<Article> allfavArticlesByUserid = favArticleService.findAllfavArticlesByUserid("1234380501851181056");
-        System.out.println(allfavArticlesByUserid);
+//        List<Article> allfavArticlesByUserid = favArticleService.findAllfavArticlesByUserid("1234380501851181056");
+//        System.out.println(allfavArticlesByUserid);
+        favArticleService.deleteByarticleidAndUserid("1244540245345701888","1234380501851181056");
     }
     @Test
     public void test07(){

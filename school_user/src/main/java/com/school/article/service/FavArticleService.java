@@ -16,6 +16,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +39,19 @@ public class FavArticleService {
 	@Autowired
 	private ArticleDao articleDao;
 
-
+	/**
+	 * 取消收藏
+	 */
+	@Transactional
+	public void deleteByarticleidAndUserid(String articleid ,String userid){
+		favDao.deleteByArticleidAndUserid(articleid,userid);
+	}
+	/**
+	 * 查找收藏
+	 * @param userid
+	 * @param articleid
+	 * @return
+	 */
 	public int findByUseridAndArticleid(String userid,String articleid){
 		return  favDao.countByUseridAndArticleid(userid,articleid);
 	}
@@ -60,11 +73,13 @@ public class FavArticleService {
 		for (FavArticle favArticle:favArticles){
 			//获取改用户收藏的文章id
 			String articleid = favArticle.getArticleid();
-			System.out.println("articleid="+articleid);
+
 			//通过该文章id查找
-			Article article = articleDao.findById(articleid).get();
-			System.out.println("article="+article);
-			articles.add(article);
+			Article article = articleDao.findByIdAndUserid(articleid,userid);
+			if (article!=null){
+				articles.add(article);
+			}
+
 		}
 		return  articles;
 	}

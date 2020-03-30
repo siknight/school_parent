@@ -42,6 +42,9 @@ public interface ArticleDao extends JpaRepository<Article,String>,JpaSpecificati
 
     public Optional<Article> findById(String articleid);
 
+    public Article findByIdAndUserid(String articleid,String userid);
+
+
 
 
 

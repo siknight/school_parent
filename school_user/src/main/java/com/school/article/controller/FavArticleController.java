@@ -32,6 +32,26 @@ public class FavArticleController {
 	@Autowired
 	private HttpServletRequest request;
 
+
+	/**
+	 * 根据文章ID查询
+	 * @param
+	 * @return
+	 */
+	@RequestMapping(value="/cancelall/{articleid}",method= RequestMethod.DELETE)
+	public Result cancelByArticleid(@PathVariable String articleid){
+		System.out.println("cancelall,arid="+articleid);
+		//判断是否有权限访问
+		Claims claims=(Claims) request.getAttribute("user_claims");
+		System.out.println("claims11="+claims);
+		if(claims==null){
+			return new Result(true,StatusCode.ACCESSERROR,"无权访问");
+		}
+		favService.deleteByarticleidAndUserid(articleid,claims.getId());
+		System.out.println("cancelall2222");
+		return new Result(true,StatusCode.OK,"取消成功");
+	}
+
 	/**
 	 * 根据文章ID查询
 	 * @param
@@ -57,6 +77,7 @@ public class FavArticleController {
 	 */
 	@RequestMapping(value = "/findfav",method= RequestMethod.GET)
 	public Result findAllfavArticlesByUserid(){
+
 		//判断是否有权限访问
 		Claims claims=(Claims) request.getAttribute("user_claims");
 		System.out.println("claims11="+claims);

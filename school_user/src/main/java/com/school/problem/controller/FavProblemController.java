@@ -32,6 +32,23 @@ public class FavProblemController {
 	@Autowired
 	private HttpServletRequest request;
 
+	/**
+	 * 根据问题ID查询
+	 * @param
+	 * @return
+	 */
+	@RequestMapping(value="/cancelall/{proid}",method= RequestMethod.DELETE)
+	public Result cancelByProid(@PathVariable String proid){
+		System.out.println("cancelall");
+		//判断是否有权限访问
+		Claims claims=(Claims) request.getAttribute("user_claims");
+		System.out.println("claims11="+claims);
+		if(claims==null){
+			return new Result(true,StatusCode.ACCESSERROR,"无权访问");
+		}
+		favService.deleteByProidAndUserid(proid,claims.getId());
+		return new Result(true,StatusCode.OK,"取消成功");
+	}
 
 
 

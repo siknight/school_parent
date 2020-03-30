@@ -33,4 +33,7 @@ public interface ProblemDao extends JpaRepository<Problem,String>,JpaSpecificati
     @Query("update Problem a set thumbup=thumbup+1 where id=?1")
     public int updateThumbup(String id);
 
+
+    public Problem findByIdAndUserid(String id,String userid);
+
 }

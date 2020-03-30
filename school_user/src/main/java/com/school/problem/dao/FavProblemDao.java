@@ -20,6 +20,7 @@ public interface FavProblemDao extends JpaRepository<FavProblem,String>,JpaSpeci
 
     public List<FavProblem> findByUserid(String userid);
 
+    public  void deleteByProblemidAndUserid(String proid,String userid);
 
 //    public void deleteAllByArticleid(String articleid);
 

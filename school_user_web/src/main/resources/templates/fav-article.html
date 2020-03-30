@@ -127,7 +127,7 @@
         <span  v-text="article.time"></span>
        </span>
 
-       <span class="fr date"><button @click="deletebyid(article.id)">取消收藏</button></span>
+       <span class="fr date"><button @click="deletebyarticleidAndUserid(article.id)">取消收藏</button></span>
        <span class="clearfix"></span>
       </li>
      </ul>
@@ -160,10 +160,12 @@
                       // console.log("网络错误");
                   });
               },
-              deletebyid:function (id) {
-                  var url = school_user_server+"/favArticle/"+id;
+              deletebyarticleidAndUserid:function (id) {  //取消收藏
+                  var url = school_user_server+"/favArticle/cancelall/"+id;
                   var _this = this;
                   var token=window.localStorage.getItem("token_school");  //获取token
+                  // var params = new URLSearchParams()
+                  // params.append('articleid', id)
                   axios.delete(url,{
                       headers:{
                           //请求时添加token，验证是否登录
