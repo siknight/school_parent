@@ -4,7 +4,9 @@ package com.school.problem.service;
 
 import com.school.article.pojo.FavArticle;
 import com.school.problem.dao.FavProblemDao;
+import com.school.problem.dao.ProblemDao;
 import com.school.problem.pojo.FavProblem;
+import com.school.problem.pojo.Problem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,6 +36,34 @@ public class FavProblemService {
 	
 	@Autowired
 	private IdWorker idWorker;
+
+	@Autowired
+	private ProblemDao problemDao;
+
+
+	/**
+	 * 查找收藏的问题
+	 * @param userid
+	 * @return
+	 */
+	public List<Problem> findAllfavProblemsByUserid(String userid){
+		//获取该用户收藏的所有记录
+		List<FavProblem> favArticles = favDao.findByUserid(userid);
+		//用于存储查询出来的文章
+		List<Problem> problems = new ArrayList<>();
+		for (FavProblem favProblem:favArticles){
+			//获取改用户收藏的文章id
+			String problemid = favProblem.getProblemid();
+			System.out.println("problemid="+problemid);
+			//通过该文章id查找
+//			Problem article = prob.findById(articleid).get();
+			Problem problem = problemDao.findById(problemid).get();
+			System.out.println("problem="+problem);
+			problems.add(problem);
+		}
+		return  problems;
+	}
+
 
 
 	public int findByUseridAndProblemid(String userid,String problemid){

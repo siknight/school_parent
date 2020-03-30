@@ -63,7 +63,7 @@ public class FavArticleController {
 		if(claims==null){
 			return new Result(true,StatusCode.ACCESSERROR,"无权访问");
 		}
-		System.out.println("fav article="+favService.findAllfavArticlesByUserid(claims.getId()));
+//		System.out.println("fav article="+favService.findAllfavArticlesByUserid(claims.getId()));
 		return new Result(true,StatusCode.OK,"查询成功",
 				favService.findAllfavArticlesByUserid(claims.getId()));
 	}

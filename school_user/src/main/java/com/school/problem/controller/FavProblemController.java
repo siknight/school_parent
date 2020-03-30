@@ -32,6 +32,27 @@ public class FavProblemController {
 	@Autowired
 	private HttpServletRequest request;
 
+
+
+
+	/**
+	 * 查询全部收藏数据
+	 * @return
+	 */
+	@RequestMapping(value = "/findfav",method= RequestMethod.GET)
+	public Result findAllfavProblemsByUserid(){
+		//判断是否有权限访问
+		Claims claims=(Claims) request.getAttribute("user_claims");
+		System.out.println("claims11="+claims);
+		if(claims==null){
+			return new Result(true,StatusCode.ACCESSERROR,"无权访问");
+		}
+//		System.out.println("fav article="+favService.findAllfavProblemsByUserid(claims.getId()));
+		return new Result(true,StatusCode.OK,"查询成功",
+				favService.findAllfavProblemsByUserid(claims.getId()));
+	}
+
+
 	/**
 	 * 根据文章ID查询
 	 * @param
