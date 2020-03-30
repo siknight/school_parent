@@ -140,7 +140,7 @@
          <div class="words"> 
           <h3>
            <!--v-text="ac.title"-->
-           <a :href="articleAndUser.article.url"  v-text="articleAndUser.article.title">
+           <a :href="articleAndUser.article.url" style="font-weight: lighter;alpha(opacity=50);"  v-text="articleAndUser.article.title">
 
            </a>
 
@@ -149,8 +149,11 @@
           <h5 class="author">
            <div class="fl">
             <span class="authorName">
-              <img :src="articleAndUser.user.avatar" alt="" />
-               <span v-text="articleAndUser.user.nickname"></span>
+             <span @click="hisfile(articleAndUser.user.id)" >
+               <img :src="articleAndUser.user.avatar" alt="" />
+               <span v-text="articleAndUser.user.nickname" style="color:black" ></span>发布
+             </span>
+
                &nbsp;&nbsp;&nbsp;
              <!--时间-->
 
@@ -168,6 +171,10 @@
           </h5>
           <!--滴滴与360都开源了各自的插件化框架，VirtualAPK与RePlugin,作为一个插件化方面的狂热研究者，在周末就迫不及待的下载了Virtualapk框架来进行研究，本篇博客带的……-->
          </div>
+         <h3>
+
+          <!--<span><img src="./img/widget-vip.png" class="vip" /></span>-->
+         </h3>
          <a :href="articleAndUser.article.url" style="color: black">
           <p class="content" v-text="removeTAG(articleAndUser.article.content)"></p>
          </a>
@@ -248,6 +255,9 @@
               },
               formatData(time){
                   return moment(time).format('YYYY-MM-DD');
+              },
+              hisfile:function (id) {
+                  window.location.href="./person-hisfile.html?hisid="+id;
               }
 
           },
