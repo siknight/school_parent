@@ -36,7 +36,10 @@ public class ArticleController {
 	private RedisTemplate redisTemplate;
 
 
-
+	/**
+	 * 查找用户发布的交友活动
+	 * @return
+	 */
 	@RequestMapping(value = "/all/userid",method= RequestMethod.GET)
 	public Result findFriendActivityByUserid(){
 		//判断是否有权限访问

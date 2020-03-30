@@ -2,6 +2,7 @@ package com.school.article.service;
 
 
 import com.school.article.dao.ArticleDao;
+import com.school.article.dao.FavArticleDao;
 import com.school.article.pojo.Article;
 import com.school.article.pojo.ArticleAndUser;
 import com.school.friend.pojo.Friendactivity;
@@ -45,6 +46,8 @@ public class ArticleService {
 
 	@Autowired private
 	RedisTemplate redisTemplate;
+	@Autowired
+	private FavArticleDao favArticleDao;
 
 
 	/**
@@ -180,6 +183,9 @@ public class ArticleService {
 	public void deleteById(String id) {
 		redisTemplate.delete( "article_" + id );//删除缓存
 		articleDao.deleteById(id);
+//		//删除收藏全部通过文章id
+//		favArticleDao.deleteAllByArticleid(id);
+
 	}
 
 	/**

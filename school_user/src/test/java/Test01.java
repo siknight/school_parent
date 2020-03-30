@@ -1,7 +1,9 @@
 import com.school.SchoolApplication;
 import com.school.article.dao.ReplyDao;
+import com.school.article.pojo.Article;
 import com.school.article.pojo.ArticleReply;
 import com.school.article.pojo.ArticleReplyUser;
+import com.school.article.service.FavArticleService;
 import com.school.article.service.ReplyService;
 import com.school.friend.pojo.Friendactivity;
 import com.school.friend.service.FriendactivityService;
@@ -29,10 +31,21 @@ public class Test01 {
     @Autowired
     UserDao userDao;
 
+
     @Autowired
     ReplyService service;
     @Autowired
     FriendactivityService friendactivityService;
+
+    @Autowired
+    FavArticleService favArticleService;
+
+
+    @Test
+    public void test08(){
+        List<Article> allfavArticlesByUserid = favArticleService.findAllfavArticlesByUserid("1234380501851181056");
+        System.out.println(allfavArticlesByUserid);
+    }
     @Test
     public void test07(){
         List<Friendactivity> allByUserid = friendactivityService.findAllByUserid("1234380501851181056");

@@ -53,11 +53,17 @@ public class FavArticleService {
 	 * @return
 	 */
 	public List<Article> findAllfavArticlesByUserid(String userid){
+		//获取该用户收藏的所有记录
 		List<FavArticle> favArticles = favDao.findByUserid(userid);
+		//用于存储查询出来的文章
 		List<Article> articles = new ArrayList<>();
 		for (FavArticle favArticle:favArticles){
+			//获取改用户收藏的文章id
 			String articleid = favArticle.getArticleid();
+			System.out.println("articleid="+articleid);
+			//通过该文章id查找
 			Article article = articleDao.findById(articleid).get();
+			System.out.println("article="+article);
 			articles.add(article);
 		}
 		return  articles;
