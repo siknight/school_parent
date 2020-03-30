@@ -39,6 +39,11 @@
      <div class="navbar-inner">
       <!--<a href="index-logined.html" class="sui-brand">-->
       <a href="#" class="sui-brand">
+       <!--<div >开心校园</div>-->
+       <!--图标-->
+       <!--./img/asset-favicon.ico
+       ./img/asset-logo-black.png
+       -->
        <img src="./img/asset-logo-black.png"  alt="社交" />
       </a>
       <ul class="sui-nav">
@@ -46,7 +51,7 @@
        <li><a href="./qa-logined.html">问答</a></li>
        <li><a href="./activity-index.html">活动</a></li>
        <li><a href="./makeFriends-index.html">交友</a></li>
-       <!--<li><a href="./spit-index.html">吐槽</a></li>-->
+       <!--<li><a href="./spit-index.html">吐槽</a></li> -->
        <!--<li><a href="./recruit-index.html">招聘</a></li>-->
       </ul>
       <form class="sui-form -pull-right">
@@ -56,22 +61,22 @@
 
        <!--这部分为用户管理部分 没有登录状况-->
        <div class="sui-nav pull-right info" v-show="show">
-        <li><a href="tologin_register.html" target="_blank">注册</a></li>
-        <li><a href="tologin_register.html" target="_blank" class="sui-btn btn-login">登录</a></li>
+        <li><a href="tologin_register.html" >注册</a></li>
+        <li><a href="tologin_register.html"  class="sui-btn btn-login">登录</a></li>
        </div>
        <!--这部分为用户管理部分 没有登录状况-->
        <!--这部分为用户管理部分 登录后状况-->
        <div class="sui-nav pull-right info" v-show="!show">
-        <li><a href="./other-notice.html" target="_blank" class="notice">通知</a></li>
+        <li><a href="#"  class="notice" style="color: red" @click.prevent="loginOut()">退出</a></li>
         <!--中间加号-->
-        <li class="hover">
-         <span class="fa fa-plus "></span>
-         <ul class="hoverinfo">
-          <li><i class="fa fa-share-alt" ></i> <a href="boke-submit.html">去分享</a></li>
-          <li><i class="fa fa-question-circle" aria-hidden="true"></i> <a href="./qa-submit.html" target="_blank">提问题</a></li>
-          <li><i class="fa fa-comments" aria-hidden="true"></i><a href="./spit-submit.html" target="_blank">去吐槽</a></li>
-          <li><i class="fa fa-heartbeat" aria-hidden="true"></i> <a href="./makeFriends-submit.html" target="_blank">发约会</a></li>
-         </ul> </li>
+        <!--<li class="hover">-->
+        <!--<span class="fa fa-plus "></span>-->
+        <!--<ul class="hoverinfo">-->
+        <!--<li><i class="fa fa-share-alt" ></i> <a href="boke-submit.html">去分享</a></li>-->
+        <!--<li><i class="fa fa-question-circle" aria-hidden="true"></i> <a href="./qa-submit.html" target="_blank">提问题</a></li>-->
+        <!--<li><i class="fa fa-comments" aria-hidden="true"></i><a href="./spit-submit.html" target="_blank">去吐槽</a></li>-->
+        <!--<li><i class="fa fa-heartbeat" aria-hidden="true"></i> <a href="./makeFriends-submit.html" target="_blank">发约会</a></li>-->
+        <!--</ul> </li>-->
         <!--中间加号-->
         <li><a href="./person-myfile.html"  class="homego"><img src="./img/widget-photo.png" alt="用户头像" /></a></li>
        </div>

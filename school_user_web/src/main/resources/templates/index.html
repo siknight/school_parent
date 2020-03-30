@@ -34,24 +34,24 @@
  <!--包裹整个body-->
   <div class="wrapper"> 
    <!--引用组件--> 
-   <!--头部导航--> 
+   <!--头部导航-->
    <header id="index_header" v-cloak>
     <div class="sui-navbar" >
-     <div class="navbar-inner"> 
+     <div class="navbar-inner">
       <!--<a href="index-logined.html" class="sui-brand">-->
-         <a href="#" class="sui-brand">
-          <!--<div >开心校园</div>-->
-          <!--图标-->
-          <!--./img/asset-favicon.ico
-          ./img/asset-logo-black.png
-          -->
-          <img src="./img/asset-logo-black.png"  alt="社交" />
+      <a href="#" class="sui-brand">
+       <!--<div >开心校园</div>-->
+       <!--图标-->
+       <!--./img/asset-favicon.ico
+       ./img/asset-logo-black.png
+       -->
+       <img src="./img/asset-logo-black.png"  alt="社交" />
       </a>
-      <ul class="sui-nav"> 
+      <ul class="sui-nav">
        <li class="active"><a href="./index.html">首页</a></li>
-       <li><a href="./qa-logined.html">问答</a></li> 
-       <li><a href="./activity-index.html">活动</a></li> 
-       <li><a href="./makeFriends-index.html">交友</a></li> 
+       <li><a href="./qa-logined.html">问答</a></li>
+       <li><a href="./activity-index.html">活动</a></li>
+       <li><a href="./makeFriends-index.html">交友</a></li>
        <!--<li><a href="./spit-index.html">吐槽</a></li> -->
        <!--<li><a href="./recruit-index.html">招聘</a></li>-->
       </ul>
@@ -71,22 +71,22 @@
         <li><a href="#"  class="notice" style="color: red" @click.prevent="loginOut()">退出</a></li>
         <!--中间加号-->
         <!--<li class="hover">-->
-         <!--<span class="fa fa-plus "></span>-->
-         <!--<ul class="hoverinfo">-->
-          <!--<li><i class="fa fa-share-alt" ></i> <a href="boke-submit.html">去分享</a></li>-->
-          <!--<li><i class="fa fa-question-circle" aria-hidden="true"></i> <a href="./qa-submit.html" target="_blank">提问题</a></li>-->
-          <!--<li><i class="fa fa-comments" aria-hidden="true"></i><a href="./spit-submit.html" target="_blank">去吐槽</a></li>-->
-          <!--<li><i class="fa fa-heartbeat" aria-hidden="true"></i> <a href="./makeFriends-submit.html" target="_blank">发约会</a></li>-->
-         <!--</ul> </li>-->
+        <!--<span class="fa fa-plus "></span>-->
+        <!--<ul class="hoverinfo">-->
+        <!--<li><i class="fa fa-share-alt" ></i> <a href="boke-submit.html">去分享</a></li>-->
+        <!--<li><i class="fa fa-question-circle" aria-hidden="true"></i> <a href="./qa-submit.html" target="_blank">提问题</a></li>-->
+        <!--<li><i class="fa fa-comments" aria-hidden="true"></i><a href="./spit-submit.html" target="_blank">去吐槽</a></li>-->
+        <!--<li><i class="fa fa-heartbeat" aria-hidden="true"></i> <a href="./makeFriends-submit.html" target="_blank">发约会</a></li>-->
+        <!--</ul> </li>-->
         <!--中间加号-->
         <li><a href="./person-myfile.html"  class="homego"><img src="./img/widget-photo.png" alt="用户头像" /></a></li>
        </div>
       </form>
       <!--这部分为用户管理部分 登录后状况-->
-     </div> 
-    </div> 
+     </div>
+    </div>
    </header>
-      <!--头部导航-->
+   <!--头部导航-->
 
 
       <!--左中右部分三列布局-->
@@ -155,20 +155,23 @@
              <!--时间-->
 
                    <span v-text="articleAndUser.time" style="font-weight: lighter;alpha(opacity=50);"></span>
-                 <!--&nbsp; &nbsp; &nbsp;-->
-                 <!--<span style="color: black;font-weight: bold" v-text="articleAndUser.user.myschool"></span>-->
-                  &nbsp; &nbsp; &nbsp;
-                <span style="color: black;" v-text="articleAndUser.user.myprofessional"></span>
+                 &nbsp; &nbsp;
+                 <span style="font-weight: lighter;alpha(opacity=50);" v-text="articleAndUser.user.myschool"></span>
+                  &nbsp; &nbsp;
+                <span style="font-weight: lighter;alpha(opacity=50);" v-text="articleAndUser.user.myprofessional"></span>
+              &nbsp; &nbsp;
+                <span style="font-weight: lighter;alpha(opacity=50);" v-text="articleAndUser.user.mygrade"></span>
             </span>
            </div>
-           <div class="fr attention">
-            <span class="attentionText">关注</span>
-            <span class="beforeclose"> <i class="fa fa-times delete" aria-hidden="true"></i> <i class="nolike">不感兴趣</i> </span>
-           </div>
+
            <div class="clearfix"></div>
           </h5>
           <!--滴滴与360都开源了各自的插件化框架，VirtualAPK与RePlugin,作为一个插件化方面的狂热研究者，在周末就迫不及待的下载了Virtualapk框架来进行研究，本篇博客带的……-->
-         </div> <p class="content" v-text="removeTAG(articleAndUser.article.content)"></p>
+         </div>
+         <a :href="articleAndUser.article.url" style="color: black">
+          <p class="content" v-text="removeTAG(articleAndUser.article.content)"></p>
+         </a>
+
         </li>
        <!--中间文章循环-->
        </ul>
