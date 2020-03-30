@@ -48,7 +48,7 @@
      </div> 
      <!--文字信息--> 
      <div class="info"> 
-      <h1><span class="allinfo"><a href="#" >他的基本介绍</a></span></h1>
+      <h1><span class="allinfo"><a href="#" ><span v-text="user.nickname"></span>的基本介绍</a></span></h1>
       <ul class="fill">
        <li>
         <i  aria-hidden="true">QQ</i>
@@ -74,8 +74,11 @@
     <!--左侧编辑-->
     <!--右侧编辑--> 
     <div class="edit-info"> 
-     <h4>他的简介<span class="addedit" @click="personalityFlagChange()">
-      <img  width="12" height="12" /></span></h4>
+     <h4>他的简介
+      <span class="addedit" >
+      <img  width="12" height="12" />
+      </span>
+     </h4>
      <div class="info-box">
       <div class="edit-intro"  v-text="user.personality">
 
@@ -107,15 +110,15 @@
           methods:{
 
               findUserById:function () {
-                  var url = school_user_server+"/user/findById";
+                  var url = window.location.href ;
+                  var cs = url.split('?')[1];    //获取?之后的参数字符串
+                  var params = cs.split('=');
+                  var value = params[1];  //文章id
+
+                  var url = school_user_server+"/user/hisid/"+value;
                   var _this = this;
-                  var token=window.localStorage.getItem("token_school");  //获取token
-                  axios.get(url,{
-                      headers:{
-                          //请求时添加token，验证是否登录
-                          'Authorization':"Bearer "+token
-                      }
-                  }).then(function (response) {
+
+                  axios.get(url).then(function (response) {
                       _this.result = response.data;
                       _this.user = _this.result.data;
                       if (_this.user.myqq==null||_this.user.myqq==""){

@@ -107,7 +107,21 @@ public class UserController {
 	}
 
 
-	
+	/**
+	 * 他人根据ID查询
+	 * @return
+	 */
+	@RequestMapping(value="/hisid/{hisid}",method= RequestMethod.GET)
+	public Result findByhisId(@PathVariable String hisid){
+
+		User user = userService.findById(hisid);
+		user.setPassword(null);
+		user.setUpdatedate(null);
+		user.setRegdate(null);
+		return new Result(true,StatusCode.OK,"查询成功",user);
+	}
+
+
 	/**
 	 * 根据ID查询
 	 * @return
