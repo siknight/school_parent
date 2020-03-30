@@ -35,7 +35,13 @@ var loginManager = new Vue({
             // }else{
             //     this.show=false;
             // }
+        },
+        loginOut:function () {
+            // window.localStorage.getItem("token_school");
+            window.localStorage.removeItem("token_school");
+            window.location.href="./tologin_register.html";
         }
+
     },
     created(){
         this.showloginManager();
