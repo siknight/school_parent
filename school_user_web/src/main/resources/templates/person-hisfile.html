@@ -134,16 +134,12 @@
                   var params = cs.split('=');
                   var value = params[1];  //文章id
 
-                  // var url = school_user_server+"/friendactivity/hisid/"+value;
-                  var url = school_user_server+"/friendactivity/all/userid";
+                  var url = school_user_server+"/friendactivity/hisid/"+value;
+                  // var url = school_user_server+"/friendactivity/all/userid";
+                  console.info('url='+url);
                   var _this = this;
                   var token=window.localStorage.getItem("token_school");  //获取token
-                  axios.get(url,{
-                      headers:{
-                          //请求时添加token，验证是否登录
-                          'Authorization':"Bearer "+token
-                      }
-                  }).then(function (response) {
+                  axios.get(url).then(function (response) {
                       _this.result = response.data;
                       _this.friendactivitys = _this.result.data;
                   }).catch(function (err) {

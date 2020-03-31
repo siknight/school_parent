@@ -41,9 +41,10 @@ public class FriendactivityController {
 	private HttpServletRequest request;
 
 	@RequestMapping(value = "/hisid/{hisid}",method= RequestMethod.GET)
-	public Result findFriendActivityByhisid(String hisid){
+	public Result findFriendActivityByhisid(@PathVariable String hisid){
 		//判断是否有权限访问
-		System.out.println("fa hisid");
+
+
 		return  new Result(true,StatusCode.OK,"查询成功",friendactivityService.findAllByUserid(hisid));
 	}
 
