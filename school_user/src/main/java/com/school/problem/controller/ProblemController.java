@@ -43,6 +43,12 @@ public class ProblemController {
 	@Autowired
 	private RedisTemplate redisTemplate;
 
+	@RequestMapping(value = "/hisid/{hisid}",method= RequestMethod.GET)
+	public Result findFriendActivityByhisid(@PathVariable String hisid){
+
+		return  new Result(true,StatusCode.OK,"查询成功",problemService.findAllByUserid(hisid));
+	}
+
 	@RequestMapping(value = "/all/userid",method= RequestMethod.GET)
 	public Result findFriendActivityByUserid(){
 		//判断是否有权限访问

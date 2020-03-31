@@ -35,6 +35,15 @@ public class ArticleController {
 	@Autowired
 	private RedisTemplate redisTemplate;
 
+	/**
+	 * 查找用户发布的交友活动
+	 * @return
+	 */
+	@RequestMapping(value = "/hisid/{hisid}",method= RequestMethod.GET)
+	public Result findFriendActivityByhisid(@PathVariable String hisid){
+		return  new Result(true,StatusCode.OK,"查询成功",articleService.findAllByUserid(hisid));
+	}
+
 
 	/**
 	 * 查找用户发布的交友活动

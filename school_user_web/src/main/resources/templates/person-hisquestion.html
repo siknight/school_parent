@@ -97,25 +97,18 @@
       $('#hisfileMust').load('person-hisfile-must.html');
   </script>
   <!--两列布局-->
-  <div class="wrapper  myhome">
+  <div class="wrapper  myhome" id="myquestion">
+
    <div class="left-list">
     <div class="myhome-list">
      <ul class="home-list">
-      <li  ><a href="./person-hisfile.html">他的的交友活动</a></li>
-      <li class="active"><a href="./person-hisquestion.html">他的的提问</a></li>
-      <li ><a href="./person-hisshare.html">他的文章</a></li>
+      <li  ><a :href="hisfriendactivityurl">他的的交友活动</a></li>
+      <li class="active"><a :href="hisproblemurl">他的提问</a></li>
+      <li ><a :href="hisarticle">他的文章</a></li>
      </ul>
     </div>
-    <!-- <script>
-    $(function(){
-        $(".home-list li").click(function(){
-            $(this).addClass("active");
-            $(this).siblings().removeClass("active");
-        })
-    })
-</script> -->
    </div>
-   <div class="right-content" id="myquestion">
+   <div class="right-content" >
     <div class="questions">
      <h4><span>他的提问</span></h4>
      <ul class="question-list">
@@ -133,6 +126,7 @@
     </div>
    </div>
    <div class="clearfix"></div>
+
   </div>
 
   <script type="text/javascript">
@@ -140,19 +134,24 @@
           el:"#myquestion",
           data:{
               problems:[],
-              result:{}
+              result:{},
+              hisfriendactivityurl:"#",
+              hisproblemurl:"#",
+              hisarticle:"#"
           },
           methods:{
               findquestionById:function () {
-                  var url = school_user_server+"/problem/all/userid";
+
+                  var url = window.location.href ;
+                  var cs = url.split('?')[1];    //获取?之后的参数字符串
+                  var params = cs.split('=');
+                  var value = params[1];  //文章id
+                  var url = school_user_server+"/problem/hisid/"+value;
                   var _this = this;
-                  var token=window.localStorage.getItem("token_school");  //获取token
-                  axios.get(url,{
-                      headers:{
-                          //请求时添加token，验证是否登录
-                          'Authorization':"Bearer "+token
-                      }
-                  }).then(function (response) {
+                  this.hisfriendactivityurl="./person-hisfile.html?hisid="+value;
+                  this.hisproblemurl = "./person-hisquestion.html?hisid="+value;
+                  this.hisarticle="./person-hisshare.html?hisid="+value;
+                  axios.get(url).then(function (response) {
                       _this.result = response.data;
                       _this.problems = _this.result.data;
                   }).catch(function (err) {

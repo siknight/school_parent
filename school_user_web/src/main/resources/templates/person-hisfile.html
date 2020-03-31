@@ -89,18 +89,18 @@
       $('#hisfileMust').load('person-hisfile-must.html');
   </script>
   <!--两列布局--> 
-  <div class="wrapper  myhome"> 
+  <div class="wrapper  myhome" id="friendactivity">
    <div class="left-list"> 
     <div class="myhome-list">
      <ul class="home-list">
-      <li  class="active"><a href="./person-hisfile.html">他的的交友活动</a></li>
-      <li><a href="./person-hisquestion.html">他的的提问</a></li>
-      <li ><a href="./person-hisshare.html">他的文章</a></li>
+      <li  class="active"><a :href="hisfriendactivityurl">他的的交友活动</a></li>
+      <li><a :href="hisproblemurl">他的的提问</a></li>
+      <li ><a :href="hisarticle">他的文章</a></li>
      </ul>
     </div> 
 
    </div> 
-   <div class="right-content" id="friendactivity">
+   <div class="right-content" >
     <div class="questions"> 
      <h4><span>他的的交友活动</span></h4>
      <ul class="question-list">
@@ -125,7 +125,11 @@
           el:"#friendactivity",
           data:{
               friendactivitys:[],
-              result:{}
+              result:{},
+              hisfriendactivityurl:"#",
+              hisproblemurl:"#",
+              hisarticle:"#",
+
           },
           methods:{
               findUserById:function () {
@@ -133,6 +137,10 @@
                   var cs = url.split('?')[1];    //获取?之后的参数字符串
                   var params = cs.split('=');
                   var value = params[1];  //文章id
+
+                  this.hisfriendactivityurl="./person-hisfile.html?hisid="+value;
+                  this.hisproblemurl = "./person-hisquestion.html?hisid="+value;
+                  this.hisarticle="./person-hisshare.html?hisid="+value;
 
                   var url = school_user_server+"/friendactivity/hisid/"+value;
                   // var url = school_user_server+"/friendactivity/all/userid";
