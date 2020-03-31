@@ -45,12 +45,14 @@ public class Test01 {
     public void test08(){
 //        List<Article> allfavArticlesByUserid = favArticleService.findAllfavArticlesByUserid("1234380501851181056");
 //        System.out.println(allfavArticlesByUserid);
-        favArticleService.deleteByarticleidAndUserid("1244540245345701888","1234380501851181056");
+//        favArticleService.deleteByarticleidAndUserid("1244540245345701888","1234380501851181056");
+        List<Article> allfavArticlesByUserid = favArticleService.findAllfavArticlesByUserid("1237667139779956736");
+        System.out.println("Article="+allfavArticlesByUserid);
     }
     @Test
     public void test07(){
         List<Friendactivity> allByUserid = friendactivityService.findAllByUserid("1234380501851181056");
-        System.out.println(allByUserid);
+        System.out.println(""+allByUserid);
     }
 
     @Test

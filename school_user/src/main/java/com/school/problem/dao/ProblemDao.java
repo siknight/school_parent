@@ -34,6 +34,9 @@ public interface ProblemDao extends JpaRepository<Problem,String>,JpaSpecificati
     public int updateThumbup(String id);
 
 
+    public Problem findProblemById(String id);
+
+
     public Problem findByIdAndUserid(String id,String userid);
 
 }

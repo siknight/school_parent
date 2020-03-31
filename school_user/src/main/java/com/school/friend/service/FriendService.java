@@ -54,9 +54,7 @@ public class FriendService {
      */
     public int addFriend(String userid,String friendid){
         //判断如果用户已经添加了这个好友，则不进行任何操作,返回0
-        if(friendDao.selectCount(userid, friendid)>0){  //查询是否有一个
-            return 0;
-        }
+
 
         Friend friend=new Friend();
         friend.setUserid(userid);
@@ -64,14 +62,6 @@ public class FriendService {
         friend.setIslike("0");
         friendDao.save(friend);
 
-        userClient.incFollowcount(userid,1);//增加自己的关注数
-        userClient.incFanscount(friendid,1);//增加对方的粉丝数
-
-        //判断对方是否喜欢你，如果喜欢，将islike设置为1
-        if(friendDao.selectCount( friendid,userid)>0){
-            friendDao.updateLike(userid,friendid,"1");
-            friendDao.updateLike(friendid,userid,"1");
-        }
 
         return 1;
     }

@@ -71,11 +71,12 @@ public class FavArticleService {
 		//用于存储查询出来的文章
 		List<Article> articles = new ArrayList<>();
 		for (FavArticle favArticle:favArticles){
-			//获取改用户收藏的文章id
+			//获取每个用户收藏的文章id
 			String articleid = favArticle.getArticleid();
-
+			System.out.println("articleid="+articleid);
 			//通过该文章id查找
-			Article article = articleDao.findByIdAndUserid(articleid,userid);
+			Article article =articleDao.findArticleById(articleid);
+			System.out.println("service article="+article);
 			if (article!=null){
 				articles.add(article);
 			}

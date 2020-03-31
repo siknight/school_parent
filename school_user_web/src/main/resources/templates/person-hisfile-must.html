@@ -43,12 +43,26 @@
       <img :src="user.avatar" alt="" class="person"/>
       <!--<div><input type="file"> </div>-->
       <div class="share" style="text-align: center">
-       <h2 v-text="user.nickname"></h2>
+       <h2 >
+        <span v-text="user.nickname"></span>
+        <a target="_blank" :href="user.qqurl">
+         <i class="message sui-icon icon-tb-comment" ></i>
+        </a>
+       </h2>
+
       </div>
      </div> 
      <!--文字信息--> 
      <div class="info"> 
-      <h1><span class="allinfo"><a href="#" ><span v-text="user.nickname"></span>的基本介绍</a></span></h1>
+      <h1>
+       <span class="allinfo">
+        <span v-text="user.nickname" style="color: red"></span>的基本介绍</span>
+       &nbsp;
+       <!--关注-->
+       <button class="sui-btn btn-info btn-attention"  @click="addlove()" v-show="loveFlag">关注</button>
+       <button class="sui-btn btn-info btn-attention"  @click="deletelove()" v-show="!loveFlag">取消关注</button>
+       <!--关注-->
+      </h1>
       <ul class="fill">
        <li>
         <i  aria-hidden="true">QQ</i>
@@ -102,9 +116,13 @@
                   mygrade:"",
                   myprofessional:"",
                   personality:"",
-                  avatar:""
+                  avatar:"",
+
               },
               result:{},
+              love:"关注",
+              friend:{},
+              loveFlag:true   //默认未关注
 
           },
           methods:{
@@ -117,6 +135,7 @@
 
                   var url = school_user_server+"/user/hisid/"+value;
                   var _this = this;
+
 
                   axios.get(url).then(function (response) {
                       _this.result = response.data;
@@ -142,10 +161,118 @@
                   }).catch(function (err) {
                       // console.log("网络错误");
                   });
+              },
+              loadlove:function () {   //看是否关注
+                  //获取id，因为token里存的有，所以这里省略
+                  var token = window.localStorage.getItem("token_school");  //获取token
+
+                  if (token== null ||token ==""){
+                      this.loveFlag = true;  //未关注
+                  } else {
+                      var url = window.location.href ;
+                      var cs = url.split('?')[1];    //获取?之后的参数字符串
+                      var params = cs.split('=');
+                      var value = params[1];  //文章id
+
+                      var url = school_user_server+"/friend/likeFlag";
+                      var _this = this;
+                      this.friend.friendid = value;
+                      axios.post(url,_this.friend,{
+                          headers: {
+                              //请求时添加token，验证是否登录
+                              'Authorization': "Bearer " + token
+                          }
+                      }).then(function (response) {
+                          _this.result = response.data;
+                          if ( _this.result.code == "20000"){
+                              _this.loveFlag = false;  //变成取消关注
+                          }else {
+                              _this.loveFlag = true;  //变成关注
+                          }
+                      }).catch(function (err) {
+                          // console.log("网络错误");
+                      });
+                  }
+
+              },
+              addlove:function () { //关注
+
+                  //获取id，因为token里存的有，所以这里省略
+                  var token = window.localStorage.getItem("token_school");  //获取token
+                  if (token==null||token==""){
+                      window.location.href="./tologin_register.html"
+                  } else{
+                      var url = window.location.href ;
+                      var cs = url.split('?')[1];    //获取?之后的参数字符串
+                      var params = cs.split('=');
+                      var value = params[1];  //文章id
+
+                      var _this = this;
+                      var url = school_user_server + "/friend/like";
+                      this.friend.friendid = value;
+                      //json请求用默认方式
+                      axios.post(url,_this.friend,{
+                          headers: {
+                              //请求时添加token，验证是否登录
+                              'Authorization': "Bearer " + token
+                          }
+                      }).then(function (response) {
+                          _this.result = response.data;
+                         if ( _this.result.code == "20005"){
+                              alert("你不能关注你自己")
+                          }
+                          if (_this.result.code == "20002"){
+                              alert("你已经关注过")
+                          }
+                          if (_this.result.code == "20000"){
+                              _this.loadlove();
+                          }
+
+
+                      }).catch(function (err) {
+                          alert("网络错误");
+                      });
+                  }
+
+              },
+              deletelove:function () {  //取消关注
+                  //获取id，因为token里存的有，所以这里省略
+                  var token = window.localStorage.getItem("token_school");  //获取token
+                  if (token==null||token==""){
+                      window.location.href="./tologin_register.html"
+                  } else{
+                      var url = window.location.href ;
+                      var cs = url.split('?')[1];    //获取?之后的参数字符串
+                      var params = cs.split('=');
+                      var value = params[1];  //文章id
+
+                      var _this = this;
+                      var url = school_user_server + "/friend/dellike/"+value;
+                      this.friend.friendid = value;
+                      //json请求用默认方式
+                      axios.delete(url,{
+                          headers: {
+                              //请求时添加token，验证是否登录
+                              'Authorization': "Bearer " + token
+                          }
+                      }).then(function (response) {
+                          _this.result = response.data;
+
+                          if (_this.result.code == "20000"){
+                              _this.loadlove();
+                          }
+
+                      }).catch(function (err) {
+                          alert("网络错误");
+                      });
+                  }
+
               }
+              
           },  //methods
           created(){
               this.findUserById();
+              this.loadlove();
           }
 
       });

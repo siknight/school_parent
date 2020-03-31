@@ -65,8 +65,9 @@ public class FavProblemService {
 			String problemid = favProblem.getProblemid();
 			System.out.println("problemid="+problemid);
 			//通过该文章id查找
-//			Problem article = prob.findById(articleid).get();
-			Problem problem = problemDao.findByIdAndUserid(problemid,userid);
+
+//			Problem problem = problemDao.findByIdAndUserid(problemid,userid);
+			Problem problem =problemDao.findProblemById(problemid);
 			if (problem!=null){
 				problems.add(problem);
 			}
