@@ -25,6 +25,23 @@ public class FriendController {
     @Autowired
     private HttpServletRequest request;
 
+    /**
+     * 查询全部收藏数据
+     * @return
+     */
+    @RequestMapping(value = "/all/userid",method= RequestMethod.GET)
+    public Result findAllfavUsersByUserid(){
+
+        //判断是否有权限访问
+        Claims claims=(Claims) request.getAttribute("user_claims");
+        System.out.println("claims11="+claims);
+        if(claims==null){
+            return new Result(true,StatusCode.ACCESSERROR,"无权访问");
+        }
+//		System.out.println("fav article="+favService.findAllfavArticlesByUserid(claims.getId()));
+        return new Result(true,StatusCode.OK,"查询成功",
+               friendService.findAllFriendsByUserid(claims.getId()));
+    }
 
     /**
      * 取消关注
@@ -44,7 +61,7 @@ public class FriendController {
 
 
     /**
-     * 关注
+     * 关注判断
      * @param
      * @return
      */
@@ -121,7 +138,7 @@ public class FriendController {
             return new Result(false, StatusCode.ACCESSERROR,"无权访问");
         }
         friendService.deleteFriend(claims.getId(), friendid);
-        return new Result(true, StatusCode.OK, "删除成功");
+        return new Result(true, StatusCode.OK, "取消成功");
 
     }
 }

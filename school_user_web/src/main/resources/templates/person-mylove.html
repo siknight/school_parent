@@ -127,8 +127,12 @@
      <ul class="question-list">
       <li v-for="friend in friends">
        <span class="title">
-        <a  v-text="friend.nickname" style="color: #5d9c0a;font-size: large"></a>
+        <a href="#" @click.stop="hisfile(friend.id)" v-text="friend.nickname" style="color: #5d9c0a;font-size: large"></a>
         <!--&nbsp; &nbsp; &nbsp;-->
+        &nbsp;&nbsp;
+         <a target="_blank" :href="friend.qqurl">
+         <i class="message sui-icon icon-tb-comment" ></i>
+        </a>
         <!--<span  v-text="problem.createtime"></span>-->
        </span>
 
@@ -183,6 +187,9 @@
                   }).catch(function (err) {
                       // console.log("网络错误");
                   });
+              },
+              hisfile:function (id) {
+                  window.location.href="./person-hisfile.html?hisid="+id;
               }
           },  //methods
           created(){

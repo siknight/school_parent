@@ -1,10 +1,13 @@
 package com.school.friend.dao;
 
 
+
 import com.school.friend.pojo.Friend;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 public interface FriendDao extends JpaRepository<Friend,String> {
 
@@ -36,4 +39,7 @@ public interface FriendDao extends JpaRepository<Friend,String> {
      * @param friendid
      */
     public void deleteFriendByUseridAndFriendid(String userid, String friendid);
+
+
+    public List<Friend> findByUserid(String userid);
 }
