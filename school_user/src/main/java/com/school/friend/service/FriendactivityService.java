@@ -60,7 +60,8 @@ public class FriendactivityService {
 	 * @return
 	 */
 	public List<UserFriendActivity> findAllUserFriendActivity() {
-		List<Friendactivity> acAll = friendactivityDao.findAll();
+		Sort sort = new Sort(Sort.Direction.DESC,"updatetime");
+		List<Friendactivity> acAll = friendactivityDao.findAll(sort);
 		ArrayList<UserFriendActivity> ufList = new ArrayList<>();
 
 		for (Friendactivity ac:acAll){

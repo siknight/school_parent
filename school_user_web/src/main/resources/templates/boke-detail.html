@@ -72,16 +72,7 @@
                         <!--这部分为用户管理部分 登录后状况-->
                         <div class="sui-nav pull-right info" v-show="!show">
                             <li><a href="#"  class="notice" style="color: red" @click.prevent="loginOut()">退出</a></li>
-                            <!--中间加号-->
-                            <!--<li class="hover">-->
-                            <!--<span class="fa fa-plus "></span>-->
-                            <!--<ul class="hoverinfo">-->
-                            <!--<li><i class="fa fa-share-alt" ></i> <a href="boke-submit.html">去分享</a></li>-->
-                            <!--<li><i class="fa fa-question-circle" aria-hidden="true"></i> <a href="./qa-submit.html" target="_blank">提问题</a></li>-->
-                            <!--<li><i class="fa fa-comments" aria-hidden="true"></i><a href="./spit-submit.html" target="_blank">去吐槽</a></li>-->
-                            <!--<li><i class="fa fa-heartbeat" aria-hidden="true"></i> <a href="./makeFriends-submit.html" target="_blank">发约会</a></li>-->
-                            <!--</ul> </li>-->
-                            <!--中间加号-->
+
                             <li><a href="./person-myfile.html"  class="homego"><img src="./img/widget-photo.png" alt="用户头像" /></a></li>
                         </div>
                     </form>
@@ -101,14 +92,14 @@
         <div class="operate">
             <!--  -->
             <span class="fl author">
-                <span v-text="articleAndUser.user.nickname"  style="color: #00a8ff;"></span>发布　
+                <span @click="hisfile(articleAndUser.user.id)" v-text="articleAndUser.user.nickname"  style="color: #00a8ff;"></span>发布　
 
 
-                <span class="time" v-text="articleAndUser.user.myschool" ></span>
-                  &nbsp; &nbsp;
-                 <span class="time" v-text="articleAndUser.user.myprofessional" ></span>
-                &nbsp; &nbsp;
-                 <span class="time" v-text="articleAndUser.user.mygrade" ></span>
+                <!--<span class="time" v-text="articleAndUser.user.myschool" ></span>-->
+                  <!--&nbsp; &nbsp;-->
+                 <!--<span class="time" v-text="articleAndUser.user.myprofessional" ></span>-->
+                <!--&nbsp; &nbsp;-->
+                 <!--<span class="time" v-text="articleAndUser.user.mygrade" ></span>-->
             </span>
             <!--<span class="fr ">收藏</span>-->
         </div>
@@ -159,16 +150,16 @@
                         <img :src="articleReplyUser.user.avatar" alt="">
                     </div>
                     <div class="fl text">
-                        <p class="author"><span class="name" v-text="articleReplyUser.user.nickname"></span> 发布</p>
+                        <p class="author"><span @click="hisfile(articleReplyUser.user.id)" class="name" v-text="articleReplyUser.user.nickname"></span> 发布</p>
                         <p class="word" v-text="articleReplyUser.articleReply.content"></p>
                         <!--<p class="tool"><a class="callback">回复</a>&nbsp;<span class="remark-num">26条回复</span></p>-->
                     </div>
                     <div style="clear:both"></div>
                     <div class="edit-box">
-                        <form class="comment-form">
-                            <textarea row="1" placeholder="使用评论询问更多信息或提出修改意见，请不要在评论里回答问题"></textarea>
-                            <button type="submit" class="sui-btn submit-comment">提交评论</button>
-                        </form>
+                        <!--<form class="comment-form">-->
+                            <!--<textarea row="1" placeholder="使用评论询问更多信息或提出修改意见，请不要在评论里回答问题"></textarea>-->
+                            <!--<button type="submit" class="sui-btn submit-comment">提交评论</button>-->
+                        <!--</form>-->
                     </div>
 
                 </li>
@@ -181,20 +172,21 @@
             <div class="focus similar-problem">
                 <div class="img-title">
                     <div class="fl img">
-                        <img src="./img/widget-photo.jpg" alt="">
+                        <!--<img src="./img/widget-photo.jpg" alt="">-->
                     </div>
-                    <div class="fl btn-focus">
-                        <h4>PHP达人</h4>
-                        <button class="sui-btn btn-info btn-attention">关注</button>
+                    <div class="fl btn-focus" style="text-align: center">
+                        <h4>今天，有什么知识要和大家分享么?</h4>
+                        <button class="sui-btn btn-info btn-attention" style="margin-bottom: 5px;" @click="articlerouter()">发布知识分享</button>
                     </div>
-                    <div class="clearfix"></div>
+                    <br/>
+                    <div class="clearfix">
+
+                    </div>
                 </div>
-                <ul class="problem-list">
-                    <li class="list-item">
-                        <p class="list-title">如果你还是象棋新手，学会这些套路，你就可以去破残局赚钱了！</p>
-                    </li>
-
-
+                <!--<ul class="problem-list">-->
+                    <!--<li class="list-item">-->
+                        <!--<p class="list-title">如果你还是象棋新手，学会这些套路，你就可以去破残局赚钱了！</p>-->
+                    <!--</li>-->
                 </ul>
             </div>
 
@@ -358,7 +350,13 @@
                         }).catch(function (err) {
                         });
                     }
-                }
+                },
+                articlerouter:function(){
+                    window.location.href="./boke-submit.html"
+                },
+                hisfile:function (id) {
+                    window.location.href="./person-hisfile.html?hisid="+id;
+                },
             },  //methods
             created(){
                 this.loadArticle();

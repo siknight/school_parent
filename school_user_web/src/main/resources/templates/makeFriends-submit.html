@@ -101,6 +101,16 @@
             <label  class="control-label topic">主题：</label>
             <div class="controls">
                 <ul>
+                    <li @click="same('学习')" class="active">
+                        <div class="topic d6">
+                            <span>学习</span>
+                        </div>
+                    </li>
+                    <li @click="same('运动')" class="active">
+                        <div class="topic d5">
+                            <span>运动</span>
+                        </div>
+                    </li>
                     <li @click="same('看电影')" class="active">
                         <div class="topic d1">
                             <span>看电影</span>
@@ -121,16 +131,7 @@
                             <span>喝咖啡</span>
                         </div>
                     </li>
-                    <li @click="same('运动')" class="active">
-                        <div class="topic d5">
-                            <span>运动</span>
-                        </div>
-                    </li>
-                    <li @click="same('旅行')" class="active">
-                        <div class="topic d6">
-                            <span>旅行</span>
-                        </div>
-                    </li>
+
                     <li @click="same('逛街')" class="active">
                         <div class="topic d7">
                             <span>逛街</span>

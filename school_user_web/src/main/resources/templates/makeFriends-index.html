@@ -68,15 +68,7 @@
        <!--这部分为用户管理部分 登录后状况-->
        <div class="sui-nav pull-right info" v-show="!show">
         <li><a href="#"  class="notice" style="color: red" @click.prevent="loginOut()">退出</a></li>
-        <!--中间加号-->
-        <!--<li class="hover">-->
-        <!--<span class="fa fa-plus "></span>-->
-        <!--<ul class="hoverinfo">-->
-        <!--<li><i class="fa fa-share-alt" ></i> <a href="boke-submit.html">去分享</a></li>-->
-        <!--<li><i class="fa fa-question-circle" aria-hidden="true"></i> <a href="./qa-submit.html" target="_blank">提问题</a></li>-->
-        <!--<li><i class="fa fa-comments" aria-hidden="true"></i><a href="./spit-submit.html" target="_blank">去吐槽</a></li>-->
-        <!--<li><i class="fa fa-heartbeat" aria-hidden="true"></i> <a href="./makeFriends-submit.html" target="_blank">发约会</a></li>-->
-        <!--</ul> </li>-->
+
         <!--中间加号-->
         <li><a href="./person-myfile.html"  class="homego"><img src="./img/widget-photo.png" alt="用户头像" /></a></li>
        </div>
@@ -87,11 +79,7 @@
    </header>
    <!--头部导航-->
   </div> 
-  <!--<div class="banner"> -->
-   <!--<div class="wrapper"> -->
-    <!--<img src="./img/page-banner.png" alt="" /> -->
-   <!--</div> -->
-  <!--</div> -->
+
   <!--两列布局--> 
   <div class="wrapper tag-item" id="makeFriendsIndexApp">
    <div class="fl left-list"> 
@@ -111,7 +99,8 @@
        <div class="fl content">
 
         <p class="title">
-         <span class="name" v-text="UserFriendActivity.user.nickname"></span>
+         <!--class="name"-->
+         <span  class="name" style="color: dodgerblue" @click="hisfile(UserFriendActivity.user.id)" v-text="UserFriendActivity.user.nickname"></span>
           邀你一起
          <span class="cafe" v-text="UserFriendActivity.friendactivity.activityname"></span>
         </p>
@@ -186,7 +175,10 @@
              },
              likeUser:function () {
 
-             }
+             },
+             hisfile:function (id) {
+                 window.location.href="./person-hisfile.html?hisid="+id;
+             },
          },
          created(){
              this.loadFriendActivity();

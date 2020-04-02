@@ -114,7 +114,7 @@
             <div class="fl info"> 
              <div class="question"> 
               <p class="author">
-               <span class="name" v-text="problemuser.user.nickname"></span >
+               <span class="name" @click="hisfile(problemuser.user.id)" v-text="problemuser.user.nickname"></span >
                <span v-text="problemuser.problem.createtime">2019年6月19</span>
 
               </p>
@@ -250,6 +250,9 @@
 
 
 
+               },
+               hisfile:function (id) {
+                   window.location.href="./person-hisfile.html?hisid="+id;
                },
            },
            created(){
