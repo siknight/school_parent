@@ -44,6 +44,16 @@ public class GatheringController {
 	}
 
 	/**
+	 * 查询全部数据
+	 * @return
+	 */
+	@RequestMapping(value = "/top2",method= RequestMethod.GET)
+	public Result findTop2Gathing(){
+		System.out.println("allGathing");
+		return new Result(true,StatusCode.OK,"查询成功",gatheringService.findTop2());
+	}
+
+	/**
 	 * 查询全部数据 搜索
 	 * @return
 	 */

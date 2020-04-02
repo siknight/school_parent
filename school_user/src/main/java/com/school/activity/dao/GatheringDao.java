@@ -17,7 +17,7 @@ public interface GatheringDao extends JpaRepository<Gathering,String>,JpaSpecifi
 
     public List<Gathering> findByNameLikeOrAddressLikeOrDetailLikeOrSponsorLike(String name,String address,String detail,String sponsor);
 
-    public List<Gathering> findTop2ByStateOrderByEndtimeDesc(String summary);
+    public List<Gathering> findTop2ByStateOrderByEndtimeDesc(String state);
 
 //    @Override
 //    List<Gathering> findAll(Sort sort);

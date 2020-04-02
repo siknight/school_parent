@@ -20,4 +20,6 @@ public interface FriendactivityDao extends JpaRepository<Friendactivity,String>,
      * @return
      */
     public List<Friendactivity> findByUserid(String userid);
+
+    public List<Friendactivity> findByActivitynameLike(String searchContent);
 }

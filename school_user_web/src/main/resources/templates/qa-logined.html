@@ -168,12 +168,16 @@
                    this.changeQaFlag = ! this.changeQaFlag;
                },
                savaQa:function() {
+                   //获取id，因为token里存的有，所以这里省略
+                   var token = window.localStorage.getItem("token_school");  //获取token
+                   if (token==null||token==""){
+                       window.location.href=user_web_url+"/tologin_register.html";
+                   }
                    if (this.problem.title == null || this.problem.title == "") {
                        // this.result.message="邮箱不能为空";
                        alert("内容不能为空");
                    } else {
-                       //获取id，因为token里存的有，所以这里省略
-                       var token = window.localStorage.getItem("token_school");  //获取token
+
                        console.info("userid=")
                        var url = school_user_server + "/problem";
                        var _this = this;

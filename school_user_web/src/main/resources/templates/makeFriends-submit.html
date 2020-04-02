@@ -161,9 +161,9 @@
 </script> -->
     </div>
     <!--验证是否登录-->
-    <script type="text/javascript" src="./js/loginFlag.js">
+    <!--<script type="text/javascript" src="./js/loginFlag.js">-->
 
-    </script>
+    <!--</script>-->
 
 
     <script type="text/javascript">
@@ -180,33 +180,37 @@
                     this.Friendactivity.activityname = this.msg;
                 },
                 add:function () {
-                    if(this.msg==null||this.msg==""){
-                        // this.result.message="邮箱不能为空";
-                        alert("你还没有选择约会活动");
+                    var token=window.localStorage.getItem("token_school");  //获取token
+                    if (token==null||token==""){
+                        window.location.href=user_web_url+"/tologin_register.html";
                     }else{
+                        if(this.msg==null||this.msg==""){
+                            // this.result.message="邮箱不能为空";
+                            alert("你还没有选择约会活动");
+                        }else{
+                            var url = school_user_server+"/friendactivity";
 
-                        var token=window.localStorage.getItem("token_school");  //获取token
-                        var url = school_user_server+"/friendactivity";
+                            console.info("acName="+this.Friendactivity.activityname)
+                            var _this = this;
+                            //json请求用默认方式
+                            axios.post(url,_this.Friendactivity,{
+                                headers:{
+                                    //请求时添加token，验证是否登录
+                                    'Authorization':"Bearer "+token
+                                }
+                            }).then(function (response) {
+                                _this.result = response.data;
+                                alert(_this.result.message);
+                                if(_this.result.code=="20000"){
+                                    window.location.href=user_web_url+"/makeFriends-index.html";
+                                }
 
-                        console.info("acName="+this.Friendactivity.activityname)
-                        var _this = this;
-                        //json请求用默认方式
-                        axios.post(url,_this.Friendactivity,{
-                            headers:{
-                                //请求时添加token，验证是否登录
-                                'Authorization':"Bearer "+token
-                            }
-                        }).then(function (response) {
-                            _this.result = response.data;
-                            alert("msg="+_this.result.message);
-                            if(_this.result.code=="20000"){
-                                window.location.href=user_web_url+"/makeFriends-index.html";
-                            }
-
-                        }).catch(function (err) {
-                            alert("网络错误");
-                        });
+                            }).catch(function (err) {
+                                alert("网络错误");
+                            });
+                        }
                     }
+
                 }
             }
 

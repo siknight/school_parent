@@ -106,7 +106,7 @@
         </form>
         &nbsp; &nbsp;
         <!--修改头像-->
-        <form class="form-inline" style="display: inline-block"  v-show="!imgFlag">
+        <form class="form-inline" style="display: inline-block"  v-show="!imageFlag">
          <!--<input type="file" style="display: none">-->
           <input type="file" id="saveImage" accept="image/png,image/gif,image/jpeg" >
          <button class="sui-btn btn-danger save-btn" @click.prevent="saveImg()">保存</button>
@@ -151,7 +151,7 @@
               professionalFlag:true,// 用于判断学院是文本显示还是输入框显示
               gradeFlag:true, //用于判断年级是文本显示还是输入框显示
               personalityFlag:true,  //简介
-              imgFlag:true,  //是否显示修改头像框  true表示不显示
+              imageFlag:true,  //是否显示修改头像框  true表示不显示
               user:{
                   myqq:"",
                   myschool:" ",
@@ -368,7 +368,6 @@
                   }
               },
               updateImage:function () { //修改个人头像,用于将修改框显示出来
-                  // alert("你好");
                   this.imageFlag = false;
               },
               saveImg:function () {  //将头像保存到数据库
@@ -387,11 +386,12 @@
                           'Authorization':"Bearer "+token
                       }
                   }).then(function (response) {
-                        this.imageFlag = true;
+
                       _this.result = response.data;
-                      if (_this.result.code.equals("20000")||_this.result.code=="2000") {
+                      if (_this.result.code=="20000") {
+                          _this.imageFlag = true;
                           console.info("修改头像执行了");
-                          _this.user.avatar = _this.result.data.avatar;
+                          _this.findUserById();
                       }
 
                   }).catch(function (err) {

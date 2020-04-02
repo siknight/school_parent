@@ -32,9 +32,9 @@
  </head> 
  <body> 
   <!--引用组件--> 
-  <div class="wrapper">
+  <div class="wrapper" id="makeFriendsIndexApp" v-cloak>
    <!--头部导航-->
-   <header id="index_header" v-cloak>
+   <header  >
     <div class="sui-navbar" >
      <div class="navbar-inner">
       <!--<a href="index-logined.html" class="sui-brand">-->
@@ -55,8 +55,8 @@
        <!--<li><a href="./recruit-index.html">招聘</a></li>-->
       </ul>
       <form class="sui-form -pull-right">
-       <input type="text" placeholder="输入关键词..." />
-       <span class="btn-search fa fa-search"></span>
+       <input type="text" v-model="searchcontent"   placeholder="输入关键词..." />
+       <span class="btn-search fa fa-search" @click.prevent="search()"></span>
        <!--搜索-->
 
        <!--这部分为用户管理部分 没有登录状况-->
@@ -78,12 +78,14 @@
     </div>
    </header>
    <!--头部导航-->
-  </div> 
+
 
   <!--两列布局--> 
-  <div class="wrapper tag-item" id="makeFriendsIndexApp">
+  <div class="wrapper tag-item" >
    <div class="fl left-list"> 
-    <p class="full-info">为了获取更好的体验 请 <a href="person-myfile.html" target="_blank">完善兴趣信息</a><span class="sui-icon icon-tb-close close"></span></p>
+    <p class="full-info">为了获取更好的体验 请 <a href="person-myfile.html" target="_blank">完善兴趣信息</a>
+     <!--<span class="sui-icon icon-tb-close close"></span>-->
+    </p>
     <div class="friend-dating-list"> 
      <ul class="friends">
       <!--循环部分-->
@@ -149,7 +151,7 @@
    </div> 
    <div class="clearfix"></div> 
   </div>
-
+  </div>
   <script type="text/javascript">
      new Vue({
          el:"#makeFriendsIndexApp",
@@ -158,7 +160,10 @@
              result:{},
              UserFriendActivitys:[],
              like:"like sui-icon icon-tb-likefill",
-             notlike:"like sui-icon icon-tb-like"
+             notlike:"like sui-icon icon-tb-like",
+             show:true,  //默认显示登陆和注册
+             user: {}, //用户
+             searchcontent:""
          },
          methods:{
              loadFriendActivity:function () {
@@ -179,7 +184,54 @@
              hisfile:function (id) {
                  window.location.href="./person-hisfile.html?hisid="+id;
              },
-         },
+             showloginManager:function () {
+                 //取值，判断是否登录
+                 this.user.mobile = window.localStorage.getItem("mobile_school");
+                 this.result.token_school = window.localStorage.getItem("token_school");
+                 //登录token校验
+                 var url =school_user_server+"/token/tokenVerify"
+                 var _this = this;
+                 axios.get(url,{
+                     headers:{
+                         //请求时添加token，验证是否登录
+                         'Authorization':"Bearer "+_this.result.token_school
+                     }
+                 }).then(function (response) {
+                     _this.result = response.data;
+                     if(_this.result.code==20000){
+                         //开始时应将所有存的都删掉，以后再加
+                         _this.show=false; //显示登录后信息
+                     }else{
+                         _this.show=true;  //显示登陆和注册，没有等
+                     }
+                 }).catch(function (err) {
+                     console.log("网络错误");
+                 });
+
+             },
+             loginOut:function () {
+                 // window.localStorage.getItem("token_school");
+                 window.localStorage.removeItem("token_school");
+                 window.location.href="./tologin_register.html";
+             },
+             search:function () {
+                 if (this.searchcontent == null || this.searchcontent == "") {
+                     alert("不能搜索空字符")
+                 } else {
+                     var url = school_user_server + "/friendactivity/search/" + this.searchcontent;
+                     console.info("url=" + url);
+                     var _this = this;
+                     //json请求用默认方式
+                     axios.get(url).then(function (response) {
+                         _this.result = response.data;
+                         console.info(_this.result.message);
+                         _this.UserFriendActivitys = _this.result.data;
+                     }).catch(function (err) {
+                         console.log("网络错误");
+                     });
+                 }
+             }
+             },
          created(){
              this.loadFriendActivity();
          }
@@ -187,10 +239,10 @@
      });
   </script>
 
-  <!--将导航栏判断此页vue代码引进来-->
-  <script type="text/javascript" src="./js/Nav_loginManager.js">
+  <!--&lt;!&ndash;将导航栏判断此页vue代码引进来&ndash;&gt;-->
+  <!--<script type="text/javascript" src="./js/Nav_loginManager.js">-->
 
-  </script>
+  <!--</script>-->
 
   <!--尾部-->
   <div id="footer">

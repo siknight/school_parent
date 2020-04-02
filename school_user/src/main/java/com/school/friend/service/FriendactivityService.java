@@ -33,6 +33,7 @@ import util.IdWorker;
  *
  */
 @Service
+@SuppressWarnings("all")
 public class FriendactivityService {
 
 	@Autowired
@@ -59,6 +60,28 @@ public class FriendactivityService {
 	 * 查询全部列表
 	 * @return
 	 */
+	public List<UserFriendActivity> findSearchAllUserFriendActivity(String searchContent) {
+
+		List<Friendactivity> acAll = friendactivityDao.findByActivitynameLike(searchContent);
+		ArrayList<UserFriendActivity> ufList = new ArrayList<>();
+
+		for (Friendactivity ac:acAll){
+			String userid = ac.getUserid();  //获取每一个发布者的活动id，我还要获取自己的id，但是如果没有登录的情况下怎么处理
+			User user = userDao.findById(userid).get();
+			user.setPassword(null);
+			UserFriendActivity userFriendActivity = new UserFriendActivity();
+			userFriendActivity.setUser(user);
+			userFriendActivity.setFriendactivity(ac);
+
+			ufList.add(userFriendActivity);
+		}
+		return ufList;
+	}
+
+	/**
+	 * 查询全部列表
+	 * @return
+	 */
 	public List<UserFriendActivity> findAllUserFriendActivity() {
 		Sort sort = new Sort(Sort.Direction.DESC,"updatetime");
 		List<Friendactivity> acAll = friendactivityDao.findAll(sort);
@@ -76,8 +99,6 @@ public class FriendactivityService {
 		}
 		return ufList;
 	}
-
-
 	/**
 	 * 查询全部列表
 	 * @return

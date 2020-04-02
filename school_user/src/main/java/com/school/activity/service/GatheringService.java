@@ -49,6 +49,14 @@ public class GatheringService {
 	 * 查询全部列表
 	 * @return
 	 */
+	public List<Gathering> findTop2() {
+		return gatheringDao.findTop2ByStateOrderByEndtimeDesc("1");
+	}
+
+	/**
+	 * 查询全部列表
+	 * @return
+	 */
 	public List<Gathering> findSearchAll(String searchContent) {
 		return gatheringDao.findByNameLikeOrAddressLikeOrDetailLikeOrSponsorLike("%"+searchContent+"%","%"+searchContent+"%","%"+searchContent+"%","%"+searchContent+"%");
 	}

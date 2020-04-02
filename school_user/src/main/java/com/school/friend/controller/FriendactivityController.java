@@ -74,7 +74,17 @@ public class FriendactivityController {
 	public Result findAll(){
 		return new Result(true,StatusCode.OK,"查询成功",friendactivityService.findAll());
 	}
-	
+
+
+	/**
+	 * 查询全部数据
+	 * @return
+	 */
+	@RequestMapping(value = "/search/{searchContent}",method= RequestMethod.GET)
+	public Result findSearchAll(@PathVariable String searchContent){
+		return new Result(true,StatusCode.OK,"查询成功",friendactivityService.findSearchAllUserFriendActivity(searchContent));
+	}
+
 	/**
 	 * 根据ID查询
 	 * @param id ID
@@ -126,7 +136,7 @@ public class FriendactivityController {
 		friendactivity.setUpdatetime(new Date());
 		System.out.println("fa="+friendactivity);
 		friendactivityService.add(friendactivity);
-		return new Result(true,StatusCode.OK,"增加成功");
+		return new Result(true,StatusCode.OK,"发布成功");
 	}
 	
 	/**
