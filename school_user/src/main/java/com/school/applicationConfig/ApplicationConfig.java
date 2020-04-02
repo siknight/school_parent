@@ -35,7 +35,12 @@ public class ApplicationConfig extends WebMvcConfigurationSupport {
                 .excludePathPatterns("/problem/prouser/all")
                 .excludePathPatterns("/column/**")
                 .excludePathPatterns("/user/hisid/**")
-                .excludePathPatterns("/**/hisid/**");  //token验证
+                .excludePathPatterns("/**/hisid/**")
+                .excludePathPatterns("/searcharticle/**")
+                .excludePathPatterns("/**/search/**")
+                .excludePathPatterns("/**/search/**/**")
+                .excludePathPatterns("/**/search")
+                .excludePathPatterns("/**/column/**");  //token验证
     }
 
     @Override

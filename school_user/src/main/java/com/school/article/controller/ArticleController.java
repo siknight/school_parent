@@ -60,6 +60,18 @@ public class ArticleController {
 		return  new Result(true,StatusCode.OK,"查询成功",articleService.findAllByUserid(claims.getId()));
 	}
 
+	/**
+	 * 查找用户发布的交友活动
+	 * @return
+	 */
+	@RequestMapping(value = "/column/{columnid}",method= RequestMethod.GET)
+	public Result findAllByColumnid(@PathVariable String columnid){
+
+
+		return  new Result(true,StatusCode.OK,"查询成功",articleService.findIndexColumnArticles(columnid));
+	}
+
+
 
 	@RequestMapping(value = "/findDetailArticle/{articleId}",method= RequestMethod.GET)
 	public Result finddetailArticlesById(@PathVariable("articleId") String articleId){
@@ -89,6 +101,18 @@ public class ArticleController {
 	@RequestMapping(value="/{id}",method= RequestMethod.GET)
 	public Result findById(@PathVariable String id){
 		return new Result(true,StatusCode.OK,"查询成功",articleService.findById(id));
+	}
+
+	/**
+	 * 查询
+	 * @return 分页结果
+	 */
+	@RequestMapping(value="/search/{searchContent}",method=RequestMethod.GET)
+	public Result findSearch(@PathVariable String searchContent){
+		System.out.println("searchContent="+searchContent);
+//		System.out.println("search result"+articleService.findSearchIndexArticles(searchContent));
+		return  new Result(true,StatusCode.OK,"查询成功",
+				articleService.findSearchIndexArticles(searchContent));
 	}
 
 

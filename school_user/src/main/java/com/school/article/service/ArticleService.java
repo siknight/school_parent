@@ -12,6 +12,7 @@ import entity.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,7 @@ import java.util.concurrent.TimeUnit;
  *
  */
 @Service
+@SuppressWarnings("all")
 public class ArticleService {
 
 	@Autowired
@@ -59,11 +61,11 @@ public class ArticleService {
 	}
 
 	/**
-	 * 首页文章遍历
+	 * 首页column文章遍历,包含有用户信息
 	 * @return
 	 */
-	public List<ArticleAndUser> findIndexArticles(){
-		List<Article> all = articleDao.findAll();
+	public List<ArticleAndUser> findIndexColumnArticles(String id){
+		List<Article> all = articleDao.findByColumnid(id);
 		ArrayList<ArticleAndUser> articleAndUsers = new ArrayList<>();
 		for (Article article:all){
 			String userid = article.getUserid();
@@ -79,6 +81,58 @@ public class ArticleService {
 		return articleAndUsers;
 	}
 
+
+	/**
+	 * 首页文章遍历,包含有用户信息
+	 * @return
+	 */
+	public List<ArticleAndUser> findIndexArticles(){
+		Sort sort = new Sort(Sort.Direction.DESC,"updatetime");
+		List<Article> all = articleDao.findAll(sort);
+		ArrayList<ArticleAndUser> articleAndUsers = new ArrayList<>();
+		for (Article article:all){
+			String userid = article.getUserid();
+			User user = userDao.findById(userid).get();
+			user.setPassword(null);
+			user.setBirthday(null);
+			ArticleAndUser articleAndUser = new ArticleAndUser();
+			articleAndUser.setArticle(article);
+			articleAndUser.setUser(user);
+			articleAndUsers.add(articleAndUser);
+			articleAndUser.setTime(DateFormatUtil.DateToString(article.getCreatetime()));
+		}
+		return articleAndUsers;
+	}
+
+
+	/**
+	 * 首页    搜索                文章遍历,包含有用户信息
+	 * @return
+	 */
+	public List<ArticleAndUser> findSearchIndexArticles(String searchContent){
+		List<Article> all = articleDao.findByTitleLikeOrContentLike("%"+searchContent+"%","%"+searchContent+"%");
+		System.out.println("all="+all);
+		ArrayList<ArticleAndUser> articleAndUsers = new ArrayList<>();
+		for (Article article:all){
+			String userid = article.getUserid();
+			User user = userDao.findById(userid).get();
+			user.setPassword(null);
+			user.setBirthday(null);
+			ArticleAndUser articleAndUser = new ArticleAndUser();
+			articleAndUser.setArticle(article);
+			articleAndUser.setUser(user);
+			articleAndUsers.add(articleAndUser);
+			articleAndUser.setTime(DateFormatUtil.DateToString(article.getCreatetime()));
+		}
+		return articleAndUsers;
+	}
+
+
+	/**
+	 * 文章详情页
+	 * @param id
+	 * @return
+	 */
 	public ArticleAndUser finddetailArticleById(String id){
 		Article article = articleDao.findById(id).get();
 		String userid = article.getUserid();
@@ -207,6 +261,9 @@ public class ArticleService {
 		return articleDao.updateThumbup(id);
 	}
 
+
+
+
 	/**
 	 * 动态条件构建
 	 * @param searchMap
@@ -219,54 +276,16 @@ public class ArticleService {
 			@Override
 			public Predicate toPredicate(Root<Article> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				List<Predicate> predicateList = new ArrayList<Predicate>();
-                // ID
-                if (searchMap.get("id")!=null && !"".equals(searchMap.get("id"))) {
-                	predicateList.add(cb.like(root.get("id").as(String.class), "%"+(String)searchMap.get("id")+"%"));
-                }
-                // 专栏ID
-                if (searchMap.get("columnid")!=null && !"".equals(searchMap.get("columnid"))) {
-                	predicateList.add(cb.like(root.get("columnid").as(String.class), "%"+(String)searchMap.get("columnid")+"%"));
-                }
-                // 用户ID
-                if (searchMap.get("userid")!=null && !"".equals(searchMap.get("userid"))) {
-                	predicateList.add(cb.like(root.get("userid").as(String.class), "%"+(String)searchMap.get("userid")+"%"));
-                }
+
                 // 标题
                 if (searchMap.get("title")!=null && !"".equals(searchMap.get("title"))) {
                 	predicateList.add(cb.like(root.get("title").as(String.class), "%"+(String)searchMap.get("title")+"%"));
                 }
                 // 文章正文
-                if (searchMap.get("content")!=null && !"".equals(searchMap.get("content"))) {
+				 if (searchMap.get("content")!=null && !"".equals(searchMap.get("content"))) {
                 	predicateList.add(cb.like(root.get("content").as(String.class), "%"+(String)searchMap.get("content")+"%"));
                 }
-                // 文章封面
-                if (searchMap.get("image")!=null && !"".equals(searchMap.get("image"))) {
-                	predicateList.add(cb.like(root.get("image").as(String.class), "%"+(String)searchMap.get("image")+"%"));
-                }
-                // 是否公开
-                if (searchMap.get("ispublic")!=null && !"".equals(searchMap.get("ispublic"))) {
-                	predicateList.add(cb.like(root.get("ispublic").as(String.class), "%"+(String)searchMap.get("ispublic")+"%"));
-                }
-                // 是否置顶
-                if (searchMap.get("istop")!=null && !"".equals(searchMap.get("istop"))) {
-                	predicateList.add(cb.like(root.get("istop").as(String.class), "%"+(String)searchMap.get("istop")+"%"));
-                }
-                // 审核状态
-                if (searchMap.get("state")!=null && !"".equals(searchMap.get("state"))) {
-                	predicateList.add(cb.like(root.get("state").as(String.class), "%"+(String)searchMap.get("state")+"%"));
-                }
-                // 所属频道
-                if (searchMap.get("channelid")!=null && !"".equals(searchMap.get("channelid"))) {
-                	predicateList.add(cb.like(root.get("channelid").as(String.class), "%"+(String)searchMap.get("channelid")+"%"));
-                }
-                // URL
-                if (searchMap.get("url")!=null && !"".equals(searchMap.get("url"))) {
-                	predicateList.add(cb.like(root.get("url").as(String.class), "%"+(String)searchMap.get("url")+"%"));
-                }
-                // 类型
-                if (searchMap.get("type")!=null && !"".equals(searchMap.get("type"))) {
-                	predicateList.add(cb.like(root.get("type").as(String.class), "%"+(String)searchMap.get("type")+"%"));
-                }
+
 				
 				return cb.and( predicateList.toArray(new Predicate[predicateList.size()]));
 

@@ -130,6 +130,18 @@ public class ProblemController {
 	}
 
 	/**
+	 * 查询
+	 * @return 分页结果
+	 */
+	@RequestMapping(value="/search/{searchContent}",method=RequestMethod.GET)
+	public Result findSearch(@PathVariable String searchContent){
+		System.out.println("searchContent="+searchContent);
+
+		return  new Result(true,StatusCode.OK,"查询成功",
+				problemService.findAllSearchProblemAndUser(searchContent));
+	}
+
+	/**
      * 根据条件查询
      * @param searchMap
      * @return

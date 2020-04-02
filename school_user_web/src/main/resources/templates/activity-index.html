@@ -30,9 +30,10 @@
    }
   </style>
  </head> 
- <body> 
+ <body>
+ <div id="acindexApp">
   <!--引用组件--> 
-  <div class="activity-head"> 
+  <div class="activity-head"  >
    <div class="wrapper">
     <!--头部导航-->
     <header id="index_header" v-cloak>
@@ -56,8 +57,8 @@
         <!--<li><a href="./recruit-index.html">招聘</a></li>-->
        </ul>
        <form class="sui-form -pull-right">
-        <input type="text" placeholder="输入关键词..." />
-        <span class="btn-search fa fa-search"></span>
+        <input type="text" v-model="searchcontent"   placeholder="输入关键词..." />
+        <span class="btn-search fa fa-search" @click.prevent="search()"></span>
         <!--搜索-->
 
         <!--这部分为用户管理部分 没有登录状况-->
@@ -69,16 +70,7 @@
         <!--这部分为用户管理部分 登录后状况-->
         <div class="sui-nav pull-right info" v-show="!show">
          <li><a href="#"  class="notice" style="color: red" @click.prevent="loginOut()">退出</a></li>
-         <!--中间加号-->
-         <!--<li class="hover">-->
-         <!--<span class="fa fa-plus "></span>-->
-         <!--<ul class="hoverinfo">-->
-         <!--<li><i class="fa fa-share-alt" ></i> <a href="boke-submit.html">去分享</a></li>-->
-         <!--<li><i class="fa fa-question-circle" aria-hidden="true"></i> <a href="./qa-submit.html" target="_blank">提问题</a></li>-->
-         <!--<li><i class="fa fa-comments" aria-hidden="true"></i><a href="./spit-submit.html" target="_blank">去吐槽</a></li>-->
-         <!--<li><i class="fa fa-heartbeat" aria-hidden="true"></i> <a href="./makeFriends-submit.html" target="_blank">发约会</a></li>-->
-         <!--</ul> </li>-->
-         <!--中间加号-->
+
          <li><a href="./person-myfile.html"  class="homego"><img src="./img/widget-photo.png" alt="用户头像" /></a></li>
         </div>
        </form>
@@ -92,7 +84,7 @@
    </div> 
   </div> 
   <!--中间布局--> 
-  <div class="wrapper activities" id="acindexApp">
+  <div class="wrapper activities">
    <div class="activity-card-list"> 
     <div class="top-title"> 
      <h4 class="latest">校园活动</h4>
@@ -127,13 +119,9 @@
    </div> 
   </div>
 
+ </div>
 
 
-  <!--将导航栏判断此页vue代码引进来-->
-  <script type="text/javascript" src="./js/Nav_loginManager.js">
-
-
-  </script>
 
   <script type="text/javascript">
       new Vue({
@@ -141,6 +129,9 @@
           data:{
               Gatherings:[], //活动
               result:{},
+              show:true,  //默认显示登陆和注册
+              user: {}, //用户
+              searchcontent:""
           },
           methods:{
               loadGatherings:function () { //查询所有活动
@@ -155,9 +146,58 @@
                       console.log("网络错误");
                   });
               },
+              showloginManager:function () {
+                  //取值，判断是否登录
+                  this.user.mobile = window.localStorage.getItem("mobile_school");
+                  this.result.token_school = window.localStorage.getItem("token_school");
+                  //登录token校验
+                  var url =school_user_server+"/token/tokenVerify"
+                  var _this = this;
+                  axios.get(url,{
+                      headers:{
+                          //请求时添加token，验证是否登录
+                          'Authorization':"Bearer "+_this.result.token_school
+                      }
+                  }).then(function (response) {
+                      _this.result = response.data;
+                      if(_this.result.code==20000){
+                          //开始时应将所有存的都删掉，以后再加
+                          _this.show=false; //显示登录后信息
+                      }else{
+                          _this.show=true;  //显示登陆和注册，没有等
+                      }
+                  }).catch(function (err) {
+                      console.log("网络错误");
+                  });
+
+              },
+              loginOut:function () {
+                  // window.localStorage.getItem("token_school");
+                  window.localStorage.removeItem("token_school");
+                  window.location.href="./tologin_register.html";
+              },
+              search:function () {
+                  if(this.searchcontent==null||this.searchcontent==""){
+                      alert("不能搜索空字符")
+                  }else{
+                      var url = school_user_server+"/gathering/search/"+this.searchcontent;
+                      console.info("url="+url);
+                      var _this = this;
+                      //json请求用默认方式
+                      axios.get(url).then(function (response) {
+                          _this.result = response.data;
+                          _this.Gatherings = _this.result.data;
+                      }).catch(function (err) {
+                          console.log("网络错误");
+                      });
+                  }
+
+              },
+
           },
           created(){
               this.loadGatherings();
+              this.showloginManager();
           }
       });
 

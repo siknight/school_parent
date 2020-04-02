@@ -37,6 +37,7 @@ import util.IdWorker;
  *
  */
 @Service
+@SuppressWarnings("all")
 public class ProblemService {
 
 	@Autowired
@@ -84,8 +85,8 @@ public class ProblemService {
 	 * @return
 	 */
 	public List<ProblemUser> findAllProblemAndUser() {
-
-		List<Problem> allProblems = problemDao.findAll();
+		Sort sort = new Sort(Sort.Direction.DESC,"updatetime");
+		List<Problem> allProblems = problemDao.findAll(sort);
 		ArrayList<ProblemUser> problemUsers = new ArrayList<>();
 		for (Problem problem : allProblems){
 			String userid = problem.getUserid();
@@ -98,7 +99,27 @@ public class ProblemService {
 		return problemUsers;
 	}
 
-	
+	/**
+	 * 查询全部列表  搜索
+	 * @return
+	 */
+	public List<ProblemUser> findAllSearchProblemAndUser(String searchContent) {
+		List<Problem> allProblems = problemDao.findByTitleLike("%" + searchContent + "%");
+//		List<Problem> allProblems = problemDao.findAll();
+		ArrayList<ProblemUser> problemUsers = new ArrayList<>();
+		for (Problem problem : allProblems){
+			String userid = problem.getUserid();
+			User user = userDao.findById(userid).get();
+			ProblemUser problemUser = new ProblemUser();
+			problemUser.setUser(user);
+			problemUser.setProblem(problem);
+			problemUsers.add(problemUser);
+		}
+		return problemUsers;
+	}
+
+
+
 	/**
 	 * 条件查询+分页
 	 * @param whereMap
@@ -141,6 +162,7 @@ public class ProblemService {
 		problem.setId( idwork+"" );
 		problem.setCreatetime(DateFormatUtil.DateToString(new Date()));
 		problem.setThumbup(0);
+		problem.setUpdatetime(new Date());
 		problem.setUrl("qa-detail.html?qaid="+idwork);
 		problemDao.save(problem);
 	}

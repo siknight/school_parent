@@ -44,4 +44,13 @@ public class ArticleAndUser implements Serializable{
 	public void setUser(User user) {
 		this.user = user;
 	}
+
+	@Override
+	public String toString() {
+		return "ArticleAndUser{" +
+				"article=" + article +
+				", user=" + user +
+				", time='" + time + '\'' +
+				'}';
+	}
 }

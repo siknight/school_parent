@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import util.FileUtil;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -40,6 +41,16 @@ public class GatheringController {
 	public Result findAllGathing(){
 		System.out.println("allGathing");
 		return new Result(true,StatusCode.OK,"查询成功",gatheringService.findAll());
+	}
+
+	/**
+	 * 查询全部数据 搜索
+	 * @return
+	 */
+	@RequestMapping(value = "/search/{searchContent}",method= RequestMethod.GET)
+	public Result findAllSearchGathing(@PathVariable String searchContent){
+
+		return new Result(true,StatusCode.OK,"查询成功",gatheringService.findSearchAll(searchContent));
 	}
 	
 	/**
@@ -101,11 +112,7 @@ public class GatheringController {
 							  @RequestPart("uploadFile") MultipartFile uploadFile ){
 		System.out.println("正在添加活动");
 		System.out.println("name="+name);
-//		//判断是否有权限访问
-//		Claims claims=(Claims) request.getAttribute("admin_claims");
-//		if(claims==null){
-//			return new Result(true,StatusCode.ACCESSERROR,"无权访问");
-//		}
+
 		//上传的文件存放在一个绝对路径里
 		String tempFileName = FileUtil.FileUpload(uploadFile,"D:\\imageschool\\adminimages\\","admin");
 
@@ -119,7 +126,7 @@ public class GatheringController {
 		gathering.setStarttime(starttime);
 		gathering.setSponsor(sponsor);
 		gathering.setWeixin(weixin);
-
+		gathering.setState("1");
 		gatheringService.add(gathering);
 		System.out.println("活动增加成功");
 		return new Result(true,StatusCode.OK,"增加成功");
@@ -157,6 +164,9 @@ public class GatheringController {
 		gathering.setSponsor(sponsor);
 		gathering.setWeixin(weixin);
 		gathering.setId(id);
+		gathering.setHref("activity-detail.html?activityid="+id);
+		gathering.setEndtime(new Date());
+		gathering.setState("1");
 		gatheringService.update(gathering);
 		System.out.println("活动修改成功");
 		return new Result(true,StatusCode.OK,"修改成功");

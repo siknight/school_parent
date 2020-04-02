@@ -143,6 +143,24 @@ public class Gathering implements Serializable{
 		this.city = city;
 	}
 
-
-	
+	@Override
+	public String toString() {
+		return "Gathering{" +
+				"id='" + id + '\'' +
+				", name='" + name + '\'' +
+				", summary='" + summary + '\'' +
+				", detail='" + detail + '\'' +
+				", sponsor='" + sponsor + '\'' +
+				", image='" + image + '\'' +
+				", starttime='" + starttime + '\'' +
+				", endtime=" + endtime +
+				", address='" + address + '\'' +
+				", enrolltime=" + enrolltime +
+				", state='" + state + '\'' +
+				", city='" + city + '\'' +
+				", phone='" + phone + '\'' +
+				", weixin='" + weixin + '\'' +
+				", href='" + href + '\'' +
+				'}';
+	}
 }

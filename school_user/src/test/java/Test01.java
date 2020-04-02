@@ -1,8 +1,12 @@
 import com.school.SchoolApplication;
+import com.school.activity.dao.GatheringDao;
+import com.school.article.dao.ArticleDao;
 import com.school.article.dao.ReplyDao;
 import com.school.article.pojo.Article;
+import com.school.article.pojo.ArticleAndUser;
 import com.school.article.pojo.ArticleReply;
 import com.school.article.pojo.ArticleReplyUser;
+import com.school.article.service.ArticleService;
 import com.school.article.service.FavArticleService;
 import com.school.article.service.ReplyService;
 import com.school.friend.pojo.Friendactivity;
@@ -16,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -40,14 +45,21 @@ public class Test01 {
     @Autowired
     FavArticleService favArticleService;
 
+    @Autowired
+    ArticleService articleService;
+
+    @Autowired
+    ArticleDao articleDao;
+    @Autowired
+    GatheringDao gatheringDao;
+
 
     @Test
     public void test08(){
-//        List<Article> allfavArticlesByUserid = favArticleService.findAllfavArticlesByUserid("1234380501851181056");
-//        System.out.println(allfavArticlesByUserid);
-//        favArticleService.deleteByarticleidAndUserid("1244540245345701888","1234380501851181056");
-        List<Article> allfavArticlesByUserid = favArticleService.findAllfavArticlesByUserid("1237667139779956736");
-        System.out.println("Article="+allfavArticlesByUserid);
+        System.out.println(gatheringDao.findTop2ByStateOrderByEndtimeDesc("1"));
+//        List<ArticleAndUser> search = articleService.findSearchIndexArticles("java");
+//        System.out.println(search);
+
     }
     @Test
     public void test07(){

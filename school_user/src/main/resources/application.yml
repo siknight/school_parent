@@ -33,6 +33,9 @@ spring:
     multipart:
       max-file-size: 10Mb
       maxRequestSize: 100Mb
+#  data:
+#    elasticsearch:
+#      cluster-nodes: 127.0.0.1:9300
 #  mail:
 #    host: smtp.163.com 	#邮箱服务器地址
 #    username: siknight666@163.com  #邮箱账号

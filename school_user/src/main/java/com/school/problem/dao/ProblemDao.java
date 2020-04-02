@@ -33,7 +33,7 @@ public interface ProblemDao extends JpaRepository<Problem,String>,JpaSpecificati
     @Query("update Problem a set thumbup=thumbup+1 where id=?1")
     public int updateThumbup(String id);
 
-
+    public List<Problem> findByTitleLike(String searchcontet);
     public Problem findProblemById(String id);
 
 

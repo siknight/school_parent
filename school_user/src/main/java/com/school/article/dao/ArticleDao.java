@@ -40,6 +40,16 @@ public interface ArticleDao extends JpaRepository<Article,String>,JpaSpecificati
      */
     public List<Article> findByUserid(String userid);
 
+    /**
+     * 通过主题查找所有文章
+     * @param columnid
+     * @return
+     */
+    public List<Article> findByColumnid(String columnid);
+
+
+    public List<Article> findByTitleLikeOrContentLike(String searcTitle,String searchcontet);
+
     public Optional<Article> findById(String articleid);
 
     public Article findArticleById(String articleid);

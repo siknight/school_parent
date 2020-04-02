@@ -7,6 +7,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import util.IdWorker;
@@ -16,6 +17,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +41,16 @@ public class GatheringService {
 	 * @return
 	 */
 	public List<Gathering> findAll() {
-		return gatheringDao.findAll();
+		Sort sort = new Sort(Sort.Direction.DESC,"endtime");
+		return gatheringDao.findAll(sort);
+	}
+
+	/**
+	 * 查询全部列表
+	 * @return
+	 */
+	public List<Gathering> findSearchAll(String searchContent) {
+		return gatheringDao.findByNameLikeOrAddressLikeOrDetailLikeOrSponsorLike("%"+searchContent+"%","%"+searchContent+"%","%"+searchContent+"%","%"+searchContent+"%");
 	}
 
 	
@@ -84,6 +95,7 @@ public class GatheringService {
 	public void add(Gathering gathering) {
 		long id = idWorker.nextId();
 		gathering.setId( id+"" );
+		gathering.setEndtime(new Date());
 		gathering.setHref("activity-detail.html?activityid="+id);
 		gatheringDao.save(gathering);
 	}

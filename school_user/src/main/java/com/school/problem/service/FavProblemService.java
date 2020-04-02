@@ -78,6 +78,7 @@ public class FavProblemService {
 
 
 
+
 	public int findByUseridAndProblemid(String userid,String problemid){
 		return  favDao.countByUseridAndProblemid(userid,problemid);
 	}
