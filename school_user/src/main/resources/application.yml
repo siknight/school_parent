@@ -39,7 +39,7 @@ spring:
 #  mail:
 #    host: smtp.163.com 	#邮箱服务器地址
 #    username: siknight666@163.com  #邮箱账号
-#    password: merryhappy123456	#邮箱密码
+#    password: mer	#邮箱密码
 #    default-encoding: utf-8	#默认编码
 #    token生成
 jwt:
